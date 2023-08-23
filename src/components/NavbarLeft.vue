@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Activity from './Navbar_Acitivity.vue'
 import Organize from './Navbar_Organize.vue'
+import RentOrder from './Navbar_RentOrder.vue';
 const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
 
 </script>
@@ -16,6 +17,7 @@ const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
                         <select v-model="selectedOption">
                             <option value="singleActivity">單一 Activity</option>
                             <option value="singleOrganize">單一 Organize</option>
+                            <option value="singleRentOrder">單一 RentOrder</option>
                             <option value="both">兩個一起顯示</option>
                         </select>
 
@@ -26,9 +28,14 @@ const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
                         <div v-else-if="selectedOption === 'singleOrganize'">
                             <Organize></Organize>
                         </div>
+                        <div v-else-if="selectedOption === 'singleRentOrder'">
+                            <RentOrder></RentOrder>
+                        </div>
+                        
                         <div v-else-if="selectedOption === 'both'">
                             <Activity></Activity>
                             <Organize></Organize>
+                            <RentOrder></RentOrder>
                         </div>
                     </div>
                 </div>
