@@ -34,12 +34,53 @@
                                     <td>{{ rentOrder.rentdate }}</td>
                                     <td>{{ rentOrder.renttime }}</td>
                                     <td>{{ rentOrder.rentstatus }}</td>
-                                    <td><button type="submit" class="btn btn-outline-info">修改</button></td>
+                                    <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                            data-bs-target="#updateModal">修改</button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 彈出視窗 -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+        data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">修改訂單</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        租借場地:<input type="text" class="form-control" required="required">
+                    </div>
+                    <div class="mb-3">
+                        日期:<input type="date" class="form-control"  required="required">
+                    </div>
+                    <div class="mb-3">
+                        時段:<select class="form-control">
+                            <option>早上</option>
+                            <option>中午</option>
+                            <option>下午</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        租借狀態:<select class="form-control">
+                            <option>處理中</option>
+                            <option>已確認</option>
+                            <option>已完成</option>
+                            <option>已取消</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">送出</button>
+                </div>
+
             </div>
         </div>
     </div>
