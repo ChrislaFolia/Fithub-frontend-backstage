@@ -5,6 +5,8 @@
                 <h1 class="mt-4" style="text-align: center;">教室</h1>
                 <div class="card mb-4">
                     <div class="card-body table-responsive">
+                        <button class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal"
+                            style="margin-bottom: 10px;">新增教室</button>
                         <table class="table table-bordered">
                             <thead class="align-middle text-center">
                                 <tr class="table-primary">
@@ -12,21 +14,26 @@
                                         <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
                                     </th>
                                     <th>教室名稱</th>
-                                    <th>簡介</th>
-                                    <th>價格</th>
-                                    <th>狀態</th>
+                                    <th>容納人數</th>
+                                    <th>設備介紹</th>
+                                    <th>租借價格</th>
+                                    <th>教室狀態</th>
+                                    <th>教室圖片</th>
                                     <th>修改</th>
                                 </tr>
                             </thead>
 
                             <tbody class="align-middle text-center">
                                 <tr v-for="(classroom, classroomindex) in classrooms" :key="classroomindex">
-                                    <td><input type="checkbox" v-model="selectedClassrooms" :value="classroom.classroomId"></td>
+                                    <td><input type="checkbox" v-model="selectedClassrooms" :value="classroom.classroomId">
+                                    </td>
                                     <td>{{ classroom.classroomName }}</td>
+                                    <td>{{ classroom.classroomCapacity }}</td>
                                     <td>{{ classroom.classroomDescription }}</td>
                                     <td>{{ classroom.classroomPrice }}</td>
                                     <td>{{ classroom.classroomStatus }}</td>
-                                    <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                    <td><img :src="classroom.classroompic" alt="維修中"></td>
+                                    <td><button class="btn btn-outline-info" data-bs-toggle="modal"
                                             data-bs-target="#updateModal">修改</button></td>
                                 </tr>
                             </tbody>
@@ -37,42 +44,94 @@
         </div>
     </div>
 
-    <!-- 彈出視窗 -->
+    <!-- 修改-彈出視窗 -->
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
         data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">修改訂單</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">更新教室</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        教室名稱:<input type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        容納人數:<input type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        設備介紹:<input type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        租借價格:<input type="text" class="form-control">
+                    </div>
+                    教室狀態:<div class="mb-3">
+                        <select class="form-control">
+                            <option>開放</option>
+                            <option>關閉</option>
+                            <option>維修中</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        教室圖片:
+                        <input type="file" class="form-control" accept="image/*" @change="handleImageUpload">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" @click="">送出</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增-彈出視窗 -->
+    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
+        data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">新增教室</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        租借場地:<input type="text" class="form-control" required="required">
+                        教室名稱:<input v-model="classroom.classroomName" type="text" class="form-control">
+                        <span v-if="!classroom.classroomName" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        日期:<input type="date" class="form-control"  required="required">
+                        容納人數:<input v-model="classroom.classroomCapacity" type="text" class="form-control">
+                        <span v-if="!classroom.classroomCapacity" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        時段:<select class="form-control">
-                            <option>早上</option>
-                            <option>中午</option>
-                            <option>下午</option>
+                        設備介紹:<input v-model="classroom.classroomDescription" type="text" class="form-control">
+                        <span v-if="!classroom.classroomDescription" class="text-danger">必填</span>
+                    </div>
+                    <div class="mb-3">
+                        租借價格:<input v-model="classroom.classroomPrice" type="text" class="form-control">
+                        <span v-if="!classroom.classroomPrice" class="text-danger">必填</span>
+                    </div>
+                    教室狀態:
+                    <div class="mb-3">
+                        <select v-model="classroom.classroomStatus" class="form-control">
+                            <option value="開放">開放</option>
+                            <option value="關閉">關閉</option>
+                            <option value="維修中">維修中</option>
                         </select>
+                        <span v-if="!classroom.classroomStatus" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        租借狀態:<select class="form-control">
-                            <option>處理中</option>
-                            <option>已確認</option>
-                            <option>已完成</option>
-                            <option>已取消</option>
-                        </select>
+                        教室圖片:
+                        <input type="file" class="form-control" accept="image/*">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">送出</button>
+                    <button type="submit" class="btn btn-primary" @click="insertClassroom">送出</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -80,14 +139,23 @@
   
 <script setup>
 import axios from 'axios'
-import { ref, onMounted } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 
+const classroom = reactive({
+    classroomName: '',
+    classroomCapacity: '',
+    classroomDescription: '',
+    classroomPrice: '',
+    classroomStatus: '',
+    classroompic: '',
+});
 
 const classrooms = ref([]); // 使用 ref 創建一個響應式變數
 const selectedClassrooms = ref([]); // 儲存選中的 ClassroomID
 
+
 // 從伺服器獲取 JSON 資料
-const getclassroom = async () => {
+const getclassrooms = async () => {
     try {
         const response = await axios.get('http://localhost:8080/fithub/classroom/list'); // 替換為實際的 API URL
         classrooms.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
@@ -107,7 +175,7 @@ const deleteSelected = async () => {
         });
 
         // 刷新資料
-        getclassroom();
+        getclassrooms();
         selectedClassrooms.value = []; // 清空選中的項目
     } catch (error) {
         console.error('Error deleting rent orders:', error);
@@ -115,9 +183,38 @@ const deleteSelected = async () => {
 };
 
 
+const insertClassroom = async () => {
+    try {
+        // 检查是否有任何必填字段为空
+        if (!classroom.classroomName ||
+            !classroom.classroomCapacity ||
+            !classroom.classroomDescription ||
+            !classroom.classroomPrice ||
+            !classroom.classroomStatus) {
+            return;
+        }
+
+        const response = await axios.post('http://localhost:8080/fithub/classroom/insert', classroom,
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+        // 處理成功或失敗
+        console.log('New classroom added:', response.data);
+    } catch (error) {
+        console.error('Error adding new classroom:', error);
+    }
+};
+
 onMounted(() => {
-    getclassroom();
+    getclassrooms();
 });
 </script>
 
-<style></style>
+<style scoped>
+.text-danger {
+    font-size: 8px;
+}
+</style>

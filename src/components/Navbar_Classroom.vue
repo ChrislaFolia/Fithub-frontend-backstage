@@ -7,7 +7,7 @@
 	</a>
 	<div class="collapse" id="collapseLayouts4" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 		<nav class="sb-sidenav-menu-nested nav">
-			<router-link class="nav-link" to="classroom">教室場地</router-link>
+			<router-link class="nav-link" to="classroom">場地</router-link>
 		</nav>
 	</div>
 </template>

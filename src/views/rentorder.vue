@@ -11,9 +11,10 @@
                                     <th>
                                         <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
                                     </th>
+                                    <th>訂單日期</th>
                                     <th>會員姓名</th>
                                     <th>租借場地</th>
-                                    <th>日期</th>
+                                    <th>預約日期</th>
                                     <th>時段</th>
                                     <th>租借狀態</th>
                                     <th>修改</th>
@@ -24,13 +25,9 @@
                                 <tr v-for="(rentOrder, rentorderindex) in rentOrders" :key="rentorderindex">
                                     <td><input type="checkbox" v-model="selectedRentOrderIds"
                                             :value="rentOrder.rentorderid"></td>
+                                    <td>{{ rentOrder.rentorderdate }}</td>
                                     <td>{{ rentOrder.member.membername }}</td>
-                                    <td>
-                                        <span v-for="(classroom, classIndex) in rentOrder.classrooms" :key="classIndex">
-                                            {{ classroom.classroomName }}
-                                            <br>
-                                        </span>
-                                    </td>
+                                    <td>{{ rentOrder.classroom.classroomName }}</td>
                                     <td>{{ rentOrder.rentdate }}</td>
                                     <td>{{ rentOrder.renttime }}</td>
                                     <td>{{ rentOrder.rentstatus }}</td>
@@ -59,7 +56,7 @@
                         租借場地:<input type="text" class="form-control" required="required">
                     </div>
                     <div class="mb-3">
-                        日期:<input type="date" class="form-control"  required="required">
+                        日期:<input type="date" class="form-control" required="required">
                     </div>
                     <div class="mb-3">
                         時段:<select class="form-control">

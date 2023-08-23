@@ -8,7 +8,6 @@
 	<div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 		<nav class="sb-sidenav-menu-nested nav">
 			<router-link class="nav-link" to="RentOrder">租借訂單</router-link>
-			<a class="nav-link" href="">訂單</a>
 		</nav>
 	</div>
 </template>

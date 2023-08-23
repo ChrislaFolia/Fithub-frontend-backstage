@@ -13,7 +13,7 @@ import { RouterLink, RouterView } from 'vue-router';
 </template>
 
 <style>
-div {
+/* div {
     border: 1px red solid;
-}
+} */
 </style>
