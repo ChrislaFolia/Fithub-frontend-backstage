@@ -9,7 +9,6 @@ import { RouterLink, RouterView } from 'vue-router';
         <NavbarTop></NavbarTop>
         <NavbarLeft></NavbarLeft>
         <router-view></router-view>
-
     </body>
 </template>
 
