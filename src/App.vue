@@ -1,6 +1,7 @@
 <script setup>
 import NavbarTop from './components/NavbarTop.vue'
 import NavbarLeft from './components/NavbarLeft.vue'
+
 import { RouterLink, RouterView } from 'vue-router';
 </script>
 
@@ -14,7 +15,5 @@ import { RouterLink, RouterView } from 'vue-router';
 </template>
 
 <style>
-div {
-    border: 1px red solid;
-}
+
 </style>
