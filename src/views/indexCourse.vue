@@ -30,11 +30,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for=" { courseId, courseName, categoryId, courseImgPath, courseDescription }  in   courses  "
+                                    <tr v-for=" { courseId, courseName, courseCategories, courseImgPath, courseDescription }  in   courses  "
                                         :key="courseId">
                                         <td>{{ courseName }}</td>
-                                        <td>{{ categoryId }} </td>
-                                        <td>{{ courseImgPath }} </td>
+                                        <td>{{ courseCategories.categoryName }} </td>
+                                        <td>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                                                :data-bs-target="`#staticBackdropPic${courseId}`">
+                                                檢視圖片
+                                            </button>
+                                            <courseImg :parentId="courseId" :parentImgName="courseName"
+                                                :parentImgPath="courseImgPath" modalTitle="課程圖片"></courseImg>
+                                        </td>
                                         <td>
                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
                                                 :data-bs-target="`#staticBackdrop${courseId}`">
@@ -70,6 +77,7 @@
 import { ref, reactive, onBeforeMount } from "vue";
 import axios from "axios";
 import InsertCourse from '../components/courseInsertModal.vue';
+import courseImg from '../components/imageModal.vue';
 import courseDescription from '../components/textModal.vue';
 const totalPages = ref(0);
 const datas = reactive({
