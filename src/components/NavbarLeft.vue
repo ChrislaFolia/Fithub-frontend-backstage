@@ -2,7 +2,8 @@
 import { ref } from 'vue';
 import Activity from './Navbar_Acitivity.vue'
 import Organize from './Navbar_Organize.vue'
-const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
+import Coupons from './Navbar_Coupons.vue'
+const selectedOption = ref('getAll'); // 預設選擇單一 Activity 組件
 
 </script>
 
@@ -16,7 +17,8 @@ const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
                         <select v-model="selectedOption">
                             <option value="singleActivity">單一 Activity</option>
                             <option value="singleOrganize">單一 Organize</option>
-                            <option value="both">兩個一起顯示</option>
+                            <option value="singleCoupons">單一 Coupons</option>
+                            <option value="getAll">一起顯示</option>
                         </select>
 
                         <!-- 條件渲染動態組件 -->
@@ -26,10 +28,15 @@ const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
                         <div v-else-if="selectedOption === 'singleOrganize'">
                             <Organize></Organize>
                         </div>
-                        <div v-else-if="selectedOption === 'both'">
+                        <div v-else-if="selectedOption === 'getAll'">
                             <Activity></Activity>
                             <Organize></Organize>
+                            <Coupons></Coupons>
                         </div>
+                        <div v-else-if="selectedOption === 'singleCoupons'">
+                            <Coupons></Coupons>
+                        </div>
+
                     </div>
                 </div>
             </nav>
