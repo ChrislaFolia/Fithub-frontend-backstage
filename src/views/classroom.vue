@@ -32,13 +32,60 @@
                                     <td>{{ classroom.classroomDescription }}</td>
                                     <td>{{ classroom.classroomPrice }}</td>
                                     <td>{{ classroom.classroomStatus }}</td>
-                                    <td><img :src="'data:image/png;base64,' + classroom.classroomPic" style="width: 150px;height: 150px;" alt="維修中"></td>
+                                    <td><img :src="classroom.classroomPic" style="width: 150px;height: 150px;" alt="維修中">
+                                    </td>
                                     <td><button class="btn btn-outline-info" data-bs-toggle="modal"
                                             data-bs-target="#updateModal">修改</button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改-彈出視窗 -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">更新教室</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        教室名稱<input v-model="classroom.classroomName" type="text" class="form-control">
+                        <span v-if="!classroom.classroomName" class="text-danger">必填</span>
+                    </div>
+                    <div class="mb-3">
+                        容納人數<input v-model="classroom.classroomCapacity" type="text" class="form-control">
+                        <span v-if="!classroom.classroomCapacity" class="text-danger">必填</span>
+                    </div>
+                    <div class="mb-3">
+                        設備介紹<input v-model="classroom.classroomDescription" type="text" class="form-control">
+                        <span v-if="!classroom.classroomDescription" class="text-danger">必填</span>
+                    </div>
+                    <div class="mb-3">
+                        租借價格<input v-model="classroom.classroomPrice" type="text" class="form-control">
+                        <span v-if="!classroom.classroomPrice" class="text-danger">必填</span>
+                    </div>
+                    教室狀態
+                    <div class="mb-3">
+                        <select v-model="classroom.classroomStatus" class="form-control">
+                            <option value="開放">開放</option>
+                            <option value="關閉">關閉</option>
+                            <option value="維修中">維修中</option>
+                        </select>
+                        <span v-if="!classroom.classroomStatus" class="text-danger">必填</span>
+                    </div>
+                    <div class="mb-3">
+                        教室圖片:
+                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageUpload">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" @click="insertClassroom">送出</button>
                 </div>
             </div>
         </div>
@@ -55,22 +102,22 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        教室名稱:<input v-model="classroom.classroomName" type="text" class="form-control">
+                        教室名稱<input v-model="classroom.classroomName" type="text" class="form-control">
                         <span v-if="!classroom.classroomName" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        容納人數:<input v-model="classroom.classroomCapacity" type="text" class="form-control">
+                        容納人數<input v-model="classroom.classroomCapacity" type="text" class="form-control">
                         <span v-if="!classroom.classroomCapacity" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        設備介紹:<input v-model="classroom.classroomDescription" type="text" class="form-control">
+                        設備介紹<input v-model="classroom.classroomDescription" type="text" class="form-control">
                         <span v-if="!classroom.classroomDescription" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        租借價格:<input v-model="classroom.classroomPrice" type="text" class="form-control">
+                        租借價格<input v-model="classroom.classroomPrice" type="text" class="form-control">
                         <span v-if="!classroom.classroomPrice" class="text-danger">必填</span>
                     </div>
-                    教室狀態:
+                    教室狀態
                     <div class="mb-3">
                         <select v-model="classroom.classroomStatus" class="form-control">
                             <option value="開放">開放</option>
@@ -81,7 +128,7 @@
                     </div>
                     <div class="mb-3">
                         教室圖片:
-                        <input type="file" class="form-control" accept="image/*" @change="imageUpload">
+                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageUpload">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -118,8 +165,7 @@ const imageUpload = (event) => {
 
         reader.onload = (event) => {
             const base64Data = event.target.result;
-            const base64WithoutPrefix = base64Data.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
-            classroom.classroomPic = base64WithoutPrefix;
+            classroom.classroomPic = base64Data;
         };
     }
 };
@@ -137,6 +183,48 @@ const getclassrooms = async () => {
     }
 };
 
+// 新增教室
+const insertClassroom = async () => {
+    try {
+        // 检查是否有任何必填字段为空
+        if (!classroom.classroomName ||
+            !classroom.classroomCapacity ||
+            !classroom.classroomDescription ||
+            !classroom.classroomPrice ||
+            !classroom.classroomStatus) {
+            return;
+        }
+
+
+        const response = await axios.post('http://localhost:8080/fithub/classroom/insert', classroom, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+
+        //關閉動態框
+        const insertModal = document.getElementById('insertModal')
+        let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
+        getInstanceInsertModal.toggle();
+
+        // 清空輸入的值
+        classroom.classroomName = '';
+        classroom.classroomCapacity = '';
+        classroom.classroomDescription = '';
+        classroom.classroomPrice = '';
+        classroom.classroomStatus = '';
+        classroom.classroomPic = '';
+        let insertfile = document.querySelector('#insertfile')
+        insertfile.value = '';
+
+        //刷新畫面
+        getclassrooms();
+    } catch (error) {
+        console.error('Error adding new classroom:', error);
+    }
+};
+
 // 刪除多筆教室
 const deleteSelected = async () => {
     try {
@@ -150,39 +238,6 @@ const deleteSelected = async () => {
         selectedClassrooms.value = []; // 清空選中的項目
     } catch (error) {
         console.error('Error deleting rent orders:', error);
-    }
-};
-
-// 新增教室
-const insertClassroom = async () => {
-    try {
-        // 检查是否有任何必填字段为空
-        if (!classroom.classroomName ||
-            !classroom.classroomCapacity ||
-            !classroom.classroomDescription ||
-            !classroom.classroomPrice ||
-            !classroom.classroomStatus) {
-            return;
-        }
-
-        // Convert classroom object to JSON string
-        const classroomJson = JSON.stringify(classroom);
-        console.log(classroomJson)
-        const response = await axios.post('http://localhost:8080/fithub/classroom/insert', classroomJson, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-
-        //關閉動態框
-        const modal = document.getElementById('insertModal')
-        var insertModal = bootstrap.Modal.getInstance(modal)
-        insertModal.toggle();
-
-        // getclassrooms();
-    } catch (error) {
-        console.error('Error adding new classroom:', error);
     }
 };
 
