@@ -35,7 +35,8 @@
                                     <td><img :src="classroom.classroomPic" style="width: 150px;height: 150px;" alt="維修中">
                                     </td>
                                     <td><button class="btn btn-outline-info" data-bs-toggle="modal"
-                                            data-bs-target="#updateModal">修改</button></td>
+                                            @click="openUpdateModal(classroom)" data-bs-target="#updateModal">修改</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -55,37 +56,37 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        教室名稱<input v-model="classroom.classroomName" type="text" class="form-control">
-                        <span v-if="!classroom.classroomName" class="text-danger">必填</span>
+                        教室名稱<input v-model="updateSelectedClassroom.classroomName" type="text" class="form-control">
+                        <span v-if="!updateSelectedClassroom.classroomName" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        容納人數<input v-model="classroom.classroomCapacity" type="text" class="form-control">
-                        <span v-if="!classroom.classroomCapacity" class="text-danger">必填</span>
+                        容納人數<input v-model="updateSelectedClassroom.classroomCapacity" type="text" class="form-control">
+                        <span v-if="!updateSelectedClassroom.classroomCapacity" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        設備介紹<input v-model="classroom.classroomDescription" type="text" class="form-control">
-                        <span v-if="!classroom.classroomDescription" class="text-danger">必填</span>
+                        設備介紹<input v-model="updateSelectedClassroom.classroomDescription" type="text" class="form-control">
+                        <span v-if="!updateSelectedClassroom.classroomDescription" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        租借價格<input v-model="classroom.classroomPrice" type="text" class="form-control">
-                        <span v-if="!classroom.classroomPrice" class="text-danger">必填</span>
+                        租借價格<input v-model="updateSelectedClassroom.classroomPrice" type="text" class="form-control">
+                        <span v-if="!updateSelectedClassroom.classroomPrice" class="text-danger">必填</span>
                     </div>
                     教室狀態
                     <div class="mb-3">
-                        <select v-model="classroom.classroomStatus" class="form-control">
+                        <select v-model="updateSelectedClassroom.classroomStatus" class="form-control">
                             <option value="開放">開放</option>
                             <option value="關閉">關閉</option>
                             <option value="維修中">維修中</option>
                         </select>
-                        <span v-if="!classroom.classroomStatus" class="text-danger">必填</span>
+                        <span v-if="!updateSelectedClassroom.classroomStatus" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
                         教室圖片:
-                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageUpload">
+                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" @click="insertClassroom">送出</button>
+                    <button type="submit" class="btn btn-primary" @click="updateClassroom">送出</button>
                 </div>
             </div>
         </div>
@@ -128,7 +129,7 @@
                     </div>
                     <div class="mb-3">
                         教室圖片:
-                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageUpload">
+                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageInsert">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -143,6 +144,7 @@
 import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
 
+//建立教室物件
 const classroom = reactive({
     classroomName: '',
     classroomCapacity: '',
@@ -152,11 +154,17 @@ const classroom = reactive({
     classroomPic: '',
 });
 
-const classrooms = ref([]); // 使用 ref 創建一個響應式變數
+const classrooms = ref([]); // 儲存SelectAll的教室
 const selectedClassrooms = ref([]); // 儲存選中的 ClassroomID
+const updateSelectedClassroom = reactive({}); // 儲存要修改的教室資料(預設值)
+
+// 将選中的教室資料複製到 selectedClassroom
+const openUpdateModal = (classroom) => {
+    Object.assign(updateSelectedClassroom, classroom);
+};
 
 // 取得圖片轉為BASE64
-const imageUpload = (event) => {
+const imageInsert = (event) => {
     const file = event.target.files[0];
 
     if (file) {
@@ -166,6 +174,21 @@ const imageUpload = (event) => {
         reader.onload = (event) => {
             const base64Data = event.target.result;
             classroom.classroomPic = base64Data;
+        };
+    }
+};
+
+// 取得圖片轉為BASE64
+const imageUpdate = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = (event) => {
+            const base64Data = event.target.result;
+            updateSelectedClassroom.classroomPic = base64Data;
         };
     }
 };
@@ -218,7 +241,39 @@ const insertClassroom = async () => {
         let insertfile = document.querySelector('#insertfile')
         insertfile.value = '';
 
-        //刷新畫面
+        // 刷新畫面
+        getclassrooms();
+    } catch (error) {
+        console.error('Error adding new classroom:', error);
+    }
+};
+
+// 更新教室
+const updateClassroom = async () => {
+    try {
+        // 检查是否有任何必填字段为空
+        if (!updateSelectedClassroom.classroomName ||
+            !updateSelectedClassroom.classroomCapacity ||
+            !updateSelectedClassroom.classroomDescription ||
+            !updateSelectedClassroom.classroomPrice ||
+            !updateSelectedClassroom.classroomStatus) {
+            return;
+        }
+
+
+        const response = await axios.put('http://localhost:8080/fithub/classroom/update', updateSelectedClassroom, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+
+        //關閉動態框
+        const updateModal = document.getElementById('updateModal')
+        let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
+        getInstanceUpdateModal.toggle();
+
+        // 刷新畫面
         getclassrooms();
     } catch (error) {
         console.error('Error adding new classroom:', error);
@@ -227,17 +282,21 @@ const insertClassroom = async () => {
 
 // 刪除多筆教室
 const deleteSelected = async () => {
-    try {
-        // 將選中的 ClassroomID 送到後端進行刪除
-        const response = await axios.delete('http://localhost:8080/fithub/classroom/delete/multiple', {
-            data: selectedClassrooms.value
-        });
 
-        // 刷新資料
-        getclassrooms();
-        selectedClassrooms.value = []; // 清空選中的項目
-    } catch (error) {
-        console.error('Error deleting rent orders:', error);
+    const checkDelete = window.confirm('確定要刪除選中的教室嗎？');
+    if (checkDelete) {
+        try {
+            // 將選中的 ClassroomID 送到後端進行刪除
+            const response = await axios.delete('http://localhost:8080/fithub/classroom/delete/multiple', {
+                data: selectedClassrooms.value
+            });
+
+            // 刷新資料
+            getclassrooms();
+            selectedClassrooms.value = []; // 清空選中的項目
+        } catch (error) {
+            console.error('Error deleting rent orders:', error);
+        }
     }
 };
 
