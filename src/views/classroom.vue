@@ -32,7 +32,7 @@
                                     <td>{{ classroom.classroomDescription }}</td>
                                     <td>{{ classroom.classroomPrice }}</td>
                                     <td>{{ classroom.classroomStatus }}</td>
-                                    <td><img :src="classroom.classroompic" alt="維修中"></td>
+                                    <td><img :src="'data:image/png;base64,' + classroom.classroomPic" style="width: 150px;height: 150px;" alt="維修中"></td>
                                     <td><button class="btn btn-outline-info" data-bs-toggle="modal"
                                             data-bs-target="#updateModal">修改</button></td>
                                 </tr>
@@ -44,58 +44,13 @@
         </div>
     </div>
 
-    <!-- 修改-彈出視窗 -->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">更新教室</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-
-                    <div class="mb-3">
-                        教室名稱:<input type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        容納人數:<input type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        設備介紹:<input type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        租借價格:<input type="text" class="form-control">
-                    </div>
-                    教室狀態:<div class="mb-3">
-                        <select class="form-control">
-                            <option>開放</option>
-                            <option>關閉</option>
-                            <option>維修中</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        教室圖片:
-                        <input type="file" class="form-control" accept="image/*" @change="handleImageUpload">
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" @click="">送出</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
 
     <!-- 新增-彈出視窗 -->
-    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
-        data-bs-backdrop="static">
+    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">新增教室</h5>
+                    <h5 class="modal-title">新增教室</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -126,7 +81,7 @@
                     </div>
                     <div class="mb-3">
                         教室圖片:
-                        <input type="file" class="form-control" accept="image/*">
+                        <input type="file" class="form-control" accept="image/*" @change="imageUpload">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -147,14 +102,30 @@ const classroom = reactive({
     classroomDescription: '',
     classroomPrice: '',
     classroomStatus: '',
-    classroompic: '',
+    classroomPic: '',
 });
 
 const classrooms = ref([]); // 使用 ref 創建一個響應式變數
 const selectedClassrooms = ref([]); // 儲存選中的 ClassroomID
 
+// 取得圖片轉為BASE64
+const imageUpload = (event) => {
+    const file = event.target.files[0];
 
-// 從伺服器獲取 JSON 資料
+    if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = (event) => {
+            const base64Data = event.target.result;
+            const base64WithoutPrefix = base64Data.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+            classroom.classroomPic = base64WithoutPrefix;
+        };
+    }
+};
+
+
+// 從伺服器獲取 JSON 格式教室資料
 const getclassrooms = async () => {
     try {
         const response = await axios.get('http://localhost:8080/fithub/classroom/list'); // 替換為實際的 API URL
@@ -166,7 +137,7 @@ const getclassrooms = async () => {
     }
 };
 
-
+// 刪除多筆教室
 const deleteSelected = async () => {
     try {
         // 將選中的 ClassroomID 送到後端進行刪除
@@ -182,7 +153,7 @@ const deleteSelected = async () => {
     }
 };
 
-
+// 新增教室
 const insertClassroom = async () => {
     try {
         // 检查是否有任何必填字段为空
@@ -194,15 +165,22 @@ const insertClassroom = async () => {
             return;
         }
 
-        const response = await axios.post('http://localhost:8080/fithub/classroom/insert', classroom,
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+        // Convert classroom object to JSON string
+        const classroomJson = JSON.stringify(classroom);
+        console.log(classroomJson)
+        const response = await axios.post('http://localhost:8080/fithub/classroom/insert', classroomJson, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-        // 處理成功或失敗
-        console.log('New classroom added:', response.data);
+
+        //關閉動態框
+        const modal = document.getElementById('insertModal')
+        var insertModal = bootstrap.Modal.getInstance(modal)
+        insertModal.toggle();
+
+        // getclassrooms();
     } catch (error) {
         console.error('Error adding new classroom:', error);
     }
