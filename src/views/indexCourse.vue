@@ -37,7 +37,7 @@
                                         <td>{{ courseImgPath }} </td>
                                         <td>
                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
-                                                :data-bs-target="'#staticBackdrop' & courseId">
+                                                :data-bs-target="`#staticBackdrop${courseId}`">
                                                 詳細內容
                                             </button>
                                             <courseDescription :parentId="courseId" :parentDescription="courseDescription"
@@ -67,7 +67,7 @@
 </template>
     
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onBeforeMount } from "vue";
 import axios from "axios";
 import InsertCourse from '../components/courseInsertModal.vue';
 import courseDescription from '../components/textModal.vue';
@@ -107,7 +107,6 @@ const loadCourseCategories = async () => {
     console.log(courseCategories)
 
 };
-
 
 
 
