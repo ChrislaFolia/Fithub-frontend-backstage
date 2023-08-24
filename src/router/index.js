@@ -11,6 +11,11 @@ const router = createRouter({
       path: '/department',
       name: 'department',
       component: () => import('../views/department.vue')
+    },
+    {
+      path: '/testUploadImg',
+      name: 'testUploadImg',
+      component: () => import('../views/testUploadImg.vue')
     }
   ]
 })

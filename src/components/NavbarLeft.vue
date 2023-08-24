@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Activity from './Navbar_Acitivity.vue'
 import Organize from './Navbar_Organize.vue'
+import TestNavbar from './NavbarTest.vue'
 const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
 
 </script>
@@ -29,6 +30,7 @@ const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
                         <div v-else-if="selectedOption === 'both'">
                             <Activity></Activity>
                             <Organize></Organize>
+                            <TestNavbar></TestNavbar>
                         </div>
                     </div>
                 </div>
