@@ -1,6 +1,7 @@
 <script setup>
 import NavbarTop from './components/NavbarTop.vue'
 import NavbarLeft from './components/NavbarLeft.vue'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { RouterLink, RouterView } from 'vue-router';
 </script>
