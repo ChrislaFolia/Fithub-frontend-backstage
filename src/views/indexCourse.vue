@@ -3,35 +3,38 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">課程管理</h1>
-
-                    <div class="mb-3">
-                        <button type="button" id="insertCourse" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#insertModal">新增課程資料</button>
-                    </div>
-                    <InsertCourse :courseCategories="courseCategories"></InsertCourse>
+                    <h1 class="mt-4" style="text-align: center;">全部課程</h1>
 
 
                     <div class="card mb-4">
-                        <div class="card-header">
+                        <!-- <div class="card-header">
                             <i class="fas fa-table me-1"></i>
                             全部課程
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple" class="table table-bordered">
-                                <thead>
-                                    <tr class="table-dark">
+                        </div> -->
+                        <div class="card-body table-responsive">
+                            <div class="mb-3">
+                                <button type="button" id="insertCourse" class="btn btn btn-primary mb-1"
+                                    data-bs-toggle="modal" data-bs-target="#insertModal">新增課程資料</button>
+                            </div>
+                            <InsertCourse :courseCategories="courseCategories"></InsertCourse>
+                            <table class="table table-bordered">
+                                <thead class="align-middle text-center">
+                                    <tr class="table-primary">
+                                        <th>
+                                            <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
+                                        </th>
                                         <th>課程名稱</th>
                                         <th>課程分類</th>
                                         <th>課程圖片</th>
                                         <th>課程描述</th>
                                         <th>修改</th>
-                                        <th>刪除</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="align-middle text-center">
                                     <tr v-for=" { courseId, courseName, courseCategories, courseImgPath, courseDescription }  in   courses  "
                                         :key="courseId">
+                                        <td><input type="checkbox">
+                                        </td>
                                         <td>{{ courseName }}</td>
                                         <td>{{ courseCategories.categoryName }} </td>
                                         <td>
@@ -56,11 +59,6 @@
                                                 data-bs-toggle="modal" data-bs-target="#updateModal${courseId}">修改
                                             </button>
                                         </td>
-                                        <td>
-                                            <button id=" deleteCourse{{course.courseId}}"
-                                                class="btn btn-outline-danger btn-sm">刪除
-                                            </button>
-                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -74,7 +72,7 @@
 </template>
     
 <script setup>
-import { ref, reactive, onBeforeMount } from "vue";
+import { ref, reactive, onMount } from "vue";
 import axios from "axios";
 import InsertCourse from '../components/courseInsertModal.vue';
 import courseImg from '../components/imageModal.vue';
@@ -117,10 +115,11 @@ const loadCourseCategories = async () => {
 };
 
 
-
+onMount(() => {
+    loadCourse();
+})
 
 loadCourseCategories();
-loadCourse();
 </script>
     
 <style scoped></style>
