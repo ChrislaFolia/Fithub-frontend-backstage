@@ -9,12 +9,11 @@ import { RouterLink, RouterView } from 'vue-router';
         <NavbarTop></NavbarTop>
         <NavbarLeft></NavbarLeft>
         <router-view></router-view>
-
     </body>
 </template>
 
 <style>
-div {
+/* div {
     border: 1px red solid;
-}
+} */
 </style>
