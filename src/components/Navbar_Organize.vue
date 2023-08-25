@@ -8,7 +8,6 @@
 	<div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 		<nav class="sb-sidenav-menu-nested nav">
 			<router-link class="nav-link" to="department">部門分類</router-link>
-			<a class="nav-link" href="employee">員工管理</a>
 		</nav>
 	</div>
 </template>

@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-import Activity from './Navbar_Acitivity.vue'
-import Organize from './Navbar_Organize.vue'
+import Activity from './Navbar_Acitivity.vue';
+import Organize from './Navbar_Organize.vue';
 import RentOrder from './Navbar_RentOrder.vue';
 import Classroom from './Navbar_Classroom.vue';
+import Announcement from './Navbar_Announcement.vue';
 
 const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
 
@@ -39,10 +40,11 @@ const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
                         </div>
                         
                         <div v-else-if="selectedOption === 'both'">
-                            <Activity></Activity>
                             <Organize></Organize>
-                            <RentOrder></RentOrder>
                             <Classroom></Classroom>
+                            <RentOrder></RentOrder>
+                            <Activity></Activity>
+                            <Announcement></Announcement>
                         </div>
                     </div>
                 </div>

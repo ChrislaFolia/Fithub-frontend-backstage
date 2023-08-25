@@ -2,7 +2,8 @@
     <div id="layoutSidenav">
         <div id="layoutSidenav_content">
             <div class="container-fluid px-4">
-                <h1 class="mt-4" style="text-align: center;">教室</h1>
+                <!-- 標題 -->
+                <h1 class="mt-4" style="text-align: center;">教室場地</h1>
                 <div class="card mb-4">
                     <div class="card-body table-responsive">
                         <button class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal"
@@ -34,7 +35,7 @@
                                     <td>{{ classroom.classroomStatus }}</td>
                                     <td><img :src="classroom.classroomPic" style="width: 150px;height: 150px;" alt="維修中">
                                     </td>
-                                    <td><button class="btn btn-outline-info" data-bs-toggle="modal"
+                                    <td><button class="btn btn-outline-secondary" data-bs-toggle="modal"
                                             @click="openUpdateModal(classroom)" data-bs-target="#updateModal">修改</button>
                                     </td>
                                 </tr>
@@ -82,7 +83,7 @@
                     </div>
                     <div class="mb-3">
                         教室圖片:
-                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
+                        <input id="updatefile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -158,9 +159,13 @@ const classrooms = ref([]); // 儲存SelectAll的教室
 const selectedClassrooms = ref([]); // 儲存選中的 ClassroomID
 const updateSelectedClassroom = reactive({}); // 儲存要修改的教室資料(預設值)
 
-// 将選中的教室資料複製到 selectedClassroom
+// 将選中的教室資料複製到 updateSelectedClassroom
 const openUpdateModal = (classroom) => {
     Object.assign(updateSelectedClassroom, classroom);
+
+    //清空上傳圖片欄位
+    let updatefile = document.querySelector('#updatefile')
+    updatefile.value = '';
 };
 
 // 取得圖片轉為BASE64
@@ -260,13 +265,11 @@ const updateClassroom = async () => {
             return;
         }
 
-
         const response = await axios.put('http://localhost:8080/fithub/classroom/update', updateSelectedClassroom, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-
 
         //關閉動態框
         const updateModal = document.getElementById('updateModal')
