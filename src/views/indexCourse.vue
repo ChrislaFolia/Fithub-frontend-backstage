@@ -16,25 +16,21 @@
                                 <button type="button" id="insertCourse" class="btn btn btn-primary mb-1"
                                     data-bs-toggle="modal" data-bs-target="#insertModal">新增課程資料</button>
                             </div>
-                            <InsertCourse :courseCategories="courseCategories"></InsertCourse>
+                            <InsertCourse :courseCategories="allCourseCategories"></InsertCourse>
                             <table class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
-                                        <th>
-                                            <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
-                                        </th>
                                         <th>課程名稱</th>
                                         <th>課程分類</th>
                                         <th>課程圖片</th>
                                         <th>課程描述</th>
                                         <th>修改</th>
+                                        <th>刪除</th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle text-center">
                                     <tr v-for=" { courseId, courseName, courseCategories, courseImgPath, courseDescription }  in   courses  "
                                         :key="courseId">
-                                        <td><input type="checkbox">
-                                        </td>
                                         <td>{{ courseName }}</td>
                                         <td>{{ courseCategories.categoryName }} </td>
                                         <td>
@@ -55,8 +51,18 @@
                                             </courseDescription>
                                         </td>
                                         <td>
-                                            <button id="getUpdateCourseBtn{{courseId}}" class=" btn btn-secondary btn-sm"
-                                                data-bs-toggle="modal" data-bs-target="#updateModal${courseId}">修改
+                                            <button :id="`getUpdateCourseBtn${courseId}}`"
+                                                class=" btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
+                                                :data-bs-target="`#updateModal${courseId}`">修改
+                                            </button>
+                                            <UpdateCourse :categories="courseCategories" :courseId="courseId"
+                                                :courseName="courseName" :courseImgPath="courseImgPath"
+                                                :courseCategories="courseCategories" :courseDescription="courseDescription"
+                                                :allCourseCategories="allCourseCategories">
+                                            </UpdateCourse>
+                                        </td>
+                                        <td>
+                                            <button :id="`deleteCourse${courseId}`" class="btn btn-outline-danger btn-sm">刪除
                                             </button>
                                         </td>
                                     </tr>
@@ -74,9 +80,10 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
-import InsertCourse from '../components/courseInsertModal.vue';
-import courseImg from '../components/imageModal.vue';
-import courseDescription from '../components/textModal.vue';
+import InsertCourse from '../components/course/courseInsertModal.vue';
+import courseImg from '../components/util/imageModal.vue';
+import courseDescription from '../components/util/textModal.vue';
+import UpdateCourse from '../components/course/courseUpdateModal.vue'
 const totalPages = ref(0);
 const datas = reactive({
     start: 0,
@@ -89,7 +96,7 @@ const datas = reactive({
 // Load course data
 const courses = ref([]);
 const URL = import.meta.env.VITE_API_JAVAURL;
-const loadCourse = async () => {
+const loadCourses = async () => {
     const URLAPI = `${URL}/course/findAll`;
     const response = await axios.get(URLAPI, datas);
     // console.log(response.data)
@@ -102,24 +109,24 @@ const loadCourse = async () => {
 };
 
 // Load courseCategories data
-const courseCategories = ref([]);
-const loadCourseCategories = async () => {
+const allCourseCategories = ref([]);
+const loadAllCourseCategories = async () => {
     const URLAPI = `${URL}/coursecategories/findAll`;
     const response = await axios.get(URLAPI, datas);
     console.log(response.data)
 
     //取得所有分類放進courseCategories變數
-    courseCategories.value = response.data;
-    console.log(courseCategories)
+    allCourseCategories.value = response.data;
+    console.log(allCourseCategories)
 
 };
 
 
 onMounted(() => {
-    loadCourse();
+    loadCourses();
 })
 
-loadCourseCategories();
+loadAllCourseCategories();
 </script>
     
 <style scoped></style>
