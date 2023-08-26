@@ -60,52 +60,6 @@
         </div>
     </div>
 
-    <!-- 修改-彈出視窗 -->
-    <!-- <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">更新教室</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        教室名稱<input v-model="updateSelectedClassroom.classroomName" type="text" class="form-control">
-                        <span v-if="!updateSelectedClassroom.classroomName" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        容納人數<input v-model="updateSelectedClassroom.classroomCapacity" type="text" class="form-control">
-                        <span v-if="!updateSelectedClassroom.classroomCapacity" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        設備介紹<input v-model="updateSelectedClassroom.classroomDescription" type="text" class="form-control">
-                        <span v-if="!updateSelectedClassroom.classroomDescription" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        租借價格<input v-model="updateSelectedClassroom.classroomPrice" type="text" class="form-control">
-                        <span v-if="!updateSelectedClassroom.classroomPrice" class="text-danger">必填</span>
-                    </div>
-                    教室狀態
-                    <div class="mb-3">
-                        <select v-model="updateSelectedClassroom.classroomStatus" class="form-control">
-                            <option value="開放">開放</option>
-                            <option value="關閉">關閉</option>
-                            <option value="維修中">維修中</option>
-                        </select>
-                        <span v-if="!updateSelectedClassroom.classroomStatus" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        教室圖片:
-                        <input id="updatefile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" @click="updateClassroom">送出</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
 
     <!-- 新增-彈出視窗 -->
     <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
@@ -159,7 +113,8 @@
                     </div>
                     <div class="mb-3">
                         內容<br>
-                        <textarea rows="10" cols="55" v-model="Activity.activitydescription"></textarea>
+                        <textarea id="editor" v-model="Activity.activitydescription"></textarea>
+                        <!-- <div id="editor"></div> -->
                         <span v-if="!Activity.activitydescription" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
@@ -179,6 +134,8 @@
 <script setup>
 import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 //建立活動物件
 const Activity = reactive({
@@ -188,16 +145,18 @@ const Activity = reactive({
     activitydisplay: '',
     activityoff: '',
     activityon: '',
-    pic: [],
     activitysort: '',
     activityurl: '',
-    employeeid: ''
+    employeeid: '',
+    pic: [],
 });
 
 const Activitys = ref([]); // 儲存SelectAll的活動
 const AllemployeenameAndemployeeid = ref([]);
 const selectedActivities = ref([]); // 儲存選中的 ClassroomID
 const updateSelectedActivities = reactive({}); // 儲存要修改的教室資料(預設值)
+let editor = ref(null);
+
 
 // 将選中的教室資料複製到 updateSelectedClassroom
 const openUpdateModal = (Activity) => {
@@ -229,22 +188,6 @@ const imageInsert = (event) => {
     }
 };
 
-// 取得圖片轉為BASE64(update)
-const imageUpdate = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.onload = (event) => {
-            const base64Data = event.target.result;
-            updateSelectedClassroom.classroomPic = base64Data;
-        };
-    }
-};
-
-
 // 從伺服器獲取 JSON 格式教室資料
 const getActivitys = async () => {
     try {
@@ -271,9 +214,11 @@ const getAllemployeenameAndemployeeid = async () => {
 // 新增活動
 const insertActivity = async () => {
     try {
+        const editorContent = editor.getData();
+        Activity.activitydescription = editorContent;
+
         // 检查是否有任何必填字段为空
         if (!Activity.activitydate ||
-            !Activity.activitydescription ||
             !Activity.activityname ||
             !Activity.activitydisplay ||
             !Activity.activityoff ||
@@ -283,7 +228,7 @@ const insertActivity = async () => {
             !Activity.employeeid) {
             return;
         }
-        console.log(Activity)
+
         const response = await axios.post('http://localhost:8080/fithub/activity/insert', Activity, {
             headers: {
                 'Content-Type': 'application/json'
@@ -293,9 +238,9 @@ const insertActivity = async () => {
 
 
         // 關閉動態框
-        const insertModal = document.getElementById('insertModal')
-        let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
-        getInstanceInsertModal.toggle();
+        // const insertModal = document.getElementById('insertModal')
+        // let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
+        // getInstanceInsertModal.toggle();
 
         // 清空輸入的值
         // Activity.activitydate = ''
@@ -317,35 +262,6 @@ const insertActivity = async () => {
     }
 };
 
-// // 更新教室
-// const updateClassroom = async () => {
-//     try {
-//         // 检查是否有任何必填字段为空
-//         if (!updateSelectedClassroom.classroomName ||
-//             !updateSelectedClassroom.classroomCapacity ||
-//             !updateSelectedClassroom.classroomDescription ||
-//             !updateSelectedClassroom.classroomPrice ||
-//             !updateSelectedClassroom.classroomStatus) {
-//             return;
-//         }
-
-//         const response = await axios.put('http://localhost:8080/fithub/classroom/update', updateSelectedClassroom, {
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             }
-//         });
-
-//         //關閉動態框
-//         const updateModal = document.getElementById('updateModal')
-//         let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
-//         getInstanceUpdateModal.toggle();
-
-//         // 刷新畫面
-//         getclassrooms();
-//     } catch (error) {
-//         console.error('Error adding new classroom:', error);
-//     }
-// };
 
 // // 刪除多筆教室
 const deleteSelected = async () => {
@@ -370,11 +286,26 @@ const deleteSelected = async () => {
 onMounted(() => {
     getActivitys();
     getAllemployeenameAndemployeeid();
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(newEditor => {
+            //將DOM取得的editor賦與宣告的變數提供訪問方法和屬性
+            editor = newEditor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
 });
+
 </script>
 
-<style scoped>
+<style >
 .text-danger {
     font-size: 8px;
+}
+
+/* 調整文字編輯器樣式 */
+.ck-editor__editable {
+    min-height: 400px;
 }
 </style>
