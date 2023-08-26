@@ -61,9 +61,9 @@
     </div>
 
 
-    <!-- 新增-彈出視窗 -->
+    <!-- 新增-彈出視窗 點擊表格外不關閉="static"  取消輸入聚焦在表格data-bs-focus="false"-->
     <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
-        data-bs-backdrop="static">
+        data-bs-backdrop="static" data-bs-focus="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -155,7 +155,8 @@ const Activitys = ref([]); // 儲存SelectAll的活動
 const AllemployeenameAndemployeeid = ref([]);
 const selectedActivities = ref([]); // 儲存選中的 ClassroomID
 const updateSelectedActivities = reactive({}); // 儲存要修改的教室資料(預設值)
-let editor = ref(null);
+let editor = ref(null); //文字編輯器
+
 
 
 // 将選中的教室資料複製到 updateSelectedClassroom
@@ -286,6 +287,7 @@ const deleteSelected = async () => {
 onMounted(() => {
     getActivitys();
     getAllemployeenameAndemployeeid();
+    //建立文字編輯器
     ClassicEditor
         .create(document.querySelector('#editor'))
         .then(newEditor => {
@@ -307,5 +309,11 @@ onMounted(() => {
 /* 調整文字編輯器樣式 */
 .ck-editor__editable {
     min-height: 400px;
+}
+
+/* 調整文字編輯器URL按鈕(focus) */
+body {
+    --ck-z-default: 100;
+    --ck-z-modal: calc(var(--ck-z-default) + 999);
 }
 </style>
