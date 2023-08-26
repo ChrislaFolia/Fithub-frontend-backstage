@@ -72,7 +72,7 @@
 </template>
     
 <script setup>
-import { ref, reactive, onMount } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
 import InsertCourse from '../components/courseInsertModal.vue';
 import courseImg from '../components/imageModal.vue';
@@ -115,7 +115,7 @@ const loadCourseCategories = async () => {
 };
 
 
-onMount(() => {
+onMounted(() => {
     loadCourse();
 })
 
