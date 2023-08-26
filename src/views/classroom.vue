@@ -3,7 +3,7 @@
         <div id="layoutSidenav_content">
             <div class="container-fluid px-4">
                 <!-- 標題 -->
-                <h1 class="mt-4" style="text-align: center;">教室場地</h1>
+                <h1 class="mt-4" style="text-align: center;">全部教室</h1>
                 <div class="card mb-4">
                     <div class="card-body table-responsive">
                         <button class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal"
@@ -48,7 +48,8 @@
     </div>
 
     <!-- 修改-彈出視窗 -->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+        data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -82,7 +83,7 @@
                         <span v-if="!updateSelectedClassroom.classroomStatus" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        教室圖片:
+                        教室圖片
                         <input id="updatefile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
                     </div>
                 </div>
@@ -95,7 +96,8 @@
 
 
     <!-- 新增-彈出視窗 -->
-    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
+    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
+        data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -129,7 +131,7 @@
                         <span v-if="!classroom.classroomStatus" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        教室圖片:
+                        教室圖片
                         <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageInsert">
                     </div>
                 </div>
