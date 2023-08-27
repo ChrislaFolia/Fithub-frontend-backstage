@@ -16,7 +16,8 @@
                                 <button type="button" id="insertCourse" class="btn btn btn-primary mb-1"
                                     data-bs-toggle="modal" data-bs-target="#insertModal">新增課程資料</button>
                             </div>
-                            <InsertCourse :courseCategories="allCourseCategories"></InsertCourse>
+                            <InsertCourse :allCourseCategories="allCourseCategories"
+                                @submitInsertCourse-emit="loadCourses()"></InsertCourse>
                             <table class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -62,7 +63,8 @@
                                             </UpdateCourse>
                                         </td>
                                         <td>
-                                            <button :id="`deleteCourse${courseId}`" class="btn btn-outline-danger btn-sm">刪除
+                                            <button @click="deleteCourse(`${courseId}`, `${courseName}`)"
+                                                class="btn btn-outline-danger btn-sm">刪除
                                             </button>
                                         </td>
                                     </tr>
@@ -81,9 +83,9 @@
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
 import InsertCourse from '../components/course/courseInsertModal.vue';
+import UpdateCourse from '../components/course/courseUpdateModal.vue'
 import courseImg from '../components/util/imageModal.vue';
 import courseDescription from '../components/util/textModal.vue';
-import UpdateCourse from '../components/course/courseUpdateModal.vue'
 const totalPages = ref(0);
 const datas = reactive({
     start: 0,
@@ -120,6 +122,31 @@ const loadAllCourseCategories = async () => {
     console.log(allCourseCategories)
 
 };
+
+
+// deleteCourse
+const deleteCourse = async (courseId, courseName) => {
+    // console.log(`i am here to delete \${courseId}`);
+    // console.log(e);
+    const URLAPI = `${URL}/course/${courseId}`;
+    let msg = prompt(`您確定要刪除嗎?\n請輸入想要刪除的課程名稱:`);
+    if (msg == `${courseName}`) {
+        const response = await axios.delete(URLAPI);
+        console.log(response);
+        console.log(response.status);
+        if (response.status == 200) {
+            alert('刪除成功');
+        } else {
+            alert('刪除失敗');
+
+        }
+        loadCourses();
+
+    } else if (msg == null) {
+    } else {
+        alert('輸入錯誤');
+    }
+}
 
 
 onMounted(() => {
