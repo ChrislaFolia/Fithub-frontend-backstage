@@ -21,7 +21,7 @@
 
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">課程名稱 :</label>
-                        <input type="text" class="form-control" v-model="course.courseName" />
+                        <input type="text" class="form-control" v-model.trim="course.courseName" />
 
                     </div>
 
@@ -32,7 +32,7 @@
 
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">課程描述 :</label>
-                        <textarea class="form-control" rows="6" v-model="course.courseDescription"></textarea>
+                        <textarea class="form-control" rows="6" v-model.trim="course.courseDescription"></textarea>
 
                     </div>
                     <!-- </form> -->
@@ -63,31 +63,44 @@ const course = reactive({
     courseName: '',
     categoryId: '',
     courseDescription: '',
-    // courseImgFile: [],
+    courseImgPath: '',
 });
-
+const formData = new FormData;
 const courseImgFile = reactive([])
 
 const fileChange = (e) => {
     let file = e.target.files[0]
-    // console.log(file)
-    courseImgFile = []
-    courseImgFile.push(file)
-    // console.log(course.courseImgFile);
+    console.log(file)
+    // courseImgFile = []
+    // courseImgFile.push(file)
+    // console.log(courseImgFile);
+    formData.append('photoContent', file);
+    console.log(formData);
 }
 // const sendInsertCourse(e){
 //     this.$emit('sendInsertCourse-emit', this.courses)
 // }
 const URL = import.meta.env.VITE_API_JAVAURL;
 const submitInsertCourse = async (e) => {
-    const URLAPI = `${URL}/course`;
 
-    const response = await axios.post(URLAPI, course
+    const resUploadFile = await axios.post(`${URL}/course/uploadImg`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    }
+    ).catch((error) => {
+        console.log(error.toJSON());
+    });
+    console.log(resUploadFile);
+    course.courseImgPath = resUploadFile.data
+    console.log(course.courseImgPath);
+    const resInsertCourse = await axios.post(`${URL}/course`, course
     ).catch((error) => {
         console.log(error.toJSON());
     });
 
-    emit('submitInsertCourse-emit')
+    // emit('submitInsertCourse-emit')
+    location.reload();
 };
 
 </script>

@@ -9,7 +9,7 @@
                 </div>
                 <div class="modal-body">
                     <picture>
-                        <img :src="`../assets/image/course/${parentImgPath}`" class="img-fluid" alt="not Found">
+                        <img :src="`${URL}/course/img/${parentId}`" class="img-fluid" alt="not Found">
                         <figcaption>{{ parentImgName }}</figcaption>
                     </picture>
                 </div>
@@ -22,6 +22,7 @@
 </template>
     
 <script setup >
+const URL = import.meta.env.VITE_API_JAVAURL;
 const props = defineProps({
     parentId: Number,
     parentImgName: String,
