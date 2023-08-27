@@ -64,7 +64,7 @@
     <!-- 新增-彈出視窗 點擊表格外不關閉="static"  取消輸入聚焦在表格data-bs-focus="false"-->
     <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
         data-bs-backdrop="static" data-bs-focus="false">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">新增活動</h5>
@@ -114,7 +114,6 @@
                     <div class="mb-3">
                         內容<br>
                         <textarea id="editor" v-model="Activity.activitydescription"></textarea>
-                        <!-- <div id="editor"></div> -->
                         <span v-if="!Activity.activitydescription" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
@@ -134,7 +133,7 @@
 <script setup>
 import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';  已改用CDN
 
 
 //建立活動物件
@@ -155,8 +154,7 @@ const Activitys = ref([]); // 儲存SelectAll的活動
 const AllemployeenameAndemployeeid = ref([]);
 const selectedActivities = ref([]); // 儲存選中的 ClassroomID
 const updateSelectedActivities = reactive({}); // 儲存要修改的教室資料(預設值)
-let editor = ref(null); //文字編輯器
-
+let editor = ref(); //文字編輯器
 
 
 // 将選中的教室資料複製到 updateSelectedClassroom
@@ -215,10 +213,11 @@ const getAllemployeenameAndemployeeid = async () => {
 // 新增活動
 const insertActivity = async () => {
     try {
+        //取得文字編輯器內容
         const editorContent = editor.getData();
         Activity.activitydescription = editorContent;
 
-        // 检查是否有任何必填字段为空
+        //检查是否有任何必填字段为空
         if (!Activity.activitydate ||
             !Activity.activityname ||
             !Activity.activitydisplay ||
@@ -236,28 +235,26 @@ const insertActivity = async () => {
             }
         });
 
-
-
         // 關閉動態框
-        // const insertModal = document.getElementById('insertModal')
-        // let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
-        // getInstanceInsertModal.toggle();
+        const insertModal = document.getElementById('insertModal')
+        let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
+        getInstanceInsertModal.toggle();
 
         // 清空輸入的值
-        // Activity.activitydate = ''
-        // Activity.activitydescription = ''
-        // Activity.activityname = ''
-        // Activity.activitydisplay = ''
-        // Activity.activityoff = ''
-        // Activity.activityon = ''
-        // Activity.activitysort = ''
-        // Activity.activityurl = ''
-        // Activity.employeeid = ''
-        // let insertfile = document.querySelector('#insertfile')
-        // insertfile.value = '';
+        Activity.activitydate = ''
+        Activity.activitydescription = ''
+        Activity.activityname = ''
+        Activity.activitydisplay = ''
+        Activity.activityoff = ''
+        Activity.activityon = ''
+        Activity.activitysort = ''
+        Activity.activityurl = ''
+        Activity.employeeid = ''
+        let insertfile = document.querySelector('#insertfile')
+        insertfile.value = '';
 
         // 刷新畫面
-        // getActivitys();
+        getActivitys();
     } catch (error) {
         console.error('Error adding new Activity:', error);
     }
@@ -288,16 +285,136 @@ onMounted(() => {
     getActivitys();
     getAllemployeenameAndemployeeid();
     //建立文字編輯器
-    ClassicEditor
-        .create(document.querySelector('#editor'))
+    CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+        toolbar: {
+            items: [
+                'exportPDF', 'exportWord', '|',
+                'findAndReplace', 'selectAll', '|',
+                'heading', '|',
+                'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+                'bulletedList', 'numberedList', 'todoList', '|',
+                'outdent', 'indent', '|',
+                'undo', 'redo',
+                '-',
+                'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                'alignment', '|',
+                'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+                'specialCharacters', 'horizontalLine', '|',
+                'sourceEditing'
+            ],
+            shouldNotGroupWhenFull: true
+        },
+        list: {
+            properties: {
+                styles: true,
+                startIndex: true,
+                reversed: true
+            }
+        },
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+            ]
+        },
+        // placeholder: 'Welcome to CKEditor&nbsp;5!',
+        fontFamily: {
+            options: [
+                'default',
+                'Arial, Helvetica, sans-serif',
+                'Courier New, Courier, monospace',
+                'Georgia, serif',
+                'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                'Tahoma, Geneva, sans-serif',
+                'Times New Roman, Times, serif',
+                'Trebuchet MS, Helvetica, sans-serif',
+                'Verdana, Geneva, sans-serif'
+            ],
+            supportAllValues: true
+        },
+        fontSize: {
+            options: [10, 12, 14, 'default', 18, 20, 22],
+            supportAllValues: true
+        },
+        htmlSupport: {
+            allow: [
+                {
+                    name: /.*/,
+                    attributes: true,
+                    classes: true,
+                    styles: true
+                }
+            ]
+        },
+        htmlEmbed: {
+            showPreviews: true
+        },
+        link: {
+            decorators: {
+                addTargetToExternalLinks: true,
+                defaultProtocol: 'https://',
+                toggleDownloadable: {
+                    mode: 'manual',
+                    label: 'Downloadable',
+                    attributes: {
+                        download: 'file'
+                    }
+                }
+            }
+        },
+        mention: {
+            feeds: [
+                {
+                    marker: '@',
+                    feed: [
+                        '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+                        '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+                        '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+                        '@sugar', '@sweet', '@topping', '@wafer'
+                    ],
+                    minimumCharacters: 1
+                }
+            ]
+        },
+        removePlugins: [
+            'CKBox',
+            'CKFinder',
+            'EasyImage',
+            'RealTimeCollaborativeComments',
+            'RealTimeCollaborativeTrackChanges',
+            'RealTimeCollaborativeRevisionHistory',
+            'PresenceList',
+            'Comments',
+            'TrackChanges',
+            'TrackChangesData',
+            'RevisionHistory',
+            'Pagination',
+            'WProofreader',
+            'MathType',
+            'SlashCommand',
+            'Template',
+            'DocumentOutline',
+            'FormatPainter',
+            'TableOfContents',
+            'PasteFromOfficeEnhanced'
+        ]
+    })
         .then(newEditor => {
-            //將DOM取得的editor賦與宣告的變數提供訪問方法和屬性
+            // 將 DOM 取得的 editor 賦予宣告的變數提供訪問方法和屬性
             editor = newEditor;
         })
         .catch(error => {
             console.error(error);
         });
 });
+
+
+
 
 </script>
 
@@ -308,7 +425,7 @@ onMounted(() => {
 
 /* 調整文字編輯器樣式 */
 .ck-editor__editable {
-    min-height: 400px;
+    min-height: 500px;
 }
 
 /* 調整文字編輯器URL按鈕(focus) */

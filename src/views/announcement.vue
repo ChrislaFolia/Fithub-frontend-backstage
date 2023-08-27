@@ -2,7 +2,7 @@
     <div id="layoutSidenav">
         <div id="layoutSidenav_content">
             <div class="container-fluid px-4">
-                <h1 class="mt-4" style="text-align: center;">全部活動</h1>
+                <h1 class="mt-4" style="text-align: center;">全部公告</h1>
                 <div class="card mb-4">
                     <div class="card-body table-responsive">
 
