@@ -9,7 +9,8 @@
         <div class="collapse" id="collapseLayouts5" aria-labelledby="headingOne"
             data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-                <router-link class="nav-link" to="coupons">優惠券</router-link>									
+                <router-link class="nav-link" to="coupons">全部優惠券</router-link>
+                <router-link class="nav-link" to="couponcategories">優惠券分類</router-link>									
             </nav>
         </div>
 </template>

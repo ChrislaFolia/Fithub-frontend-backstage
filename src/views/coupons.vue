@@ -13,31 +13,33 @@
                                     <th>
                                         <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
                                     </th>
-                                    <th>優惠券名稱</th>
+                                    <th>分類</th>
+                                    <th>名稱</th>
                                     <th>優惠碼</th>
                                     <th>有效日期</th>
                                     <th>使用門檻</th>
                                     <th>優惠券折扣</th>
-                                    <th>已使用/可使用</th>
+                                    <th>已使用/發行總數</th>
                                     <th>修改</th>
                                 </tr>
                             </thead>
 
                             <tbody class="align-middle text-center">
                                 <tr v-for="(coupon, couponindex) in coupons" :key="couponindex">
-                                    <td><input type="checkbox" v-model="selectedCoupons" :value="coupon.couponId">
+                                    <td><input type="checkbox" v-model="selectedCoupons" :value="coupon.couponid">
                                     </td>
+                                    <td>{{ getCouponCategoryName(coupon) }}</td>
                                     <td>{{ coupon.couponname }}</td>
                                     <td>{{ coupon.couponcode }}</td>
                                     <td>{{ coupon.coupongeneratedate }}至{{ coupon.couponenddate }}</td>
                                     <td>{{ coupon.couponthreshold }}</td>
                                     <td>{{ coupon.coupondiscount }}</td>
-                                    <td>{{ coupon.couponused }}</td>
+                                    <td>{{ coupon.couponused }}/{{ coupon.couponamount }}</td>
 
                                     
-                                    <!-- <td><button class="btn btn-outline-info" data-bs-toggle="modal"
-                                            @click="openUpdateModal(classroom)" data-bs-target="#updateModal">修改</button>
-                                    </td> -->
+                                    <td><button class="btn btn-outline-info" data-bs-toggle="modal"
+                                            @click="openUpdateModal(coupon)" data-bs-target="#updateModal">修改</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -48,7 +50,7 @@
     </div>
 
     <!-- 修改-彈出視窗 -->
-    <!-- <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -57,69 +59,90 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        教室名稱<input v-model="updateSelectedClassroom.classroomName" type="text" class="form-control">
-                        <span v-if="!updateSelectedClassroom.classroomName" class="text-danger">必填</span>
+                        名稱<input v-model="updateSelectedCoupon.couponname" type="text" class="form-control" required="required">
+                        <span v-if="!updateSelectedCoupon.couponname" class="text-danger">必填</span>
+                    </div>
+                   <div class="mb-3">
+                        優惠碼<input v-model="updateSelectedCoupon.couponcode" type="text" class="form-control" required="required">
+                        <span v-if="!updateSelectedCoupon.couponcode" class="text-danger">必填</span>
+                    </div>
+                     <div class="mb-3">
+                        生效日期<input v-model="updateSelectedCoupon.coupongeneratedate" type="date" class="form-control" required="required">
+                        <span v-if="!updateSelectedCoupon.coupongeneratedate" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        容納人數<input v-model="updateSelectedClassroom.classroomCapacity" type="text" class="form-control">
-                        <span v-if="!updateSelectedClassroom.classroomCapacity" class="text-danger">必填</span>
+                        結束日期<input v-model="updateSelectedCoupon.couponenddate" type="date" class="form-control" required="required">
+                        <span v-if="!updateSelectedCoupon.couponenddate" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        設備介紹<input v-model="updateSelectedClassroom.classroomDescription" type="text" class="form-control">
-                        <span v-if="!updateSelectedClassroom.classroomDescription" class="text-danger">必填</span>
+                        使用門檻<input v-model="updateSelectedCoupon.couponthreshold" type="text" class="form-control" required="required">
+                        <span v-if="!updateSelectedCoupon.couponthreshold" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        租借價格<input v-model="updateSelectedClassroom.classroomPrice" type="text" class="form-control">
-                        <span v-if="!updateSelectedClassroom.classroomPrice" class="text-danger">必填</span>
+                        折扣金額<input v-model="updateSelectedCoupon.coupondiscount" type="text" class="form-control" required="required">
+                        <span v-if="!updateSelectedCoupon.coupondiscount" class="text-danger">必填</span>
                     </div>
-                    教室狀態
+                    <label class="form-label">分類</label>
                     <div class="mb-3">
-                        <select v-model="updateSelectedClassroom.classroomStatus" class="form-control">
-                            <option value="開放">開放</option>
-                            <option value="關閉">關閉</option>
-                            <option value="維修中">維修中</option>
+                        <select v-model="updateSelectedCoupon.couponcategoriesid" class="form-control" required="required">
+                            <option value="1">全站通用</option>
+                            <option value="3">拳擊限定</option>        
                         </select>
-                        <span v-if="!updateSelectedClassroom.classroomStatus" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        教室圖片:
-                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
-                    </div>
+                        <span v-if="!updateSelectedCoupon.couponcategoriesid" class="text-danger">必填</span>
+                    </div>                                  
+                    
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" @click="updateClassroom">送出</button>
+                    <button type="submit" class="btn btn-primary" @click="updateCoupon">送出</button>
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
 
     <!-- 新增-彈出視窗 -->
-    <!-- <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
+    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">新增教室</h5>
+                    <h5 class="modal-title">新增優惠券</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        教室名稱<input v-model="classroom.classroomName" type="text" class="form-control">
-                        <span v-if="!classroom.classroomName" class="text-danger">必填</span>
+                        名稱<input v-model="coupon.couponname" type="text" class="form-control" required="required">
+                        <span v-if="!coupon.couponname" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        容納人數<input v-model="classroom.classroomCapacity" type="text" class="form-control">
-                        <span v-if="!classroom.classroomCapacity" class="text-danger">必填</span>
+                        優惠碼<input v-model="coupon.couponcode" type="text" class="form-control" required="required">
+                        <span v-if="!coupon.couponcode" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        設備介紹<input v-model="classroom.classroomDescription" type="text" class="form-control">
-                        <span v-if="!classroom.classroomDescription" class="text-danger">必填</span>
+                        生效日期<input v-model="coupon.coupongeneratedate" type="date" class="form-control" required="required">
+                        <span v-if="!coupon.coupongeneratedate" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        租借價格<input v-model="classroom.classroomPrice" type="text" class="form-control">
-                        <span v-if="!classroom.classroomPrice" class="text-danger">必填</span>
+                        結束日期<input v-model="coupon.couponenddate" type="date" class="form-control" required="required">
+                        <span v-if="!coupon.couponenddate" class="text-danger">必填</span>
                     </div>
-                    教室狀態
+                    <div class="mb-3">
+                        使用門檻<input v-model="coupon.couponthreshold" type="text" class="form-control" required="required">
+                        <span v-if="!coupon.couponthreshold" class="text-danger">必填</span>
+                    </div>
+                    <div class="mb-3">
+                        折扣金額<input v-model="coupon.coupondiscount" type="text" class="form-control" required="required">
+                        <span v-if="!coupon.coupondiscount" class="text-danger">必填</span>
+                    </div>
+                    <label class="form-label">分類</label>
+                    <div class="mb-3">
+                        <select v-model="coupon.couponcategoriesid" class="form-control" required="required">
+                            <option value="1">全站通用</option>
+                            <option value="3">拳擊限定</option>                            
+                        </select>
+                        <span v-if="!coupon.couponcategoriesid" class="text-danger">必填</span>
+                    </div>                                  
+                   
+                    <!-- 教室狀態
                     <div class="mb-3">
                         <select v-model="classroom.classroomStatus" class="form-control">
                             <option value="開放">開放</option>
@@ -127,23 +150,22 @@
                             <option value="維修中">維修中</option>
                         </select>
                         <span v-if="!classroom.classroomStatus" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        教室圖片:
-                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageInsert">
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" @click="insertClassroom">送出</button>
+                    <button type="submit" class="btn btn-primary" @click="insertCoupon">送出</button>
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 </template>
   
 <script setup>
 import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
+
+
+
 
 //建立優惠券物件
 const coupon = reactive(
@@ -163,42 +185,14 @@ const coupon = reactive(
 
 const coupons = ref([]); // 儲存SelectAll的教室
 const selectedCoupons = ref([]); // 儲存選中的 ClassroomID
-const updateSelectedClassroom = reactive({}); // 儲存要修改的教室資料(預設值)
+const updateSelectedCoupon = reactive({}); // 儲存要修改的優惠券資料(預設值)
 
-// 将選中的教室資料複製到 updateSelectedClassroom
-const openUpdateModal = (classroom) => {
-    Object.assign(updateSelectedClassroom, classroom);
+
+// 将選中的教室資料複製到 updateSelectedCoupon
+const openUpdateModal = (coupon) => {
+    Object.assign(updateSelectedCoupon, coupon);
 };
 
-// 取得圖片轉為BASE64
-const imageInsert = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.onload = (event) => {
-            const base64Data = event.target.result;
-            classroom.classroomPic = base64Data;
-        };
-    }
-};
-
-// 取得圖片轉為BASE64
-const imageUpdate = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.onload = (event) => {
-            const base64Data = event.target.result;
-            updateSelectedClassroom.classroomPic = base64Data;
-        };
-    }
-};
 
 
 // 從伺服器獲取 JSON 格式優惠券資料
@@ -213,79 +207,79 @@ const getcoupons = async () => {
     }
 };
 
-// // 新增教室
-// const insertClassroom = async () => {
-//     try {
-//         // 检查是否有任何必填字段为空
-//         if (!classroom.classroomName ||
-//             !classroom.classroomCapacity ||
-//             !classroom.classroomDescription ||
-//             !classroom.classroomPrice ||
-//             !classroom.classroomStatus) {
-//             return;
-//         }
+const getCouponCategoryName = (coupon) => {
+      if (coupon.couponCategories) {  // 注意属性名的大小寫
+        return coupon.couponCategories.couponcategoriesname;  // 注意属性名的大小寫
+      }
+      return '未知類別';
+    };
+
+// 新增優惠券
+const insertCoupon = async () => {
+    try{
+        const response = await axios.post('http://localhost:8080/fithub/coupons', coupon, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
 
-//         const response = await axios.post('http://localhost:8080/fithub/classroom/insert', classroom, {
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             }
-//         });
+        //關閉動態框
+        const insertModal = document.getElementById('insertModal')
+        let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
+        getInstanceInsertModal.toggle();
+
+        // 清空輸入的值
+        coupon.couponname = '';
+        coupon.coupongeneratedate = '';
+        coupon.couponenddate = '';
+        coupon.couponcode = '';
+        coupon.couponamount = '';
+        coupon.couponceil = '';
+        coupon.coupondiscount = '';
+        coupon.couponused = '';
+        coupon.couponthreshold = '';
+        // let insertfile = document.querySelector('#insertfile')
+        // insertfile.value = '';
+
+        // 刷新畫面
+        getcoupons();
+    } catch (error) {
+        console.error('Error adding new coupon:', error);
+    }
+};
+
+// 更新教室
+const updateCoupon = async () => {
+    // try {
+    //     // 检查是否有任何必填字段为空
+    //     if (!updateSelectedClassroom.classroomName ||
+    //         !updateSelectedClassroom.classroomCapacity ||
+    //         !updateSelectedClassroom.classroomDescription ||
+    //         !updateSelectedClassroom.classroomPrice ||
+    //         !updateSelectedClassroom.classroomStatus) {
+    //         return;
+    //     }
 
 
-//         //關閉動態框
-//         const insertModal = document.getElementById('insertModal')
-//         let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
-//         getInstanceInsertModal.toggle();
-
-//         // 清空輸入的值
-//         classroom.classroomName = '';
-//         classroom.classroomCapacity = '';
-//         classroom.classroomDescription = '';
-//         classroom.classroomPrice = '';
-//         classroom.classroomStatus = '';
-//         classroom.classroomPic = '';
-//         let insertfile = document.querySelector('#insertfile')
-//         insertfile.value = '';
-
-//         // 刷新畫面
-//         getclassrooms();
-//     } catch (error) {
-//         console.error('Error adding new classroom:', error);
-//     }
-// };
-
-// // 更新教室
-// const updateClassroom = async () => {
-//     try {
-//         // 检查是否有任何必填字段为空
-//         if (!updateSelectedClassroom.classroomName ||
-//             !updateSelectedClassroom.classroomCapacity ||
-//             !updateSelectedClassroom.classroomDescription ||
-//             !updateSelectedClassroom.classroomPrice ||
-//             !updateSelectedClassroom.classroomStatus) {
-//             return;
-//         }
+        const response = await axios.put('http://localhost:8080/fithub/coupons/update', updateSelectedCoupon, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
 
-//         const response = await axios.put('http://localhost:8080/fithub/classroom/update', updateSelectedClassroom, {
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             }
-//         });
+        //關閉動態框
+        const updateModal = document.getElementById('updateModal')
+        let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
+        getInstanceUpdateModal.toggle();
 
-
-//         //關閉動態框
-//         const updateModal = document.getElementById('updateModal')
-//         let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
-//         getInstanceUpdateModal.toggle();
-
-//         // 刷新畫面
-//         getclassrooms();
-//     } catch (error) {
-//         console.error('Error adding new classroom:', error);
-//     }
-// };
+        // 刷新畫面
+        getcoupons();
+    // } catch (error) {
+    //     console.error('Error adding new classroom:', error);
+    // }
+};
 
 // 刪除多筆教室
 const deleteSelected = async () => {
@@ -309,6 +303,7 @@ const deleteSelected = async () => {
 
 onMounted(() => {
     getcoupons();
+    
 });
 </script>
 

@@ -18,6 +18,11 @@ const router = createRouter({
       component: () => import('../views/coupons.vue')
     },
     {
+      path: '/couponcategories',
+      name: 'couponcategories',
+      component: () => import('../views/couponcategories.vue')
+    },
+    {
       path: '/activity',
       name: 'activity',
       component: () => import('../views/activity.vue')
