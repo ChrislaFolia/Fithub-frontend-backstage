@@ -28,7 +28,7 @@
                                 <tr v-for="(coupon, couponindex) in coupons" :key="couponindex">
                                     <td><input type="checkbox" v-model="selectedCoupons" :value="coupon.couponid">
                                     </td>
-                                    <td>{{ getCouponCategoryName(coupon) }}</td>
+                                    <td>{{ coupon.couponCategories.couponcategoriesname}}</td>
                                     <td>{{ coupon.couponname }}</td>
                                     <td>{{ coupon.couponcode }}</td>
                                     <td>{{ coupon.coupongeneratedate }}至{{ coupon.couponenddate }}</td>
@@ -206,13 +206,6 @@ const getcoupons = async () => {
         console.error('Error getcoupons data:', error);
     }
 };
-
-const getCouponCategoryName = (coupon) => {
-      if (coupon.couponCategories) {  // 注意属性名的大小寫
-        return coupon.couponCategories.couponcategoriesname;  // 注意属性名的大小寫
-      }
-      return '未知類別';
-    };
 
 // 新增優惠券
 const insertCoupon = async () => {

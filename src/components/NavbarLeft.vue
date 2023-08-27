@@ -6,6 +6,7 @@ import Coupons from './Navbar_Coupons.vue'
 const selectedOption = ref('getAll'); // 預設選擇單一 Activity 組件
 import RentOrder from './Navbar_RentOrder.vue';
 import Classroom from './Navbar_Classroom.vue';
+import Orders from './Navbar_Orders.vue';
 
 </script>
 
@@ -48,6 +49,7 @@ import Classroom from './Navbar_Classroom.vue';
                             <Coupons></Coupons>
                             <RentOrder></RentOrder>
                             <Classroom></Classroom>
+                            <Orders></Orders>
                         </div>
 
 
