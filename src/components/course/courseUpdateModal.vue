@@ -28,7 +28,7 @@
                         <div class="mb-3">
                             <label for="message-text" class="col-form-label">課程圖片 :</label>
                             <picture>
-                                <img :src="`images/course/${courseImgPath}`" class="img-fluid" alt="not Found">
+                                <img :src="`${URL}/course/getImg?cid=${courseId}`" class="img-fluid" alt="not Found">
                                 <div class="text-muted text-center">{{ courseName }}原圖片</div>
                             </picture>
                             <input class="form-control" type="file" nzame="courseImgFile" id="courseImgFile">
@@ -53,6 +53,7 @@
 </template>
     
 <script setup>
+const URL = import.meta.env.VITE_API_JAVAURL;
 const props = defineProps({
     courseId: Number,
     courseCategories: Object,

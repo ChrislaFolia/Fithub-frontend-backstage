@@ -9,7 +9,7 @@
                 </div>
                 <div class="modal-body">
                     <picture>
-                        <img :src="`${URL}/course/img/${parentId}`" class="img-fluid" alt="not Found">
+                        <img :src="`${URL}/course/getImg?cid=${parentId}`" class="img-fluid" alt="not Found">
                         <figcaption>{{ parentImgName }}</figcaption>
                     </picture>
                 </div>
