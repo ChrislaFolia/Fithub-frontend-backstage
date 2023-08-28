@@ -10,7 +10,7 @@
             data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
                 <router-link class="nav-link" to="orders">全部訂單</router-link>
-                <router-link class="nav-link" to="couponcategories">訂單項目</router-link>									
+                <router-link class="nav-link" to="orderitem">訂單項目</router-link>									
             </nav>
         </div>
 </template>
