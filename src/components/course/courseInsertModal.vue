@@ -27,7 +27,7 @@
 
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">課程圖片 :</label>
-                        <input class="form-control" type="file" @change="fileChange" id="courseImgFile">
+                        <input class="form-control" type="file" @change="fileChange">
                     </div>
 
                     <div class="mb-3">
@@ -39,8 +39,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" id="sendInsertCourse" @click="submitInsertCourse"
-                        class="btn btn-primary">送出</button>
+                    <button type="submit" id="sendInsertCourse" class="btn btn-primary"
+                        @click="submitInsertCourse">送出</button>
                 </div>
             </div>
         </div>
@@ -66,20 +66,15 @@ const course = reactive({
     courseImgPath: '',
 });
 const formData = new FormData;
-const courseImgFile = reactive([])
+// const courseImgFile = reactive([])
 
 const fileChange = (e) => {
     let file = e.target.files[0]
     console.log(file)
-    // courseImgFile = []
-    // courseImgFile.push(file)
-    // console.log(courseImgFile);
     formData.append('photoContent', file);
     console.log(formData);
 }
-// const sendInsertCourse(e){
-//     this.$emit('sendInsertCourse-emit', this.courses)
-// }
+
 const URL = import.meta.env.VITE_API_JAVAURL;
 const submitInsertCourse = async (e) => {
 
