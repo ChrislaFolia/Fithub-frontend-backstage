@@ -2,7 +2,7 @@
   <div id="layoutSidenav">
     <div id="layoutSidenav_content">
       <div class="container-fluid px-4">
-        <h1 class="mt-4" style="text-align: center">部門資料</h1>
+        <h1 class="mt-4" style="text-align: center">測試用</h1>
         <div class="card mb-4">
           <div class="card-body table-responsive">
             <button
@@ -16,8 +16,8 @@
             <table id="departmentsTable" class="table table-bordered">
               <thead class="align-middle text-center">
                 <div>
-                  <input id="inputImg" type="file" />
-                  <button @click="uploadImage()">上传图片</button>
+                  <input id="inputImg" type="file" accept="image/jpeg" />
+                  <button @click="uploadImage()">上傳</button>
                 </div>
               </thead>
               <tbody class="align-middle text-center"></tbody>
@@ -42,21 +42,16 @@ onMounted(() => {
 
   inputImg.addEventListener('change',function(e){
     selectedFile.value = e.target.files[0];
-    console.log("test1")
   })
 });
 
 const uploadImage = async () => {
-  console.log("test2")
   if (!selectedFile.value) {
-    console.log("test3")
     return;
   }
 
   const reader = new FileReader();
-  console.log("test4")
   reader.onload = async (event) => {
-    console.log("test5")
     const base64Image = event.target.result;
     const jsonPayload = { employeeid: 1,cpicfile: base64Image };
 

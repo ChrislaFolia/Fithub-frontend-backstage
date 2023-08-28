@@ -1,4 +1,3 @@
-
 <template>
     <div id="layoutSidenav">
         <div id="layoutSidenav_content">
@@ -18,16 +17,16 @@
                                 </tr>
                             </thead>
                             <tbody class="align-middle text-center">
-                                <tr v-for="{ deptid, deptname } in products" :key="deptid">
-                                    <td>{{ deptid }}</td>
-                                    <td>{{ deptname }}</td>
+                                <tr v-for="data in datas" :key="data.deptid">
+                                    <td>{{ data.deptid }}</td>
+                                    <td>{{ data.deptname }}</td>
                                     <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
                                             data-bs-target="#updateModal"
-                                            @click="inputUpdateData(deptid, deptname)">修改</button>
+                                            @click="inputUpdateData(data)">修改</button>
                                     </td>
                                     <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
                                             data-bs-target="#deleteModal"
-                                            @click="inputDeleteData(deptid, deptname)">刪除</button></td>
+                                            @click="inputDeleteData(data)">刪除</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -48,12 +47,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        部門編號:<input type="text" class="form-control" v-model="updateDeptId" readonly>
+                        部門編號:<input type="text" class="form-control" v-model="updateDepartment.deptid" readonly>
                     </div>
                     <div class="mb-3">
-                        部門名稱:<input type="text" class="form-control" v-model="updateDeptName" data-bs-container="body"
-                            data-bs-toggle="popover" data-bs-placement="right" data-bs-content="請輸入資料"
-                            id="popoversUpdateDeptName">
+                        部門名稱:<input type="text" class="form-control" v-model="updateDepartment.deptname">
+                        <span v-if="!updateDepartment.deptname" class="text-danger">必填</span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -75,9 +73,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        部門名稱:<input type="text" class="form-control" v-model="insertDeptName" data-bs-container="body"
-                            data-bs-toggle="popover" data-bs-placement="right" data-bs-content="請輸入資料"
-                            id="popoversInsertDeptName">
+                        部門名稱:<input type="text" class="form-control" v-model="insertDepartment.deptname">
+                        <span v-if="!insertDepartment.deptname" class="text-danger">必填</span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -98,7 +95,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        部門名稱:<input type="text" class="form-control" v-model="deleteDeptName" readonly>
+                        部門名稱:<input type="text" class="form-control" v-model="deleteDepartment.deptname" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -112,75 +109,37 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted } from 'vue'
-
-
+import { ref, reactive,  onMounted } from 'vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
-const updateDeptId = ref();
-const updateDeptName = ref('');
-const insertDeptName = ref('');
-const deleteDeptId = ref();
-const deleteDeptName = ref();
+const insertDepartment = reactive({
+    deptname: '',
+});
+const updateDepartment = reactive({});
+const deleteDepartment = reactive({});
 
-//載入所有dept資料
-const products = ref([])
+//存所有dept資料
+const datas = ref([])
 
-const loadProducts = async () => {
+const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
     const response = await axios.get(`${url}/departments`)
 
-    products.value = response.data
+    datas.value = response.data
 
 }
 
-loadProducts()
-
-
-
 onMounted(() => {
-    // 這裡放置需要在組件掛載後執行的程式碼
-    // 設定提示框
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
-
-    var exampleTriggerEl = document.getElementById('popoversInsertDeptName')
-    var popover = bootstrap.Popover.getInstance(exampleTriggerEl)
-
-    var exampleTriggerUpdate = document.getElementById('popoversUpdateDeptName')
-    var popover = bootstrap.Popover.getInstance(exampleTriggerUpdate)
-
-    exampleTriggerEl.addEventListener('keyup', function () {
-        if (!insertDeptName.value) {
-            popover.show()
-        } else {
-            popover.hide()
-        }
-    })
-
-    exampleTriggerUpdate.addEventListener('keyup', function () {
-        if (!updateDeptName.value) {
-            popover.show()
-        } else {
-            popover.hide()
-        }
-    })
-
+    loadDatas()
 });
 
-// 點擊修改時觸發 帶入該筆資料
-const inputUpdateData = (deptid, deptname) => {
-    updateDeptId.value = deptid;
-    updateDeptName.value = deptname;
+const inputUpdateData = (data) => {
+    Object.assign(updateDepartment, data);
 };
 
-// 點擊刪除時觸發 帶入該筆資料
-const inputDeleteData = (deptid, deptname) => {
-    deleteDeptId.value = deptid;
-    deleteDeptName.value = deptname;
+const inputDeleteData = (data) => {
+    Object.assign(deleteDepartment, data);
 };
 
 
@@ -190,22 +149,17 @@ const insertDept = async () => {
     var myModalEl = document.getElementById('insertModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    var exampleTriggerEl = document.getElementById('popoversInsertDeptName')
-    var popover = bootstrap.Popover.getInstance(exampleTriggerEl)
-
     //如果沒有值 return 不做
-    if (!insertDeptName.value.trim()) {
-        popover.show()
+    if (!insertDepartment.deptname.trim()) {
+        alert("請輸入正確資料")
         return;
     }
 
     try {
-
-        const response = await axios.post(`${url}/departments`, { deptname: insertDeptName.value })
-
-        if (response.status == 200) {
-            loadProducts(); // 重新載入資料
-            insertDeptName.value = ''; // 清空 insertDeptName
+        const response = await axios.post(`${url}/departments`, { deptname: insertDepartment.deptname })
+        if (response.status === 200) {
+            loadDatas(); // 重新載入資料
+            insertDepartment.deptname = ''; // 清空 insertDeptName
             alert("新增成功")
         }
     } catch (error) {
@@ -221,29 +175,27 @@ const updateDept = async () => {
     var myModalEl = document.getElementById('updateModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    var exampleTriggerEl = document.getElementById('popoversUpdateDeptName')
-    var popover = bootstrap.Popover.getInstance(exampleTriggerEl)
 
     //如果沒有值 return 不做
-    if (!updateDeptId.value || !updateDeptName.value.trim()) {
-        popover.show()
+    console.log(updateDepartment.deptid + " " +updateDepartment.deptname.trim() )
+    if (!updateDepartment.deptid || !updateDepartment.deptname.trim()) {
+        alert("請輸入正確資料")
         return;
     }
 
 
     try {
-        const response = await axios.put(`${url}/departments/${updateDeptId.value}`, { deptid: updateDeptId.value, deptname: updateDeptName.value })
+        const response = await axios.put(`${url}/departments/${updateDepartment.deptid}`, { deptid: updateDepartment.deptid, deptname: updateDepartment.deptname })
 
         if (response.status == 200) {
-            loadProducts(); // 重新載入資料
-            deleteDeptId.value = ''
-            deleteDeptName.value = ''; // 清空 insertDeptName
+            loadDatas(); // 重新載入資料
+            updateDepartment.deptid = ''
+            updateDepartment.deptname = ''; // 清空 insertDeptName
             alert("修改成功")
         }
 
 
     } catch (error) {
-        console.log(error.response)
         alert("修改失敗")
     } finally {
         //不管是否成功 modal切換
@@ -256,25 +208,24 @@ const deleteDept = async () => {
     //抓彈出視窗
     var myModalEl = document.getElementById('deleteModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
-    console.log("deleteDept" + deleteDeptId.value + " " + deleteDeptName.value)
 
-    //如果沒有值 return 不做
-    if (!deleteDeptId.value) {
+    // 如果沒有值 return 不做
+    if (!deleteDepartment.deptname) {
         return;
     }
+
     try {
-        const response = await axios.delete(`${url}/departments/${deleteDeptId.value}`)
+        const response = await axios.delete(`${url}/departments/${deleteDepartment.deptid}`)
 
         if (response.status == 200) {
-            loadProducts(); // 重新載入資料
-            deleteDeptId.value = ''
-            deleteDeptName.value = ''; // 清空 insertDeptName
+            loadDatas(); // 重新載入資料
+            deleteDepartment.deptid = ''
+            deleteDepartment.deptname = ''; // 清空 insertDeptName
             alert("刪除成功")
         }
 
 
     } catch (error) {
-        console.log(error.response)
         alert("刪除失敗")
     } finally {
         //不管是否成功 modal切換

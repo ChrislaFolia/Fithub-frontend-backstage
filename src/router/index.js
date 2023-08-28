@@ -16,6 +16,37 @@ const router = createRouter({
       path: '/testUploadImg',
       name: 'testUploadImg',
       component: () => import('../views/testUploadImg.vue')
+    },
+    {
+      path: '/testLoadImg',
+      name: 'testLoadImg',
+      component: () => import('../views/testLoadImg.vue')
+    },
+    {
+      path: '/employee',
+      name: 'employee',
+      component: () => import('../views/employee.vue')
+    },
+    {
+      path: '/course',
+      name: 'course',
+      component: () => import('../views/employee.vue')
+    },
+    {
+      path: '/announcement',
+      name: 'announcement',
+      component: () => import('../views/employee.vue')
+    }
+    ,
+    {
+      path: '/rentorder',
+      name: 'rentorder',
+      component: () => import('../views/employee.vue')
+    },
+    {
+      path: '/classroom',
+      name: 'classroom',
+      component: () => import('../views/classroom.vue')
     }
   ]
 })
