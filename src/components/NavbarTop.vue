@@ -12,11 +12,25 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/loginPage.html"
-                                onclick="logout()">Logout</a></li>
+                        <!-- <li><a class="dropdown-item"    @onclick="logout()">Logout</a></li> -->
+                        <li><input type="button" class="dropdown-item"  @click="logout()" value="登出"></li>
                     </ul>
                 </li>
             </ul>
         </form>
     </nav>
 </template>
+
+<script setup>
+import router from "@/router"
+
+function logout(){
+    window.localStorage.setItem("isLogin", "")
+    window.localStorage.setItem("token", "")
+    window.localStorage.setItem("username", "")
+    window.localStorage.setItem("loa", "")
+
+    router.push({name:"login"})
+}
+
+</script>

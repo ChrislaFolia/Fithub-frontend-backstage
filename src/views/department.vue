@@ -1,115 +1,121 @@
 <template>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_content">
-            <div class="container-fluid px-4">
-                <h1 class="mt-4" style="text-align: center;">部門資料</h1>
-                <div class="card mb-4">
-                    <div class="card-body table-responsive">
-                        <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#insertModal">新增部門</button>
-                        <table id="departmentsTable" class="table table-bordered">
-                            <thead class="align-middle text-center">
-                                <tr class="table-primary">
-                                    <th>部門編號</th>
-                                    <th>部門名稱</th>
-                                    <th>修改</th>
-                                    <th>刪除</th>
-                                </tr>
-                            </thead>
-                            <tbody class="align-middle text-center">
-                                <tr v-for="data in datas" :key="data.deptid">
-                                    <td>{{ data.deptid }}</td>
-                                    <td>{{ data.deptname }}</td>
-                                    <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                            data-bs-target="#updateModal"
-                                            @click="inputUpdateData(data)">修改</button>
-                                    </td>
-                                    <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal"
-                                            @click="inputDeleteData(data)">刪除</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <body class="sb-nav-fixed">
+        <NavbarTop></NavbarTop>
+        <NavbarLeft></NavbarLeft>
 
-        </div>
-    </div>
-
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">修改部門名稱</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        部門編號:<input type="text" class="form-control" v-model="updateDepartment.deptid" readonly>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_content">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4" style="text-align: center;">部門資料</h1>
+                    <div class="card mb-4">
+                        <div class="card-body table-responsive">
+                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                data-bs-target="#insertModal">新增部門</button>
+                            <table id="departmentsTable" class="table table-bordered">
+                                <thead class="align-middle text-center">
+                                    <tr class="table-primary">
+                                        <th>部門編號</th>
+                                        <th>部門名稱</th>
+                                        <th>修改</th>
+                                        <th>刪除</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="align-middle text-center">
+                                    <tr v-for="data in datas" :key="data.deptid">
+                                        <td>{{ data.deptid }}</td>
+                                        <td>{{ data.deptname }}</td>
+                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                                data-bs-target="#updateModal" @click="inputUpdateData(data)">修改</button>
+                                        </td>
+                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal" @click="inputDeleteData(data)">刪除</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        部門名稱:<input type="text" class="form-control" v-model="updateDepartment.deptname">
-                        <span v-if="!updateDepartment.deptname" class="text-danger">必填</span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary" @click="updateDept()">修改</button>
                 </div>
 
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">新增部門</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        部門名稱:<input type="text" class="form-control" v-model="insertDepartment.deptname">
-                        <span v-if="!insertDepartment.deptname" class="text-danger">必填</span>
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+            data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">修改部門名稱</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary" @click="insertDept()">新增</button>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            部門編號:<input type="text" class="form-control" v-model="updateDepartment.deptid" readonly>
+                        </div>
+                        <div class="mb-3">
+                            部門名稱:<input type="text" class="form-control" v-model="updateDepartment.deptname">
+                            <span v-if="!updateDepartment.deptname" class="text-danger">必填</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" @click="updateDept()">修改</button>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">刪除部門</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        部門名稱:<input type="text" class="form-control" v-model="deleteDepartment.deptname" readonly>
+        <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
+            data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">新增部門</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary" @click="deleteDept()">刪除</button>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            部門名稱:<input type="text" class="form-control" v-model="insertDepartment.deptname">
+                            <span v-if="!insertDepartment.deptname" class="text-danger">必填</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" @click="insertDept()">新增</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true"
+            data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">刪除部門</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            部門名稱:<input type="text" class="form-control" v-model="deleteDepartment.deptname" readonly>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" @click="deleteDept()">刪除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </template>
 
 <script setup>
 import axios from 'axios';
-import { ref, reactive,  onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import NavbarTop from '../components/NavbarTop.vue'
+import NavbarLeft from '../components/NavbarLeft.vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertDepartment = reactive({
@@ -177,7 +183,7 @@ const updateDept = async () => {
 
 
     //如果沒有值 return 不做
-    console.log(updateDepartment.deptid + " " +updateDepartment.deptname.trim() )
+    console.log(updateDepartment.deptid + " " + updateDepartment.deptname.trim())
     if (!updateDepartment.deptid || !updateDepartment.deptname.trim()) {
         alert("請輸入正確資料")
         return;

@@ -1,227 +1,236 @@
 <template>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_content">
-            <div class="container-fluid px-4">
-                <h1 class="mt-4" style="text-align: center;">員工資料</h1>
-                <div class="card mb-4">
-                    <div class="card-body table-responsive">
-                        <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#insertModal">新增員工</button>
-                        <table id="departmentsTable" class="table table-bordered">
-                            <thead class="align-middle text-center">
-                                <tr class="table-primary">
-                                    <th>員工編號</th>
-                                    <th>姓名</th>
-                                    <th>性別</th>
-                                    <th>電話</th>
-                                    <th>信箱</th>
-                                    <th>職稱</th>
-                                    <th>編輯</th>
-                                    <th>刪除</th>
-                                </tr>
-                            </thead>
-                            <tbody class="align-middle text-center">
-                                <tr v-for="data in datas" :key="data.employeeid">
-                                    <td>{{ data.employeeid }}</td>
-                                    <td>{{ data.employeename }}</td>
-                                    <td>{{ data.employeegender }}</td>
-                                    <td>{{ data.employeephone }}</td>
-                                    <td>{{ data.employeeemail }}</td>
-                                    <td>{{ data.employeetitle }}</td>
-                                    <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                            data-bs-target="#updateModal" @click="inputUpdateData(data)">修改</button>
-                                    </td>
-                                    <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal" @click="inputDeleteData(data)">刪除</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <body class="sb-nav-fixed">
+        <NavbarTop></NavbarTop>
+        <NavbarLeft></NavbarLeft>
 
-        </div>
-    </div>
-
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">修改員工資料</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        員工編號:<input type="text" class="form-control" v-model="updateEmployee.employeeid" readonly>
-                        <span v-if="!updateEmployee.employeeid" class="text-danger">必填</span>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_content">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4" style="text-align: center;">員工資料</h1>
+                    <div class="card mb-4">
+                        <div class="card-body table-responsive">
+                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                data-bs-target="#insertModal">新增員工</button>
+                            <table id="departmentsTable" class="table table-bordered">
+                                <thead class="align-middle text-center">
+                                    <tr class="table-primary">
+                                        <th>員工編號</th>
+                                        <th>姓名</th>
+                                        <th>性別</th>
+                                        <th>電話</th>
+                                        <th>信箱</th>
+                                        <th>職稱</th>
+                                        <th>編輯</th>
+                                        <th>刪除</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="align-middle text-center">
+                                    <tr v-for="data in datas" :key="data.employeeid">
+                                        <td>{{ data.employeeid }}</td>
+                                        <td>{{ data.employeename }}</td>
+                                        <td>{{ data.employeegender }}</td>
+                                        <td>{{ data.employeephone }}</td>
+                                        <td>{{ data.employeeemail }}</td>
+                                        <td>{{ data.employeetitle }}</td>
+                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                                data-bs-target="#updateModal" @click="inputUpdateData(data)">修改</button>
+                                        </td>
+                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal" @click="inputDeleteData(data)">刪除</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        姓名:<input type="text" class="form-control" v-model="updateEmployee.employeename">
-                        <span v-if="!updateEmployee.employeename" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        電話:<input type="text" class="form-control" v-model="updateEmployee.employeephone">
-                        <span v-if="!updateEmployee.employeephone" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        性別:<input type="text" class="form-control" v-model="updateEmployee.employeegender">
-                        <span v-if="!updateEmployee.employeegender" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        縣市:<input type="text" class="form-control" v-model="updateEmployee.employeecity">
-                        <span v-if="!updateEmployee.employeecity" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        地區:<input type="text" class="form-control" v-model="updateEmployee.employeezone">
-                        <span v-if="!updateEmployee.employeezone" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        地址:<input type="text" class="form-control" v-model="updateEmployee.employeeaddress">
-                        <span v-if="!updateEmployee.employeeaddress" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        部門:<input type="text" class="form-control" v-model="updateEmployee.deptid">
-                        <span v-if="!updateEmployee.deptid" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        職稱:<input type="text" class="form-control" v-model="updateEmployee.employeetitle">
-                        <span v-if="!updateEmployee.employeetitle" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        主管:<input type="text" class="form-control" v-model="updateEmployee.manager">
-                    </div>
-                    <div class="mb-3">
-                        入職時間:<input type="text" class="form-control" v-model="updateEmployee.hiredate">
-                        <span v-if="!updateEmployee.hiredate" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        離職時間:<input type="text" class="form-control" v-model="updateEmployee.resigndate">
-                    </div>
-                    <div class="mb-3">
-                        薪資:<input type="text" class="form-control" v-model="updateEmployee.salary">
-                        <span v-if="!updateEmployee.salary" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        生日:<input type="text" class="form-control" v-model="updateEmployee.employeebirthday">
-                        <span v-if="!updateEmployee.employeebirthday" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        簡介:<input type="text" class="form-control" v-model="updateEmployee.employeeintroduction">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary" @click="updateData()">修改</button>
                 </div>
 
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">新增員工</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        姓名:<input type="text" class="form-control" v-model="insertEmployee.employeename">
-                        <span v-if="!insertEmployee.employeename" class="text-danger">必填</span>
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+            data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">修改員工資料</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        電話:<input type="text" class="form-control" v-model="insertEmployee.employeephone">
-                        <span v-if="!insertEmployee.employeephone" class="text-danger">必填</span>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            員工編號:<input type="text" class="form-control" v-model="updateEmployee.employeeid" readonly>
+                            <span v-if="!updateEmployee.employeeid" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            姓名:<input type="text" class="form-control" v-model="updateEmployee.employeename">
+                            <span v-if="!updateEmployee.employeename" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            電話:<input type="text" class="form-control" v-model="updateEmployee.employeephone">
+                            <span v-if="!updateEmployee.employeephone" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            性別:<input type="text" class="form-control" v-model="updateEmployee.employeegender">
+                            <span v-if="!updateEmployee.employeegender" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            縣市:<input type="text" class="form-control" v-model="updateEmployee.employeecity">
+                            <span v-if="!updateEmployee.employeecity" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            地區:<input type="text" class="form-control" v-model="updateEmployee.employeezone">
+                            <span v-if="!updateEmployee.employeezone" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            地址:<input type="text" class="form-control" v-model="updateEmployee.employeeaddress">
+                            <span v-if="!updateEmployee.employeeaddress" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            部門:<input type="text" class="form-control" v-model="updateEmployee.deptid">
+                            <span v-if="!updateEmployee.deptid" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            職稱:<input type="text" class="form-control" v-model="updateEmployee.employeetitle">
+                            <span v-if="!updateEmployee.employeetitle" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            主管:<input type="text" class="form-control" v-model="updateEmployee.manager">
+                        </div>
+                        <div class="mb-3">
+                            入職時間:<input type="text" class="form-control" v-model="updateEmployee.hiredate">
+                            <span v-if="!updateEmployee.hiredate" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            離職時間:<input type="text" class="form-control" v-model="updateEmployee.resigndate">
+                        </div>
+                        <div class="mb-3">
+                            薪資:<input type="text" class="form-control" v-model="updateEmployee.salary">
+                            <span v-if="!updateEmployee.salary" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            生日:<input type="text" class="form-control" v-model="updateEmployee.employeebirthday">
+                            <span v-if="!updateEmployee.employeebirthday" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            簡介:<input type="text" class="form-control" v-model="updateEmployee.employeeintroduction">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        性別:<select v-model="insertEmployee.employeegender" id="gender">
-                            <option value="男">男</option>
-                            <option value="女">女</option>
-                        </select>
-                        
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" @click="updateData()">修改</button>
                     </div>
-                    <span v-if="!insertEmployee.employeegender" class="text-danger">必填</span>
-                    <div class="mb-3">
-                        縣市:<input type="text" class="form-control" v-model="insertEmployee.employeecity">
-                        <span v-if="!insertEmployee.employeecity" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        地區:<input type="text" class="form-control" v-model="insertEmployee.employeezone">
-                        <span v-if="!insertEmployee.employeezone" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        地址:<input type="text" class="form-control" v-model="insertEmployee.employeeaddress">
-                        <span v-if="!insertEmployee.employeeaddress" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        部門:
-                        <select v-model="insertEmployee.deptid" >
-                            <option v-for="dept in allDept" :key="dept.deptid" :value="dept">{{ dept.deptname }}</option>
-                        </select>
-                        <span v-if="!insertEmployee.deptid" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        職稱:<input type="text" class="form-control" v-model="insertEmployee.employeetitle">
-                        <span v-if="!insertEmployee.employeetitle" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        主管:<input type="text" class="form-control" v-model="insertEmployee.manager">
-                    </div>
-                    <div class="mb-3">
-                        入職時間:<input type="text" class="form-control" v-model="insertEmployee.hiredate">
-                        <span v-if="!insertEmployee.hiredate" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        離職時間:<input type="text" class="form-control" v-model="insertEmployee.resigndate">
-                    </div>
-                    <div class="mb-3">
-                        薪資:<input type="text" class="form-control" v-model="insertEmployee.salary">
-                        <span v-if="!insertEmployee.salary" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        生日:<input type="text" class="form-control" v-model="insertEmployee.employeebirthday">
-                        <span v-if="!insertEmployee.employeebirthday" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        簡介:<input type="text" class="form-control" v-model="insertEmployee.employeeintroduction">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary" @click="insertDept()">新增</button>
+
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">刪除部門</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <!-- 部門名稱:<input type="text" class="form-control" v-model="deleteDeptName" readonly> -->
+        <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
+            data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">新增員工</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary" @click="deleteDept()">刪除</button>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            姓名:<input type="text" class="form-control" v-model="insertEmployee.employeename">
+                            <span v-if="!insertEmployee.employeename" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            電話:<input type="text" class="form-control" v-model="insertEmployee.employeephone">
+                            <span v-if="!insertEmployee.employeephone" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            性別:<select v-model="insertEmployee.employeegender" id="gender">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+
+                        </div>
+                        <span v-if="!insertEmployee.employeegender" class="text-danger">必填</span>
+                        <div class="mb-3">
+                            縣市:<input type="text" class="form-control" v-model="insertEmployee.employeecity">
+                            <span v-if="!insertEmployee.employeecity" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            地區:<input type="text" class="form-control" v-model="insertEmployee.employeezone">
+                            <span v-if="!insertEmployee.employeezone" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            地址:<input type="text" class="form-control" v-model="insertEmployee.employeeaddress">
+                            <span v-if="!insertEmployee.employeeaddress" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            部門:
+                            <select v-model="insertEmployee.deptid">
+                                <option v-for="dept in allDept" :key="dept.deptid" :value="dept">{{ dept.deptname }}
+                                </option>
+                            </select>
+                            <span v-if="!insertEmployee.deptid" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            職稱:<input type="text" class="form-control" v-model="insertEmployee.employeetitle">
+                            <span v-if="!insertEmployee.employeetitle" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            主管:<input type="text" class="form-control" v-model="insertEmployee.manager">
+                        </div>
+                        <div class="mb-3">
+                            入職時間:<input type="text" class="form-control" v-model="insertEmployee.hiredate">
+                            <span v-if="!insertEmployee.hiredate" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            離職時間:<input type="text" class="form-control" v-model="insertEmployee.resigndate">
+                        </div>
+                        <div class="mb-3">
+                            薪資:<input type="text" class="form-control" v-model="insertEmployee.salary">
+                            <span v-if="!insertEmployee.salary" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            生日:<input type="text" class="form-control" v-model="insertEmployee.employeebirthday">
+                            <span v-if="!insertEmployee.employeebirthday" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            簡介:<input type="text" class="form-control" v-model="insertEmployee.employeeintroduction">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" @click="insertDept()">新增</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true"
+            data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">刪除部門</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <!-- 部門名稱:<input type="text" class="form-control" v-model="deleteDeptName" readonly> -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" @click="deleteDept()">刪除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </template>
 
 <script setup>
 import axios from 'axios';
 import { ref, reactive, onMounted } from 'vue'
+import NavbarTop from '../components/NavbarTop.vue'
+import NavbarLeft from '../components/NavbarLeft.vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertEmployee = reactive({
