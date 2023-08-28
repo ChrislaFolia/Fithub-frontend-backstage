@@ -7,8 +7,8 @@
 	</a>
 	<div class="collapse" id="collapseLayoutsCourse" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 		<nav class="sb-sidenav-menu-nested nav">
-			<router-link class="nav-link" to="course">全部課程</router-link>
-			<!-- <router-link class="nav-link" to="classes">課程排程</router-link> -->
+			<router-link class="nav-link" to="course">課程分類管理</router-link>
+			<router-link class="nav-link" to="classes">全部課程管理</router-link>
 		</nav>
 	</div>
 </template>
