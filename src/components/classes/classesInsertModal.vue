@@ -8,6 +8,7 @@
                 </div>
                 <div class="modal-body">
 
+                    <!-- <form id="insertCourseForm" method="post" enctype="multipart/form-data" action="#"> -->
                     <div class="mb-3">
                         <label for="categoryId" class="col-form-label">課程分類 :</label>
                         <select class="form-select" v-model="course.categoryId" id="categoryId">
@@ -34,6 +35,7 @@
                         <textarea class="form-control" rows="6" v-model.trim="course.courseDescription"></textarea>
 
                     </div>
+                    <!-- </form> -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

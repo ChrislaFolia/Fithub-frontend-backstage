@@ -7,17 +7,7 @@
 
 
                     <div class="card mb-4">
-                        <!-- <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            全部課程
-                        </div> -->
                         <div class="card-body table-responsive">
-                            <div class="mb-3">
-                                <button type="button" id="insertCourse" class="btn btn btn-primary mb-1"
-                                    data-bs-toggle="modal" data-bs-target="#insertModal">新增課堂資料</button>
-                            </div>
-                            <!-- <InsertCourse :allCourseCategories="allCourseCategories"
-                                @submitInsertCourse-emit="loadClasses()"></InsertCourse> -->
                             <table class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">

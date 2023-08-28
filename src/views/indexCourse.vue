@@ -21,8 +21,9 @@
                             <table class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
-                                        <th>課程名稱</th>
+                                        <th>新增課堂</th>
                                         <th>課程分類</th>
+                                        <th>課程名稱</th>
                                         <th>課程圖片</th>
                                         <th>課程描述</th>
                                         <th>修改</th>
@@ -32,8 +33,11 @@
                                 <tbody class="align-middle text-center">
                                     <tr v-for=" { courseId, courseName, courseCategories, courseImgPath, courseDescription }  in   courses  "
                                         :key="courseId">
-                                        <td>{{ courseName }}</td>
+                                        <td>
+                                            <i class="bi bi-plus-square-fill"></i>
+                                        </td>
                                         <td>{{ courseCategories.categoryName }} </td>
+                                        <td>{{ courseName }}</td>
                                         <td>
                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
                                                 :data-bs-target="`#staticBackdropPic${courseId}`">
