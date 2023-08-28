@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" :id="`updateModal${courseId}`" tabindex=" -1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="updateModalLabel">修改課程資料</h5>

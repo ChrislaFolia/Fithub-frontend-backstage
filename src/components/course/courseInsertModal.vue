@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" id="insertModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="insertModalLabel">新增課程資料</h5>
@@ -21,7 +21,6 @@
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">課程名稱 :</label>
                         <input type="text" class="form-control" v-model.trim="course.courseName" />
-
                     </div>
 
                     <div class="mb-3">

@@ -1,46 +1,80 @@
 <template>
-    <div class="modal fade" id="insertModal" tabindex="-1">
-        <div class="modal-dialog">
+    <div class="modal fade" :id="`insertClassesModal${courseId}`" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="insertModalLabel">新增課程資料</h5>
+                    <h5 class="modal-title" id="insertModalLabel">建立{{ courseName }}課程</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
-                    <!-- <form id="insertCourseForm" method="post" enctype="multipart/form-data" action="#"> -->
                     <div class="mb-3">
-                        <label for="categoryId" class="col-form-label">課程分類 :</label>
-                        <select class="form-select" v-model="course.categoryId" id="categoryId">
+                        <label for="classDate" class="col-form-label">課程時間 :</label>
+                        <input type="date" class="form-control" v-model="classes.classDate" id="classDate" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="classTime" class="col-form-label">課程時段 :</label>
+                        <select class="form-select" v-model.trim="classes.classTime" id="classTime">
                             <option selected value="" style="display:none">請選擇</option>
-                            <option v-for="{ categoryId, categoryName } in allCourseCategories" :value=categoryId>
-                                {{ categoryName }}</option>
+                            <option value='morning'>早上</option>
+                            <option value='afternoon'>下午</option>
+                            <option value='night'>晚上</option>
                         </select>
                     </div>
 
-
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">課程名稱 :</label>
-                        <input type="text" class="form-control" v-model.trim="course.courseName" />
-
+                        <label for="coach" class="col-form-label">教練 :</label>
+                        <select class="form-select" v-model.trim="classes.employeeId" id="coach">
+                            <option selected value="" style="display:none">請選擇</option>
+                            <option v-for="{ employeeid, employeename } in allCoachs" :value=employeeid>
+                                {{ employeename }}</option>
+                        </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">課程圖片 :</label>
-                        <input class="form-control" type="file" @change="fileChange">
+                        <label for="coachSubstitute" class="col-form-label">是否為代課教練 :</label>
+                        <select class="form-select" v-model.trim="classes.coachSubstitute" id="coachSubstitute">
+                            <option selected value='0'>否</option>
+                            <option value='1'>是</option>
+                        </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">課程描述 :</label>
-                        <textarea class="form-control" rows="6" v-model.trim="course.courseDescription"></textarea>
-
+                        <label for="classroomId" class="col-form-label">教室 :</label>
+                        <select class="form-select" v-model="classes.classroomId" id="classroomId">
+                            <option selected value="" style="display:none">請選擇</option>
+                            <option v-for="{ classroomId, classroomName } in allClassrooms" :value=classroomId>
+                                {{ classroomName }}</option>
+                        </select>
                     </div>
-                    <!-- </form> -->
+
+                    <div class="mb-3">
+                        <label for="applicantsCeil" class="col-form-label">課程人數上限 :</label>
+                        <input type="text" class="form-control" v-model.trim="classes.applicantsCeil" id="applicantsCeil" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="applicantsFloor" class="col-form-label">開課人數下限 :</label>
+                        <input type="text" class="form-control" v-model.trim="classes.applicantsFloor"
+                            id="applicantsFloor" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="col-form-label">課程價格 :</label>
+                        <input type="text" class="form-control" v-model.trim="classes.price" id="price" />
+                    </div>
+
+
+
+
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" id="sendInsertCourse" class="btn btn-primary"
-                        @click="submitInsertCourse">送出</button>
+                    <button type="submit" id="sendInsertClass" class="btn btn-primary"
+                        @click="submitInsertClass">送出</button>
                 </div>
             </div>
         </div>
@@ -48,56 +82,67 @@
 </template>
 
 <script setup >
-import { reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
 
-// solution 1
-// const props = defineProps(['courseCategories'])
-
-// solution 2
 const props = defineProps({
-    allCourseCategories: Object,
+    courseId: Number,
+    courseName: String,
 })
-const emit = defineEmits(['submitInsertCourse-emit'])
-const course = reactive({
-    courseName: '',
-    categoryId: '',
-    courseDescription: '',
-    courseImgPath: '',
+const emit = defineEmits(['submitInsertClasses-emit'])
+const classes = reactive({
+    courseId: props.courseId,
+    classDate: '',
+    classTime: '',
+    employeeId: '',
+    coachSubstitute: 0,
+    applicantsCeil: 0,
+    applicantsFloor: 0,
+    price: 0,
+    classroomId: 0,
 });
-const formData = new FormData;
-// const courseImgFile = reactive([])
 
-const fileChange = (e) => {
-    let file = e.target.files[0]
-    console.log(file)
-    formData.append('photoContent', file);
-    console.log(formData);
-}
 
 const URL = import.meta.env.VITE_API_JAVAURL;
-const submitInsertCourse = async (e) => {
+const submitInsertClass = async (e) => {
 
-    const resUploadFile = await axios.post(`${URL}/course/uploadImg`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        }
-    }
-    ).catch((error) => {
-        console.log(error.toJSON());
-    });
-    console.log(resUploadFile);
-    course.courseImgPath = resUploadFile.data
-    console.log(course.courseImgPath);
-    const resInsertCourse = await axios.post(`${URL}/course`, course
+    const resInsertCourse = await axios.get(`${URL}/classes`, classes
     ).catch((error) => {
         console.log(error.toJSON());
     });
 
-    // emit('submitInsertCourse-emit')
+    // emit('submitInsertClasses-emit')
     location.reload();
 };
 
+// Load classroom data
+const allClassrooms = ref([]);
+const loadAllClassrooms = async () => {
+    const URLAPI = `${URL}/classroom/list`;
+    const response = await axios.get(URLAPI);
+    console.log(response.data)
+
+    //取得所有分類放進allClassroom變數
+    allClassrooms.value = response.data;
+    console.log(allClassrooms)
+};
+
+// Load employee data
+const allCoachs = ref([]);
+const loadAllCoachs = async () => {
+    const URLAPI = `${URL}/employees`;
+    const response = await axios.get(URLAPI);
+    console.log(response.data)
+
+    //取得所有分類放進allClassroom變數
+    allCoachs.value = response.data;
+    console.log(allCoachs)
+};
+
+onMounted(() => {
+    loadAllClassrooms()
+    loadAllCoachs()
+})
 </script>
 
 <style scoped></style>

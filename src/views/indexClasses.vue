@@ -3,8 +3,7 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">全部課程</h1>
-
+                    <h1 class="mt-4 mb-2" style="text-align: center;">全部課程</h1>
 
                     <div class="card mb-4">
                         <div class="card-body table-responsive">
@@ -37,20 +36,13 @@
                                         <td>{{ applicantsCeil }}</td>
                                         <td>{{ applicantsFloor }}</td>
                                         <td>
-                                            <button :id="`getUpdateCourseBtn${courseId}}`"
-                                                class=" btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
-                                                :data-bs-target="`#updateModal${courseId}`">修改
-                                            </button>
-                                            <UpdateCourse :categories="courseCategories" :courseId="courseId"
-                                                :courseName="courseName" :courseImgPath="courseImgPath"
-                                                :courseCategories="courseCategories" :courseDescription="courseDescription"
-                                                :allCourseCategories="allCourseCategories">
-                                            </UpdateCourse>
+                                            <i type="button" class="bi bi-pencil-square"
+                                                :id="`getUpdateCourseBtn${courseId}}`" data-bs-toggle="modal"
+                                                :data-bs-target="`#updateModal${courseId}`"></i>
                                         </td>
                                         <td>
-                                            <button @click="deleteCourse(`${courseId}`, `${courseName}`)"
-                                                class="btn btn-outline-danger btn-sm">刪除
-                                            </button>
+                                            <i type="button" class="bi bi-trash3"
+                                                @click="deleteClass(`${classId}`, `${course.courseName}`)"></i>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -67,18 +59,43 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
-// Load course data
+// Load Classes data
 const URL = import.meta.env.VITE_API_JAVAURL;
 const classes = ref([]);
 const loadClasses = async () => {
     const URLAPI = `${URL}/classes/findAll`;
     const response = await axios.get(URLAPI);
-    console.log(response.data)
+    // console.log(response.data)
 
     //classes
     classes.value = response.data;
-    console.log(classes)
+    // console.log(classes)
 };
+
+
+// deleteCourse
+const deleteClass = async (classId, courseName) => {
+    // console.log(`i am here to delete \${classID}`);
+    // console.log(e);
+    const URLAPI = `${URL}/classes/${classId}`;
+    let msg = prompt(`您確定要刪除嗎?\n請輸入想要刪除的課程名稱:`);
+    if (msg == `${courseName}`) {
+        const response = await axios.delete(URLAPI);
+        console.log(response);
+        console.log(response.status);
+        if (response.status == 200) {
+            alert('刪除成功');
+        } else {
+            alert('刪除失敗');
+
+        }
+        loadClasses();
+
+    } else if (msg == null) {
+    } else {
+        alert('輸入錯誤');
+    }
+}
 
 onMounted(() => {
     loadClasses()
