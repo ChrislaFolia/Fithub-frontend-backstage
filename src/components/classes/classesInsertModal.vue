@@ -118,25 +118,27 @@ const submitInsertClass = async (e) => {
 // Load classroom data
 const allClassrooms = ref([]);
 const loadAllClassrooms = async () => {
-    const URLAPI = `${URL}/classroom/list`;
+    const URLAPI = `${URL}/classroom/listWithoutDescriptionsAndPics`;
     const response = await axios.get(URLAPI);
-    console.log(response.data)
+    // console.log(response.data)
 
     //取得所有分類放進allClassroom變數
     allClassrooms.value = response.data;
-    console.log(allClassrooms)
+    // console.log(allClassrooms)
 };
 
 // Load employee data
 const allCoachs = ref([]);
 const loadAllCoachs = async () => {
-    const URLAPI = `${URL}/employees`;
-    const response = await axios.get(URLAPI);
-    console.log(response.data)
+    const URLAPI = `${URL}/employees/title`;
+    const response = await axios.post(URLAPI, {
+        'employeetitle': '教練'
+    });
+    // console.log(response.data)
 
     //取得所有分類放進allClassroom變數
     allCoachs.value = response.data;
-    console.log(allCoachs)
+    // console.log(allCoachs)
 };
 
 onMounted(() => {
