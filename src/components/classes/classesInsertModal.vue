@@ -15,7 +15,7 @@
 
                     <div class="mb-3">
                         <label for="classTime" class="col-form-label">課程時段 :</label>
-                        <select class="form-select" v-model.trim="classes.classTime" id="classTime">
+                        <select class="form-select" v-model="classes.classTime" id="classTime">
                             <option selected value="" style="display:none">請選擇</option>
                             <option value='morning'>早上</option>
                             <option value='afternoon'>下午</option>
@@ -25,7 +25,7 @@
 
                     <div class="mb-3">
                         <label for="coach" class="col-form-label">教練 :</label>
-                        <select class="form-select" v-model.trim="classes.employeeId" id="coach">
+                        <select class="form-select" v-model="classes.employeeId" id="coach">
                             <option selected value="" style="display:none">請選擇</option>
                             <option v-for="{ employeeid, employeename } in allCoachs" :value=employeeid>
                                 {{ employeename }}</option>
@@ -34,7 +34,7 @@
 
                     <div class="mb-3">
                         <label for="coachSubstitute" class="col-form-label">是否為代課教練 :</label>
-                        <select class="form-select" v-model.trim="classes.coachSubstitute" id="coachSubstitute">
+                        <select class="form-select" v-model="classes.coachSubstitute" id="coachSubstitute">
                             <option selected value='0'>否</option>
                             <option value='1'>是</option>
                         </select>
@@ -96,11 +96,11 @@ const classes = reactive({
     applicantsCeil: 0,
     applicantsFloor: 0,
     price: 150,
-    classroomId: 0,
+    classroomId: '',
 });
 
 const classroom = reactive({
-    classroomId: 0,
+    classroomId: '',
     classroomName: '',
     classroomCapacity: 30,
 })
