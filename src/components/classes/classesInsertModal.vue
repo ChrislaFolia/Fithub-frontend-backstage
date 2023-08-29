@@ -42,7 +42,8 @@
 
                     <div class="mb-3">
                         <label for="classroomId" class="col-form-label">教室 :</label>
-                        <select class="form-select" v-model="classes.classroomId" id="classroomId">
+                        <select class="form-select" v-model="classes.classroomId" id="classroomId"
+                            @change="setclassroomCapacity">
                             <option selected value="" style="display:none">請選擇</option>
                             <option v-for="{ classroomId, classroomName } in allClassrooms" :value=classroomId>
                                 {{ classroomName }}</option>
@@ -50,7 +51,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="applicantsCeil" class="col-form-label">課程人數上限 :</label>
+                        <label for="applicantsCeil" class="col-form-label">課程人數上限 : ({{ classroom.classroomName
+                        }}使用人數上限為{{ classroom.classroomCapacity }}人)</label>
                         <input type="text" class="form-control" v-model.trim="classes.applicantsCeil" id="applicantsCeil" />
                     </div>
 
@@ -64,11 +66,6 @@
                         <label for="price" class="col-form-label">課程價格 :</label>
                         <input type="text" class="form-control" v-model.trim="classes.price" id="price" />
                     </div>
-
-
-
-
-
 
                 </div>
                 <div class="modal-footer">
@@ -102,17 +99,23 @@ const classes = reactive({
     classroomId: 0,
 });
 
+const classroom = reactive({
+    classroomId: 0,
+    classroomName: '',
+    classroomCapacity: 30,
+})
+
 
 const URL = import.meta.env.VITE_API_JAVAURL;
 const submitInsertClass = async (e) => {
-
+    console.log(classes.classDate);
     const resInsertCourse = await axios.get(`${URL}/classes`, classes
     ).catch((error) => {
         console.log(error.toJSON());
     });
 
     // emit('submitInsertClasses-emit')
-    location.reload();
+    // location.reload();
 };
 
 // Load classroom data
@@ -124,9 +127,10 @@ const loadAllClassrooms = async () => {
 
     //取得所有分類放進allClassroom變數
     allClassrooms.value = response.data;
-    // console.log(allClassrooms)
+    console.log(allClassrooms)
 };
-
+console.log(111);
+console.log(allClassrooms);
 // Load employee data
 const allCoachs = ref([]);
 const loadAllCoachs = async () => {
@@ -140,6 +144,17 @@ const loadAllCoachs = async () => {
     allCoachs.value = response.data;
     // console.log(allCoachs)
 };
+
+const setclassroomCapacity = (e) => {
+    classroom.classroomId = e.target.value
+    for (let room of allClassrooms._rawValue) {
+        if (room.classroomId == classroom.classroomId) {
+            classroom.classroomName = room.classroomName;
+            classroom.classroomCapacity = room.classroomCapacity;
+            break;
+        }
+    }
+}
 
 onMounted(() => {
     loadAllClassrooms()
