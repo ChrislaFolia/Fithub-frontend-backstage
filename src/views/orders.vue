@@ -14,7 +14,7 @@
                                     <th>訂單日期</th>
                                     <th>會員編號</th>
                                     <th>會員名稱</th>
-                                    <th>總金額</th>
+                                    <!-- <th>總金額</th> -->
                                     <th>付款方式</th>
                                     <th>付款狀態</th>
                                     <th>訂單狀態</th>
@@ -29,7 +29,7 @@
                                     <td>{{ orders.orderDate }}</td>
                                     <td>{{ orders.member.memberid }}</td>
                                     <td>{{ orders.member.membername }}</td>
-                                    <td>{{ orders.orderTotalAmount }}</td>
+                                    <!-- <td>{{ orders.orderTotalAmount }}</td> -->
                                     <td>{{ orders.orderPaymentMethod }}</td>
                                     <td>{{ translateOrderState(orders.orderstate) }}</td>
                                     <td>{{ orders.orderCondition }}</td>
@@ -49,86 +49,59 @@
         </div>
     </div>
         <!-- 詳細資料彈出視窗 -->
-        <div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
-      <div class="modal-dialog">
+<div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">詳細資料</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <table class="table">
-                <thead class="align-middle text-center">
-                                <tr class="table-primary">
-                                    <th>訂單編號</th>
-                                    <th>課程名稱</th>
-                                    <th>課程日期/時間</th>
-                                    <th>上課教室</th>
-                                    <th>課程價格</th>
-                                    <th>優惠金額</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-        <tr v-for="item in selectedOrderItems" :key="item.itemId">
-          <td>{{ item.itemId }}</td>
-          <td>{{ item.classes.course.courseName }}</td>
+            <div class="modal-body">
+                <table class="table">
+                    <thead class="align-middle text-center">
+                        <tr class="table-primary">
+                            <th>訂單編號</th>
+                            <th>課程名稱</th>
+                            <th>課程日期/時間</th>
+                            <th>上課教室</th>
+                            <th>課程價格</th>
+                            <th>優惠金額</th>
 
-            <td>{{ item.classes.classDate }}
-            {{ item.classes.classTime }}
-        </td>
-        <td>{{ item.classes.classroom.classroomName }}</td>
-        <td>{{ item.classes.price }}</td>
-        <td>{{ item.coupon.coupondiscount }}</td>
-          <!-- 其他資料列 ... -->
-        </tr>
-      </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-        <!-- 查看-彈出視窗 -->
-    <!-- <div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">詳細資料</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-bordered">
-                        <thead class="align-middle text-center">
-                                <tr class="table-primary">
-                                    <th>訂單編號</th>
-                                    <th>課程名稱</th>
-                                    <th>課程日期/時間</th>
-                                    <th>上課教室</th>
-                                    <th>課程價格</th>
-                                    <th>優惠金額</th>
-                                </tr>
-                            </thead>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(orderitem,orderitemsindex) in selectedOrderItems" :key="orderitemsindex">
+                            <td>{{ orderitem.itemId }}</td>
+                            <td>{{ orderitem.classes.course.courseName }}</td>
+                            <td>{{ orderitem.coupon.coupondiscount }}</td>
+                        </tr>
+                            
+                        <!-- <td>{{ selectedOrderItems.orderId }}</td>
+                        <td>
+                            {{ selectedOrderItems.classes && selectedOrderItems.classes.course ? selectedOrderItems.classes.course.courseName : '' }}
+                        </td>
+                        <td>
+                            {{ selectedOrderItems.classes && selectedOrderItems.classes.classDate ? selectedOrderItems.classes.classDate : '' }}
+                            {{ selectedOrderItems.classes && selectedOrderItems.classes.classTime ? selectedOrderItems.classes.classTime : '' }}
+                        </td>
+                        <td>
+                        {{ selectedOrderItems.classes && selectedOrderItems.classes.classroom ? selectedOrderItems.classes.classroom.classroomName : '' }}
+                        </td>
+                        <td>
+                            {{ selectedOrderItems.classes && selectedOrderItems.classes.price ? selectedOrderItems.classes.price : '' }}
+                        </td>
+                        <td>
+                            {{ selectedOrderItems.coupon && selectedOrderItems.coupon.coupondiscount ? selectedOrderItems.coupon.coupondiscount : '' }}
+                        </td> -->
 
-                            <tbody class="align-middle text-center">
-                                <tr v-for="(orderitem, orderitemindex) in orderitems" :key="orderitemindex">
-                                    <td>{{ orderitem.orderId }}</td>
-                                     <td>{{ orderitem.classes.course.courseName }}</td>
-                                     <td>{{ orderitem.classes.classDate }}
-                                        {{ orderitem.classes.classTime }}
-                                    </td>
-                                    <td>{{ orderitem.classes.classroom.classroomName }}</td>
-                                    <td>{{ orderitem.classes.price }}</td>
-                                    <td>{{ orderitem.coupon.coupondiscount }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    
-                    
-                    
-                </div>
+                       
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>      -->
+    </div>
+</div>
+  
     <!-- 修改-彈出視窗 -->
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
         <div class="modal-dialog">
@@ -146,10 +119,10 @@
                         會員編號<input v-model="updateSelectedOrders.memberId" type="text" class="form-control" required="required">
                         <span v-if="!updateSelectedOrders.memberId" class="text-danger">必填</span>
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         總金額<input v-model="updateSelectedOrders.orderTotalAmount" type="text" class="form-control" required="required">
                         <span v-if="!updateSelectedOrders.orderTotalAmount" class="text-danger">必填</span>
-                    </div>
+                    </div> -->
                     <div class="mb-3">
                         付款方式<input v-model="updateSelectedOrders.orderPaymentMethod" type="text" class="form-control" required="required">
                         <span v-if="!updateSelectedOrders.orderPaymentMethod" class="text-danger">必填</span>
@@ -197,10 +170,10 @@
                         會員編號<input v-model="orders.memberId" type="text" class="form-control" required="required">
                         <span v-if="!orders.memberId" class="text-danger">必填</span>
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         總金額<input v-model="orders.orderTotalAmount" type="text" class="form-control" required="required">
                         <span v-if="!orders.orderTotalAmount" class="text-danger">必填</span>
-                    </div>
+                    </div> -->
                     <div class="mb-3">
                         付款方式<input v-model="orders.orderPaymentMethod" type="text" class="form-control" required="required">
                         <span v-if="!orders.orderPaymentMethod" class="text-danger">必填</span>
@@ -274,6 +247,15 @@ const orderss = ref([]); // 儲存SelectAll的訂單
 const selectedOrderss = ref([]); // 儲存選中的 ClassroomID
 const updateSelectedOrders = reactive({}); // 儲存要修改的優惠券資料(預設值)
 const selectedOrderItems = ref([]); // 儲存選中訂單的訂單項目
+
+
+
+
+    let  classes = null;
+    let  coupon = null;
+    let  order = null;
+
+
 
 // 将選中的教室資料複製到 updateSelectedCoupon
 const openUpdateModal = (orders) => {
@@ -385,23 +367,62 @@ const getOrderItemByOrderId = async (orderId) => {
   try {
     const url = `http://localhost:8080/fithub/order-items/${orderId}`;
     const response = await axios.get(url);
+    console.log('API Response:', response.data); // 檢查 API 的回應是否正確
     selectedOrderItems.value = response.data; // 賦值給selectedOrderItems
+
+
+    // let  classes = selectedOrderItems.value.classes
+    // let  coupon = selectedOrderItems.value.coupon
+    // let  order = selectedOrderItems.value.order.member
+
+    // console.log(classes)
+    // console.log(coupon)
+    // console.log(order)
+
   } catch (error) {
     console.error('Error getting order item by order id:', error);
   }
 };
 
+// 多筆
+const getOrderItemsByOrderId = async (orderId) => {
+  try {
+    const url = `http://localhost:8080/fithub/order-items/items/${orderId}`;
+    const response = await axios.get(url);
+    console.log('API Response:', response.data); // 檢查 API 的回應是否正確
+    selectedOrderItems.value = response.data; // 賦值給selectedOrderItems
+
+    console.log("test")
+    console.log(selectedOrderItems.value)
+    // let  classes = selectedOrderItems.value.classes
+    // let  coupon = selectedOrderItems.value.coupon
+    // let  order = selectedOrderItems.value.order.member
+
+    // console.log(classes)
+    // console.log(coupon)
+    // console.log(order)
+
+  } catch (error) {
+    console.error('Error getting order item by order id:', error);
+  }
+};
+
+
 const openModalWithOrderItem = (orderId) => {
-  getOrderItemByOrderId(orderId);
-  const modal = new bootstrap.Modal(document.getElementById('updateModal2'));
-  modal.show();
+  getOrderItemsByOrderId(orderId);
+
+       //關閉動態框
+       const modal = document.getElementById('updateModal2')
+       let getInstanceUpdateModal = bootstrap.Modal.getInstance(modal)
+       getInstanceUpdateModal.toggle();
+
 };
 
 
 
 onMounted(() => {
     getorderss();
-    getorderitems();   
+    getorderitems();
 });
 
 </script>
