@@ -38,7 +38,7 @@
                                         <td>
                                             <i type="button" class="bi bi-pencil-square"
                                                 :id="`getUpdateCourseBtn${courseId}}`" data-bs-toggle="modal"
-                                                :data-bs-target="`#updateModal${courseId}`"></i>
+                                                :data-bs-target="`#updateModal${classesId}`"></i>
                                         </td>
                                         <td>
                                             <i type="button" class="bi bi-trash3"

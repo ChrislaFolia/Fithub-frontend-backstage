@@ -1,9 +1,9 @@
 <template>
-    <div class="modal fade" :id="`insertClassesModal${courseId}`" tabindex="-1">
+    <div class="modal fade" :id="`updateClassesModal${classesId}`" tabindex="-1">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="insertModalLabel">建立{{ courseName }}課程</h5>
+                    <h5 class="modal-title" id="updateModalLabel">建立{{ courseName }}課程</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
