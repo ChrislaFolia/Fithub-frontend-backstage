@@ -14,7 +14,6 @@
                             <table id="departmentsTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
-                                        <th>部門編號</th>
                                         <th>部門名稱</th>
                                         <th>修改</th>
                                         <th>刪除</th>
@@ -22,7 +21,6 @@
                                 </thead>
                                 <tbody class="align-middle text-center">
                                     <tr v-for="data in datas" :key="data.deptid">
-                                        <td>{{ data.deptid }}</td>
                                         <td>{{ data.deptname }}</td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(data)">修改</button>
@@ -49,9 +47,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            部門編號:<input type="text" class="form-control" v-model="updateDepartment.deptid" readonly>
-                        </div>
                         <div class="mb-3">
                             部門名稱:<input type="text" class="form-control" v-model="updateDepartment.deptname">
                             <span v-if="!updateDepartment.deptname" class="text-danger">必填</span>
