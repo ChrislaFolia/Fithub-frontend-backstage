@@ -108,7 +108,6 @@ const classroom = reactive({
 
 const URL = import.meta.env.VITE_API_JAVAURL;
 const submitInsertClass = async (e) => {
-    console.log(classes.classDate);
     const resInsertCourse = await axios.post(`${URL}/classes`, classes
     ).catch((error) => {
         console.log(error.toJSON());

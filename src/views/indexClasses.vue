@@ -24,7 +24,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle text-center">
-                                    <tr v-for=" { classId, classDate, classTime, epmloyee, course, price, applicantsCeil, applicantsFloor, classroom }  in   classes  "
+                                    <tr v-for=" { classId, classDate, classTime, epmloyee, course, price, applicantsCeil, applicantsFloor, classroom, coachSubstitute }  in   classes  "
                                         :key="classId">
                                         <td>{{ course.courseCategories.categoryName }}</td>
                                         <td>{{ course.courseName }}</td>
@@ -37,8 +37,12 @@
                                         <td>{{ applicantsFloor }}</td>
                                         <td>
                                             <i type="button" class="bi bi-pencil-square"
-                                                :id="`getUpdateCourseBtn${courseId}}`" data-bs-toggle="modal"
-                                                :data-bs-target="`#updateModal${classesId}`"></i>
+                                                :id="`getUpdateClassesBtn${classId}}`" data-bs-toggle="modal"
+                                                :data-bs-target="`#updateClassesModal${classId}`"></i>
+                                            <UpdateClass :classId="classId" :classDate="classDate" :classTime="classTime"
+                                                :epmloyee="epmloyee" :course="course" :price="price"
+                                                :applicantsCeil="applicantsCeil" :applicantsFloor="applicantsFloor"
+                                                :classroom="classroom" :coachSubstitute="coachSubstitute"></UpdateClass>
                                         </td>
                                         <td>
                                             <i type="button" class="bi bi-trash3"
@@ -59,6 +63,7 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
+import UpdateClass from '../components/classes/classesUpdateModal.vue'
 // Load Classes data
 const URL = import.meta.env.VITE_API_JAVAURL;
 const classes = ref([]);
