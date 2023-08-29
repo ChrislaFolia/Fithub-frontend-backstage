@@ -1,5 +1,6 @@
 <template>
-    <div class="modal fade" :id="`insertClassesModal${courseId}`" tabindex="-1">
+    <div class="modal fade" :id="`insertClassesModal${courseId}`" tabindex="-1" aria-labelledby="insertModal"
+        aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -80,13 +81,14 @@
 
 <script setup >
 import { ref, reactive, onMounted } from "vue";
+import router from '../../router'
 import axios from "axios";
 
 const props = defineProps({
     courseId: Number,
     courseName: String,
 })
-const emit = defineEmits(['submitInsertClasses-emit'])
+// const emit = defineEmits(['submitInsertClasses-emit'])
 const classes = reactive({
     courseId: props.courseId,
     classDate: '',
@@ -114,7 +116,16 @@ const submitInsertClass = async (e) => {
     });
 
     // emit('submitInsertClasses-emit')
-    location.reload();
+    // location.reload();
+
+    //關閉Modal
+    const insertModal = document.getElementById(`insertClassesModal${props.courseId}`)
+    let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
+    getInstanceInsertModal.hide();
+    removeBackdrop();
+
+    router.push("/classes");
+
 };
 
 // Load classroom data
@@ -152,6 +163,17 @@ const setclassroomCapacity = (e) => {
         }
     }
 }
+
+// 移除modal用#id串接產生的modal-backdrop問題，待問題解決後停用
+// const modalParent = ref(document.body);
+const removeBackdrop = () => {
+    const backdrop = document.body.querySelector('.modal-backdrop fade show');
+    console.log(222);
+    if (backdrop) {
+        backdrop.remove();
+        console.log(111);
+    }
+};
 
 onMounted(() => {
     loadAllClassrooms()

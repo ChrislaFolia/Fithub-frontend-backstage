@@ -7,6 +7,9 @@
 
                     <div class="card mb-4">
                         <div class="card-body table-responsive">
+                            <div class="mb-3">
+                                <router-link to="course" type="button" class="btn btn btn-primary mb-1">新增課堂資料</router-link>
+                            </div>
                             <table class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -29,7 +32,12 @@
                                         <td>{{ course.courseCategories.categoryName }}</td>
                                         <td>{{ course.courseName }}</td>
                                         <td>{{ epmloyee.employeename }}</td>
-                                        <td>{{ classDate }}&nbsp;{{ classTime }}</td>
+
+                                        <td v-if="classTime == 'morning'">{{ classDate }}&nbsp;早上</td>
+                                        <td v-else-if="classTime == 'afternoon'">{{ classDate }}&nbsp;下午</td>
+                                        <td v-else-if="classTime == 'night'">{{ classDate }}&nbsp;晚上</td>
+                                        <td v-else>{{ classDate }}</td>
+
                                         <td>{{ classroom.classroomName }}</td>
                                         <td>{{ price }}</td>
                                         <td>{{ -1 }}</td>
