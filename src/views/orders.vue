@@ -19,6 +19,7 @@
                                     <th>付款狀態</th>
                                     <th>訂單狀態</th>
                                     <th>修改</th>
+                                    <th>詳細資料</th>
                                 </tr>
                             </thead>
 
@@ -36,6 +37,9 @@
                                     <td><button class="btn btn-outline-info" data-bs-toggle="modal"
                                             @click="openUpdateModal(orders)" data-bs-target="#updateModal">修改</button>
                                     </td>
+                                    <td><button class="btn btn-outline-info" data-bs-toggle="modal"
+                                        @click="openModalWithOrderItem(orders.orderId)" data-bs-target="#updateModal2">查看</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -44,7 +48,87 @@
             </div>
         </div>
     </div>
+        <!-- 詳細資料彈出視窗 -->
+        <div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">詳細資料</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+                <thead class="align-middle text-center">
+                                <tr class="table-primary">
+                                    <th>訂單編號</th>
+                                    <th>課程名稱</th>
+                                    <th>課程日期/時間</th>
+                                    <th>上課教室</th>
+                                    <th>課程價格</th>
+                                    <th>優惠金額</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+        <tr v-for="item in selectedOrderItems" :key="item.itemId">
+          <td>{{ item.itemId }}</td>
+          <td>{{ item.classes.course.courseName }}</td>
 
+            <td>{{ item.classes.classDate }}
+            {{ item.classes.classTime }}
+        </td>
+        <td>{{ item.classes.classroom.classroomName }}</td>
+        <td>{{ item.classes.price }}</td>
+        <td>{{ item.coupon.coupondiscount }}</td>
+          <!-- 其他資料列 ... -->
+        </tr>
+      </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+        <!-- 查看-彈出視窗 -->
+    <!-- <div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">詳細資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead class="align-middle text-center">
+                                <tr class="table-primary">
+                                    <th>訂單編號</th>
+                                    <th>課程名稱</th>
+                                    <th>課程日期/時間</th>
+                                    <th>上課教室</th>
+                                    <th>課程價格</th>
+                                    <th>優惠金額</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="align-middle text-center">
+                                <tr v-for="(orderitem, orderitemindex) in orderitems" :key="orderitemindex">
+                                    <td>{{ orderitem.orderId }}</td>
+                                     <td>{{ orderitem.classes.course.courseName }}</td>
+                                     <td>{{ orderitem.classes.classDate }}
+                                        {{ orderitem.classes.classTime }}
+                                    </td>
+                                    <td>{{ orderitem.classes.classroom.classroomName }}</td>
+                                    <td>{{ orderitem.classes.price }}</td>
+                                    <td>{{ orderitem.coupon.coupondiscount }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>      -->
     <!-- 修改-彈出視窗 -->
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
         <div class="modal-dialog">
@@ -175,14 +259,36 @@ const translateOrderState = (state) => {
   return stateTranslations[state] || '未知狀態';
 };
 
+const orderitem = reactive(
+    {
+        itemid: '',
+        orderid: '',
+        classid: '',
+        couponid: '',
+});
+
+
+const orderitems = ref([]); // 儲存SelectAll的訂單
+
 const orderss = ref([]); // 儲存SelectAll的訂單
 const selectedOrderss = ref([]); // 儲存選中的 ClassroomID
 const updateSelectedOrders = reactive({}); // 儲存要修改的優惠券資料(預設值)
-
+const selectedOrderItems = ref([]); // 儲存選中訂單的訂單項目
 
 // 将選中的教室資料複製到 updateSelectedCoupon
 const openUpdateModal = (orders) => {
     Object.assign(updateSelectedOrders, orders);
+};
+
+const getorderitems = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/fithub/order-items'); // 替換為實際的 API URL
+        orderitems.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
+        console.log(orderitems.value)
+
+    } catch (error) {
+        console.error('Error getorderss data:', error);
+    }
 };
 
 
@@ -274,10 +380,30 @@ const updateOrders = async () => {
 };
 
 
+
+const getOrderItemByOrderId = async (orderId) => {
+  try {
+    const url = `http://localhost:8080/fithub/order-items/${orderId}`;
+    const response = await axios.get(url);
+    selectedOrderItems.value = response.data; // 賦值給selectedOrderItems
+  } catch (error) {
+    console.error('Error getting order item by order id:', error);
+  }
+};
+
+const openModalWithOrderItem = (orderId) => {
+  getOrderItemByOrderId(orderId);
+  const modal = new bootstrap.Modal(document.getElementById('updateModal2'));
+  modal.show();
+};
+
+
+
 onMounted(() => {
     getorderss();
-    
+    getorderitems();   
 });
+
 </script>
 
 <style scoped>
