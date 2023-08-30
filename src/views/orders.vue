@@ -38,7 +38,8 @@
                                             @click="openUpdateModal(orders)" data-bs-target="#updateModal">修改</button>
                                     </td>
                                     <td><button class="btn btn-outline-info" data-bs-toggle="modal"
-                                        @click="openModalWithOrderItem(orders.orderId)" data-bs-target="#updateModal2">查看</button>
+                                            @click="openModalWithOrderItem(orders.orderId)"
+                                            data-bs-target="#updateModal2">查看</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -48,60 +49,46 @@
             </div>
         </div>
     </div>
-        <!-- 詳細資料彈出視窗 -->
-<div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">詳細資料</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead class="align-middle text-center">
-                        <tr class="table-primary">
-                            <th>訂單編號</th>
-                            <th>課程名稱</th>
-                            <th>課程日期/時間</th>
-                            <th>上課教室</th>
-                            <th>課程價格</th>
-                            <th>優惠金額</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(orderitem,orderitemsindex) in selectedOrderItems" :key="orderitemsindex">
-                            <td>{{ orderitem.itemId }}</td>
-                            <td>{{ orderitem.classes.course.courseName }}</td>
-                            <td>{{ orderitem.coupon.coupondiscount }}</td>
-                        </tr>
-                            
-                        <!-- <td>{{ selectedOrderItems.orderId }}</td>
-                        <td>
-                            {{ selectedOrderItems.classes && selectedOrderItems.classes.course ? selectedOrderItems.classes.course.courseName : '' }}
-                        </td>
-                        <td>
-                            {{ selectedOrderItems.classes && selectedOrderItems.classes.classDate ? selectedOrderItems.classes.classDate : '' }}
-                            {{ selectedOrderItems.classes && selectedOrderItems.classes.classTime ? selectedOrderItems.classes.classTime : '' }}
-                        </td>
-                        <td>
-                        {{ selectedOrderItems.classes && selectedOrderItems.classes.classroom ? selectedOrderItems.classes.classroom.classroomName : '' }}
-                        </td>
-                        <td>
-                            {{ selectedOrderItems.classes && selectedOrderItems.classes.price ? selectedOrderItems.classes.price : '' }}
-                        </td>
-                        <td>
-                            {{ selectedOrderItems.coupon && selectedOrderItems.coupon.coupondiscount ? selectedOrderItems.coupon.coupondiscount : '' }}
-                        </td> -->
-
-                       
-                    </tbody>
-                </table>
+    <!-- 詳細資料彈出視窗 -->
+    <div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">詳細資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="align-middle text-center">
+                            <tr class="table-primary">
+                                <th>項目編號</th>
+                                <th>課程名稱</th>
+                                <th>課程日期/時間</th>
+                                <th>上課教室</th>
+                                <th>課程價格</th>
+                                <th>優惠金額</th>
+                                <th>訂單總金額</th> <!-- 新增的列 -->
+                            </tr>
+                        </thead>
+                        <tbody class="align-middle text-center">
+                            <tr v-for="(orderitem, orderitemsindex) in selectedOrderItems" :key="orderitemsindex">
+                                <td>{{ orderitem.itemId }}</td>
+                                <td>{{ orderitem.classes.course.courseName }}</td>
+                                <td>{{ orderitem.classes.classDate }}
+                                    {{ orderitem.classes.classTime }}
+                                </td>
+                                <td>{{ orderitem.classes.classroom.classroomName }}</td>
+                                <td>{{ orderitem.classes.price }}</td>
+                                <td>{{ orderitem.coupon.coupondiscount }}</td>
+                                <td>{{ orderitem.classes.price - orderitem.coupon.coupondiscount }}</td>
+                            </tr>                      
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-  
+
     <!-- 修改-彈出視窗 -->
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
         <div class="modal-dialog">
@@ -112,11 +99,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        日期<input v-model="updateSelectedOrders.orderDate" type="date" class="form-control" required="required">
+                        日期<input v-model="updateSelectedOrders.orderDate" type="date" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedOrders.orderDate" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        會員編號<input v-model="updateSelectedOrders.memberId" type="text" class="form-control" required="required">
+                        會員編號<input v-model="updateSelectedOrders.memberId" type="text" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedOrders.memberId" class="text-danger">必填</span>
                     </div>
                     <!-- <div class="mb-3">
@@ -124,14 +113,15 @@
                         <span v-if="!updateSelectedOrders.orderTotalAmount" class="text-danger">必填</span>
                     </div> -->
                     <div class="mb-3">
-                        付款方式<input v-model="updateSelectedOrders.orderPaymentMethod" type="text" class="form-control" required="required">
+                        付款方式<input v-model="updateSelectedOrders.orderPaymentMethod" type="text" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedOrders.orderPaymentMethod" class="text-danger">必填</span>
-                    </div>                    
-                   <label class="form-label">付款狀態</label>
+                    </div>
+                    <label class="form-label">付款狀態</label>
                     <div class="mb-3">
                         <select v-model="updateSelectedOrders.orderstate" class="form-control" required="required">
                             <option value="0">未付款</option>
-                            <option value="1">已付款</option>                            
+                            <option value="1">已付款</option>
                         </select>
                         <span v-if="!updateSelectedOrders.orderstate" class="text-danger">必填</span>
                     </div>
@@ -139,18 +129,18 @@
                     <div class="mb-3">
                         <select v-model="updateSelectedOrders.orderCondition" class="form-control" required="required">
                             <option value="Pending">Pending</option>
-                            <option value="Processing">Processing</option>                            
+                            <option value="Processing">Processing</option>
                         </select>
                         <span v-if="!updateSelectedOrders.orderCondition" class="text-danger">必填</span>
-                    </div>                                  
-                    
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" @click="updateOrders">送出</button>
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 
 
     <!-- 新增-彈出視窗 -->
@@ -159,10 +149,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">新增訂單</h5>
-                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                   <div class="mb-3">
+                    <div class="mb-3">
                         日期<input v-model="orders.orderDate" type="date" class="form-control" required="required">
                         <span v-if="!orders.orderDate" class="text-danger">必填</span>
                     </div>
@@ -177,12 +167,12 @@
                     <div class="mb-3">
                         付款方式<input v-model="orders.orderPaymentMethod" type="text" class="form-control" required="required">
                         <span v-if="!orders.orderPaymentMethod" class="text-danger">必填</span>
-                    </div>                    
-                   <label class="form-label">付款狀態</label>
+                    </div>
+                    <label class="form-label">付款狀態</label>
                     <div class="mb-3">
                         <select v-model="orders.orderstate" class="form-control" required="required">
                             <option value="0">未付款</option>
-                            <option value="1">已付款</option>                            
+                            <option value="1">已付款</option>
                         </select>
                         <span v-if="!orders.orderstate" class="text-danger">必填</span>
                     </div>
@@ -190,18 +180,18 @@
                     <div class="mb-3">
                         <select v-model="orders.orderCondition" class="form-control" required="required">
                             <option value="Pending">Pending</option>
-                            <option value="Processing">Processing</option>                            
+                            <option value="Processing">Processing</option>
                         </select>
                         <span v-if="!orders.orderCondition" class="text-danger">必填</span>
-                    </div>                                  
-                   
-                     </div>
+                    </div>
+
+                </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" @click="insertOrders">送出</button>
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </template>
   
 <script setup>
@@ -221,15 +211,15 @@ const orders = reactive(
         ordertotalamount: '',
         orderpaymentmethod: '',
         orderstate: '',
-});
+    });
 const translateOrderState = (state) => {
-  const stateTranslations = {
-    0: '未付款',
-    1: '已付款'
-    // Add more translations as needed
-  };
+    const stateTranslations = {
+        0: '未付款',
+        1: '已付款'
+        // Add more translations as needed
+    };
 
-  return stateTranslations[state] || '未知狀態';
+    return stateTranslations[state] || '未知狀態';
 };
 
 const orderitem = reactive(
@@ -238,7 +228,7 @@ const orderitem = reactive(
         orderid: '',
         classid: '',
         couponid: '',
-});
+    });
 
 
 const orderitems = ref([]); // 儲存SelectAll的訂單
@@ -251,9 +241,9 @@ const selectedOrderItems = ref([]); // 儲存選中訂單的訂單項目
 
 
 
-    let  classes = null;
-    let  coupon = null;
-    let  order = null;
+let classes = null;
+let coupon = null;
+let order = null;
 
 
 
@@ -288,15 +278,15 @@ const getorderss = async () => {
 };
 
 const getCouponCategoryName = (coupon) => {
-      if (coupon.couponCategories) {  // 注意属性名的大小寫
+    if (coupon.couponCategories) {  // 注意属性名的大小寫
         return coupon.couponCategories.couponcategoriesname;  // 注意属性名的大小寫
-      }
-      return '未知類別';
-    };
+    }
+    return '未知類別';
+};
 
 // 新增優惠券
 const insertOrders = async () => {
-    try{
+    try {
         const response = await axios.post('http://localhost:8080/fithub/orders', orders, {
             headers: {
                 'Content-Type': 'application/json'
@@ -342,20 +332,20 @@ const updateOrders = async () => {
     //     }
 
 
-        const response = await axios.put('http://localhost:8080/fithub/orders/update', updateSelectedOrders, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+    const response = await axios.put('http://localhost:8080/fithub/orders/update', updateSelectedOrders, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
 
-        //關閉動態框
-        const updateModal = document.getElementById('updateModal')
-        let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
-        getInstanceUpdateModal.toggle();
+    //關閉動態框
+    const updateModal = document.getElementById('updateModal')
+    let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
+    getInstanceUpdateModal.toggle();
 
-        // 刷新畫面
-        getorderss();
+    // 刷新畫面
+    getorderss();
     // } catch (error) {
     //     console.error('Error adding new classroom:', error);
     // }
@@ -364,71 +354,68 @@ const updateOrders = async () => {
 
 
 const getOrderItemByOrderId = async (orderId) => {
-  try {
-    const url = `http://localhost:8080/fithub/order-items/${orderId}`;
-    const response = await axios.get(url);
-    console.log('API Response:', response.data); // 檢查 API 的回應是否正確
-    selectedOrderItems.value = response.data; // 賦值給selectedOrderItems
+    try {
+        const url = `http://localhost:8080/fithub/order-items/${orderId}`;
+        const response = await axios.get(url);
+        console.log('API Response:', response.data); // 檢查 API 的回應是否正確
+        selectedOrderItems.value = response.data; // 賦值給selectedOrderItems
 
 
-    // let  classes = selectedOrderItems.value.classes
-    // let  coupon = selectedOrderItems.value.coupon
-    // let  order = selectedOrderItems.value.order.member
+        // let  classes = selectedOrderItems.value.classes
+        // let  coupon = selectedOrderItems.value.coupon
+        // let  order = selectedOrderItems.value.order.member
 
-    // console.log(classes)
-    // console.log(coupon)
-    // console.log(order)
+        // console.log(classes)
+        // console.log(coupon)
+        // console.log(order)
 
-  } catch (error) {
-    console.error('Error getting order item by order id:', error);
-  }
+    } catch (error) {
+        console.error('Error getting order item by order id:', error);
+    }
 };
 
 // 多筆
 const getOrderItemsByOrderId = async (orderId) => {
-  try {
-    const url = `http://localhost:8080/fithub/order-items/items/${orderId}`;
-    const response = await axios.get(url);
-    console.log('API Response:', response.data); // 檢查 API 的回應是否正確
-    selectedOrderItems.value = response.data; // 賦值給selectedOrderItems
+    try {
+        const url = `http://localhost:8080/fithub/order-items/items/${orderId}`;
+        const response = await axios.get(url);
+        console.log('API Response:', response.data); // 檢查 API 的回應是否正確
+        selectedOrderItems.value = response.data; // 賦值給selectedOrderItems
 
-    console.log("test")
-    console.log(selectedOrderItems.value)
-    // let  classes = selectedOrderItems.value.classes
-    // let  coupon = selectedOrderItems.value.coupon
-    // let  order = selectedOrderItems.value.order.member
+        console.log("test")
+        console.log(selectedOrderItems.value)
+        // let  classes = selectedOrderItems.value.classes
+        // let  coupon = selectedOrderItems.value.coupon
+        // let  order = selectedOrderItems.value.order.member
 
-    // console.log(classes)
-    // console.log(coupon)
-    // console.log(order)
+        // console.log(classes)
+        // console.log(coupon)
+        // console.log(order)
 
-  } catch (error) {
-    console.error('Error getting order item by order id:', error);
-  }
+    } catch (error) {
+        console.error('Error getting order item by order id:', error);
+    }
 };
 
 
 const openModalWithOrderItem = (orderId) => {
-  getOrderItemsByOrderId(orderId);
+    getOrderItemsByOrderId(orderId);
 
-       //關閉動態框
-       const modal = document.getElementById('updateModal2')
-       let getInstanceUpdateModal = bootstrap.Modal.getInstance(modal)
-       getInstanceUpdateModal.toggle();
+    //關閉動態框
+    const modal = document.getElementById('updateModal2')
+    let getInstanceUpdateModal = bootstrap.Modal.getInstance(modal)
+    getInstanceUpdateModal.toggle();
 
 };
 
 
 
 onMounted(() => {
-    getorderss();
-    getorderitems();
+    getorderss();    
 });
 
 </script>
 
-<style scoped>
-.text-danger {
+<style scoped>.text-danger {
     font-size: 8px;
-}
-</style>
+}</style>
