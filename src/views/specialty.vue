@@ -3,30 +3,31 @@
         <NavbarTop></NavbarTop>
         <NavbarLeft></NavbarLeft>
 
+
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">部門資料</h1>
+                    <h1 class="mt-4" style="text-align: center;">專長項目</h1>
                     <div class="card mb-4">
                         <div class="card-body table-responsive">
                             <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                data-bs-target="#insertModal">新增部門</button>
-                            <table id="departmentsTable" class="table table-bordered">
+                                data-bs-target="#insertModal">新增專長</button>
+                            <table id="specialtysTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
-                                        <th>部門名稱</th>
+                                        <th>專長名稱</th>
                                         <th>修改</th>
                                         <th>刪除</th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle text-center">
-                                    <tr v-for="dept in allDepts" :key="dept.deptid">
-                                        <td>{{ dept.deptname }}</td>
+                                    <tr v-for="spec in allSpecs" :key="spec.specialtyid">
+                                        <td>{{ spec.specialtyname }}</td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#updateModal" @click="inputUpdateData(dept)">修改</button>
+                                                data-bs-target="#updateModal" @click="inputUpdateData(spec)">修改</button>
                                         </td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" @click="inputDeleteData(dept)">刪除</button>
+                                                data-bs-target="#deleteModal" @click="inputDeleteData(spec)">刪除</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -34,7 +35,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -43,13 +43,13 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">修改部門名稱</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">修改專長名稱</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            部門名稱:<input type="text" class="form-control" v-model="updateDepartment.deptname">
-                            <span v-if="!updateDepartment.deptname" class="text-danger">必填</span>
+                            專長名稱:<input type="text" class="form-control" v-model="updateSpecialty.specialtyname">
+                            <span v-if="!updateSpecialty.specialtyname" class="text-danger">必填</span>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -66,13 +66,13 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">新增部門</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">新增專長</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            部門名稱:<input type="text" class="form-control" v-model="insertDepartment.deptname">
-                            <span v-if="!insertDepartment.deptname" class="text-danger">必填</span>
+                            專長名稱:<input type="text" class="form-control" v-model="insertSpecialty.specialtyname">
+                            <span v-if="!insertSpecialty.specialtyname" class="text-danger">必填</span>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -88,12 +88,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">刪除部門</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">刪除專長</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            部門名稱:<input type="text" class="form-control" v-model="deleteDepartment.deptname" readonly>
+                            專長名稱:<input type="text" class="form-control" v-model="deleteSpecialty.specialtyname" readonly>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -113,21 +113,23 @@ import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
-const insertDepartment = reactive({
-    deptname: '',
+const insertSpecialty = reactive({
+    specialtyname: '',
 });
-const updateDepartment = reactive({});
-const deleteDepartment = reactive({});
+const updateSpecialty = reactive({});
+const deleteSpecialty = reactive({});
 
 //存所有dept資料
-const allDepts = ref([])
+const allSpecs = ref([])
 
 const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
-    const response = await axios.get(`${url}/departments`)
+    const response = await axios.get(`${url}/specialtys`)
 
-    allDepts.value = response.data
+    allSpecs.value = response.data
+
+    console.log(allSpecs.value)
 
 }
 
@@ -136,11 +138,11 @@ onMounted(() => {
 });
 
 const inputUpdateData = (data) => {
-    Object.assign(updateDepartment, data);
+    Object.assign(updateSpecialty, data);
 };
 
 const inputDeleteData = (data) => {
-    Object.assign(deleteDepartment, data);
+    Object.assign(deleteSpecialty, data);
 };
 
 
@@ -151,16 +153,16 @@ const insertData = async () => {
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
     //如果沒有值 return 不做
-    if (!insertDepartment.deptname.trim()) {
+    if (!insertSpecialty.specialtyname.trim()) {
         alert("請輸入正確資料")
         return;
     }
 
     try {
-        const response = await axios.post(`${url}/departments`, { deptname: insertDepartment.deptname })
+        const response = await axios.post(`${url}/specialtys`, { specialtyname: insertSpecialty.specialtyname })
         if (response.status === 200) {
             loadDatas(); // 重新載入資料
-            insertDepartment.deptname = ''; // 清空 insertDeptName
+            insertSpecialty.specialtyname = ''; // 清空 insertSpecialtyname
             alert("新增成功")
         }
     } catch (error) {
@@ -178,20 +180,19 @@ const updateData = async () => {
 
 
     //如果沒有值 return 不做
-    console.log(updateDepartment.deptid + " " + updateDepartment.deptname.trim())
-    if (!updateDepartment.deptid || !updateDepartment.deptname.trim()) {
+    if (!updateSpecialty.specialtyid || !updateSpecialty.specialtyname.trim()) {
         alert("請輸入正確資料")
         return;
     }
 
 
     try {
-        const response = await axios.put(`${url}/departments/${updateDepartment.deptid}`, { deptid: updateDepartment.deptid, deptname: updateDepartment.deptname })
+        const response = await axios.put(`${url}/specialtys/${updateSpecialty.specialtyid}`, { specialtyid: updateSpecialty.specialtyid, specialtyname: updateSpecialty.specialtyname })
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            updateDepartment.deptid = ''
-            updateDepartment.deptname = ''; // 清空 insertDeptName
+            updateSpecialty.specialtyid = ''
+            updateSpecialty.specialtyname = ''; // 清空 insertSpecialtyname
             alert("修改成功")
         }
 
@@ -211,17 +212,17 @@ const deleteData = async () => {
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
     // 如果沒有值 return 不做
-    if (!deleteDepartment.deptname) {
+    if (!deleteSpecialty.specialtyid) {
         return;
     }
 
     try {
-        const response = await axios.delete(`${url}/departments/${deleteDepartment.deptid}`)
+        const response = await axios.delete(`${url}/specialtys/${deleteSpecialty.specialtyid}`)
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            deleteDepartment.deptid = ''
-            deleteDepartment.deptname = ''; // 清空 insertDeptName
+            deleteSpecialty.specialtyid = ''
+            deleteSpecialty.specialtyname = ''; // 清空 insertSpecialtyname
             alert("刪除成功")
         }
 
@@ -235,5 +236,3 @@ const deleteData = async () => {
 }
 
 </script>
-
-<style></style>

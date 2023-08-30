@@ -20,6 +20,9 @@
     <nav class="sb-sidenav-menu-nested nav">
       <router-link class="nav-link" to="department">部門分類</router-link>
       <router-link class="nav-link" to="employee">員工管理</router-link>
+      <router-link class="nav-link" to="specialty">專長項目</router-link>
+      <router-link class="nav-link" to="coachspecialty">教練專長</router-link>
+      <router-link class="nav-link" to="jobtitle">職稱管理</router-link>
     </nav>
   </div>
 </template>

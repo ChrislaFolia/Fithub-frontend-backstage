@@ -3,30 +3,33 @@
         <NavbarTop></NavbarTop>
         <NavbarLeft></NavbarLeft>
 
+
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">部門資料</h1>
+                    <h1 class="mt-4" style="text-align: center;">專長項目</h1>
                     <div class="card mb-4">
                         <div class="card-body table-responsive">
                             <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                data-bs-target="#insertModal">新增部門</button>
-                            <table id="departmentsTable" class="table table-bordered">
+                                data-bs-target="#insertModal">新增專長</button>
+                            <table id="specialtysTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
-                                        <th>部門名稱</th>
+                                        <th>教練名稱</th>
+                                        <th>專長</th>
                                         <th>修改</th>
                                         <th>刪除</th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle text-center">
-                                    <tr v-for="dept in allDepts" :key="dept.deptid">
-                                        <td>{{ dept.deptname }}</td>
+                                    <tr v-for="coachSpec in allCoachSpecs" :key="coachSpec.specialtyid">
+                                        <td>{{ coachSpec.employee.employeename }}</td>
+                                        <td>{{ coachSpec.specialty.specialtyname }}</td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#updateModal" @click="inputUpdateData(dept)">修改</button>
+                                                data-bs-target="#updateModal" @click="inputUpdateData(coachSpec)">修改</button>
                                         </td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" @click="inputDeleteData(dept)">刪除</button>
+                                                data-bs-target="#deleteModal" @click="inputDeleteData(coachSpec)">刪除</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -34,7 +37,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -43,13 +45,23 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">修改部門名稱</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">修改專長</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            部門名稱:<input type="text" class="form-control" v-model="updateDepartment.deptname">
-                            <span v-if="!updateDepartment.deptname" class="text-danger">必填</span>
+                            教練名稱:
+                            <input type="text" class="form-control" v-model="updateCoachSpecialtyEmployee.employeename" readonly>
+                            <span v-if="!updateCoachSpecialty.employeeid" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            專長名稱:
+                            <select v-model="updateCoachSpecialty.specialtyid">
+                                <option v-for="spec in allSpecs" :key="spec.specialtyid"
+                                    :value="spec.specialtyid">{{ spec.specialtyname }}
+                                </option>
+                            </select>
+                            <span v-if="!updateCoachSpecialty.specialtyid" class="text-danger">必填</span>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -66,13 +78,27 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">新增部門</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">新增專長</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            部門名稱:<input type="text" class="form-control" v-model="insertDepartment.deptname">
-                            <span v-if="!insertDepartment.deptname" class="text-danger">必填</span>
+                            教練名稱:
+                            <select v-model="insertCoachSpecialty.employeeid">
+                                <option v-for="coach in allCoachs" :key="coach.employeeid"
+                                    :value="coach.employeeid">{{ coach.employeename }}
+                                </option>
+                            </select>
+                            <span v-if="!insertCoachSpecialty.employeeid" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            專長名稱:
+                            <select v-model="insertCoachSpecialty.specialtyid">
+                                <option v-for="spec in allSpecs" :key="spec.specialtyid"
+                                    :value="spec.specialtyid">{{ spec.specialtyname }}
+                                </option>
+                            </select>
+                            <span v-if="!insertCoachSpecialty.specialtyid" class="text-danger">必填</span>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -88,12 +114,19 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">刪除部門</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">刪除專長</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            部門名稱:<input type="text" class="form-control" v-model="deleteDepartment.deptname" readonly>
+                            教練名稱:
+                            <input type="text" class="form-control" v-model="deleteCoachSpecialtyEmployee.employeename" readonly>
+                            <span v-if="!deleteCoachSpecialty.employeeid" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            專長名稱:
+                            <input type="text" class="form-control" v-model="deleteCoachSpecialtySpecialty.specialtyname" readonly>
+                            <span v-if="!deleteCoachSpecialty.specialtyid" class="text-danger">必填</span>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -106,6 +139,7 @@
     </body>
 </template>
 
+
 <script setup>
 import axios from 'axios';
 import { ref, reactive, onMounted } from 'vue'
@@ -113,21 +147,35 @@ import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
-const insertDepartment = reactive({
-    deptname: '',
+const insertCoachSpecialty = reactive({
+    employeeid: '',
+    specialtyid: '',
 });
-const updateDepartment = reactive({});
-const deleteDepartment = reactive({});
+const updateCoachSpecialty = reactive({});
+const updateCoachSpecialtyEmployee = reactive({});
+
+
+const deleteCoachSpecialty = reactive({});
+const deleteCoachSpecialtyEmployee = reactive({});
+const deleteCoachSpecialtySpecialty = reactive({});
 
 //存所有dept資料
-const allDepts = ref([])
+const allCoachSpecs = ref([])
+const allSpecs = ref([])
+const allCoachs = ref([])
 
 const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
-    const response = await axios.get(`${url}/departments`)
+    const responseCoachSpecialtys = await axios.get(`${url}/coachspecialtys`)
+    const responseSpecialtys = await axios.get(`${url}/specialtys`)
+    const responseCoachs = await axios.get(`${url}/employees/coachs`)
 
-    allDepts.value = response.data
+    allCoachSpecs.value = responseCoachSpecialtys.data
+    allSpecs.value = responseSpecialtys.data
+    allCoachs.value = responseCoachs.data
+
+    console.log(allCoachSpecs.value)
 
 }
 
@@ -136,11 +184,14 @@ onMounted(() => {
 });
 
 const inputUpdateData = (data) => {
-    Object.assign(updateDepartment, data);
+    Object.assign(updateCoachSpecialty, data);
+    Object.assign(updateCoachSpecialtyEmployee, data.employee);
 };
 
-const inputDeleteData = (data) => {
-    Object.assign(deleteDepartment, data);
+const inputDeleteData = async (data) => {
+    await Object.assign(deleteCoachSpecialty, data);
+    await Object.assign(deleteCoachSpecialtyEmployee, data.employee);
+    await Object.assign(deleteCoachSpecialtySpecialty, data.specialty);
 };
 
 
@@ -150,17 +201,19 @@ const insertData = async () => {
     var myModalEl = document.getElementById('insertModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
+    console.log(!insertCoachSpecialty.employeeid)
+    console.log(!insertCoachSpecialty.specialtyid)
     //如果沒有值 return 不做
-    if (!insertDepartment.deptname.trim()) {
+    if (!insertCoachSpecialty.employeeid || !insertCoachSpecialty.specialtyid) {
         alert("請輸入正確資料")
         return;
     }
 
     try {
-        const response = await axios.post(`${url}/departments`, { deptname: insertDepartment.deptname })
+        const response = await axios.post(`${url}/coachspecialtys`, { employeeid: insertCoachSpecialty.employeeid , specialtyid: insertCoachSpecialty.specialtyid})
         if (response.status === 200) {
             loadDatas(); // 重新載入資料
-            insertDepartment.deptname = ''; // 清空 insertDeptName
+            insertCoachSpecialty.specialtyid = ''; // 清空 insertCoachSpecialtyid
             alert("新增成功")
         }
     } catch (error) {
@@ -178,20 +231,17 @@ const updateData = async () => {
 
 
     //如果沒有值 return 不做
-    console.log(updateDepartment.deptid + " " + updateDepartment.deptname.trim())
-    if (!updateDepartment.deptid || !updateDepartment.deptname.trim()) {
+    if (!updateCoachSpecialty.specialtyid) {
         alert("請輸入正確資料")
         return;
     }
 
 
     try {
-        const response = await axios.put(`${url}/departments/${updateDepartment.deptid}`, { deptid: updateDepartment.deptid, deptname: updateDepartment.deptname })
+        const response = await axios.put(`${url}/coachspecialtys/${updateCoachSpecialty.coachspecialtyid}`, { coachspecialtyid: updateCoachSpecialty.coachspecialtyid, employeeid: updateCoachSpecialty.employeeid, specialtyid: updateCoachSpecialty.specialtyid })
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            updateDepartment.deptid = ''
-            updateDepartment.deptname = ''; // 清空 insertDeptName
             alert("修改成功")
         }
 
@@ -210,18 +260,18 @@ const deleteData = async () => {
     var myModalEl = document.getElementById('deleteModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
+    console.log(deleteCoachSpecialty)
+
     // 如果沒有值 return 不做
-    if (!deleteDepartment.deptname) {
+    if (!deleteCoachSpecialty.coachspecialtyid) {
         return;
     }
 
     try {
-        const response = await axios.delete(`${url}/departments/${deleteDepartment.deptid}`)
+        const response = await axios.delete(`${url}/coachspecialtys/${deleteCoachSpecialty.coachspecialtyid}`)
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            deleteDepartment.deptid = ''
-            deleteDepartment.deptname = ''; // 清空 insertDeptName
             alert("刪除成功")
         }
 
@@ -235,5 +285,3 @@ const deleteData = async () => {
 }
 
 </script>
-
-<style></style>

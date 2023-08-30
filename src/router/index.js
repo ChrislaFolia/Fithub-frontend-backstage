@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { authToken } from '@/api/login'
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -15,6 +17,22 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/loginView.vue')
+    },
+    {
+      path: '/navbartop',
+      name: 'navbartop',
+      component: () => import('../components/NavbarTop.vue'),
+      meta:{
+        needLogin: true
+      }
+    },
+    {
+      path: '/navbarleft',
+      name: 'navbarleft',
+      component: () => import('../components/NavbarLeft.vue'),
+      meta:{
+        needLogin: true
+      }
     },
     {
       path: '/department',
@@ -83,17 +101,25 @@ const router = createRouter({
       }
     },
     {
-      path: '/navbartop',
-      name: 'navbartop',
-      component: () => import('../components/NavbarTop.vue'),
+      path: '/specialty',
+      name: 'specialty',
+      component: () => import('../views/specialty.vue'),
       meta:{
         needLogin: true
       }
     },
     {
-      path: '/navbarleft',
-      name: 'navbarleft',
-      component: () => import('../components/NavbarLeft.vue'),
+      path: '/coachspecialty',
+      name: 'coachspecialty',
+      component: () => import('../views/coachspecialty.vue'),
+      meta:{
+        needLogin: true
+      }
+    },
+    {
+      path: '/jobtitle',
+      name: 'jobtitle',
+      component: () => import('../views/jobtitle.vue'),
       meta:{
         needLogin: true
       }
