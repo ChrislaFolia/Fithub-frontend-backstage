@@ -63,7 +63,8 @@
                                             <UpdateCourse :categories="courseCategories" :courseId="courseId"
                                                 :courseName="courseName" :courseImgPath="courseImgPath"
                                                 :courseCategories="courseCategories" :courseDescription="courseDescription"
-                                                :allCourseCategories="allCourseCategories">
+                                                :allCourseCategories="allCourseCategories"
+                                                @submitUpdateCourse-emit="loadCourses">
                                             </UpdateCourse>
                                         </td>
                                         <td>

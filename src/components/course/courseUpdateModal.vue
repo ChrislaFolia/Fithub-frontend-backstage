@@ -84,6 +84,7 @@ const fileChange = (e) => {
     console.log(formData.get('photoContent'));
 }
 
+const emit = defineEmits(['submitUpdateCourse-emit'])
 const submitUpdateCourse = async (e) => {
 
     if (formData.get('photoContent') != null) {
@@ -107,9 +108,15 @@ const submitUpdateCourse = async (e) => {
         console.log(error.toJSON());
     });
 
-    // emit('submitInsertCourse-emit')
+    //關閉Modal
+    const upadteModal = document.getElementById(`updateModal${props.courseId}`)
+    let getInstanceUpdateModal = bootstrap.Modal.getInstance(upadteModal)
+    getInstanceUpdateModal.toggle()
 
-    location.reload();
+    // 傳送event至parent componont
+    emit('submitUpdateCourse-emit')
+
+    // location.reload();
 };
 
 </script>

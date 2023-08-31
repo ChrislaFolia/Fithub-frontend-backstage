@@ -55,7 +55,6 @@ import axios from "axios";
 const props = defineProps({
     allCourseCategories: Object,
 })
-const emit = defineEmits(['submitInsertCourse-emit'])
 const course = reactive({
     courseName: '',
     categoryId: '',
@@ -72,6 +71,7 @@ const fileChange = (e) => {
     console.log(formData);
 }
 
+const emit = defineEmits(['submitInsertCourse-emit'])
 const URL = import.meta.env.VITE_API_JAVAURL;
 const submitInsertCourse = async (e) => {
     if (formData.get('photoContent') != null) {
@@ -96,10 +96,11 @@ const submitInsertCourse = async (e) => {
     //關閉Modal
     const insertModal = document.getElementById(`insertModal`)
     let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
-    getInstanceInsertModal.toggle();
+    getInstanceInsertModal.toggle()
+
+    // 傳送event至parent componont
     emit('submitInsertCourse-emit')
 
-    // location.reload();
 };
 
 </script>
