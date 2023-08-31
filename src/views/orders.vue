@@ -197,10 +197,11 @@
 <script setup>
 import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
+const URL = import.meta.env.VITE_API_JAVAURL
 
 
 
-
+// const resInsertCourse = await axios.post(`${URL}/classes`, classes)
 //建立優惠券物件
 const orders = reactive(
     {
@@ -241,6 +242,7 @@ const selectedOrderItems = ref([]); // 儲存選中訂單的訂單項目
 
 
 
+
 let classes = null;
 let coupon = null;
 let order = null;
@@ -254,7 +256,7 @@ const openUpdateModal = (orders) => {
 
 const getorderitems = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/fithub/order-items'); // 替換為實際的 API URL
+        const response = await axios.get(`${URL}/order-items`); // 替換為實際的 API URL
         orderitems.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
         console.log(orderitems.value)
 
@@ -268,7 +270,7 @@ const getorderitems = async () => {
 // 從伺服器獲取 JSON 格式優惠券資料
 const getorderss = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/fithub/orders'); // 替換為實際的 API URL
+        const response = await axios.get(`${URL}/orders`); // 替換為實際的 API URL
         orderss.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
         console.log(orderss.value)
 
@@ -287,7 +289,7 @@ const getCouponCategoryName = (coupon) => {
 // 新增優惠券
 const insertOrders = async () => {
     try {
-        const response = await axios.post('http://localhost:8080/fithub/orders', orders, {
+        const response = await axios.post(`${URL}/orders`, orders, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -332,7 +334,7 @@ const updateOrders = async () => {
     //     }
 
 
-    const response = await axios.put('http://localhost:8080/fithub/orders/update', updateSelectedOrders, {
+    const response = await axios.put(`${URL}/orders/update`, updateSelectedOrders, {
         headers: {
             'Content-Type': 'application/json'
         }
@@ -355,7 +357,7 @@ const updateOrders = async () => {
 
 const getOrderItemByOrderId = async (orderId) => {
     try {
-        const url = `http://localhost:8080/fithub/order-items/${orderId}`;
+        const url = `${URL}/order-items/${orderId}`;
         const response = await axios.get(url);
         console.log('API Response:', response.data); // 檢查 API 的回應是否正確
         selectedOrderItems.value = response.data; // 賦值給selectedOrderItems
@@ -377,7 +379,7 @@ const getOrderItemByOrderId = async (orderId) => {
 // 多筆
 const getOrderItemsByOrderId = async (orderId) => {
     try {
-        const url = `http://localhost:8080/fithub/order-items/items/${orderId}`;
+        const url = `${URL}/order-items/items/${orderId}`;
         const response = await axios.get(url);
         console.log('API Response:', response.data); // 檢查 API 的回應是否正確
         selectedOrderItems.value = response.data; // 賦值給selectedOrderItems

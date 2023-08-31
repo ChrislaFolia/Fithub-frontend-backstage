@@ -84,6 +84,7 @@
 <script setup>
 import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
+const URL = import.meta.env.VITE_API_JAVAURL
 
 
 
@@ -111,7 +112,7 @@ const openUpdateModal = (couponcategories) => {
 // 從伺服器獲取 JSON 格式優惠券資料
 const getcouponcategoriess = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/fithub/coupon-categories'); // 替換為實際的 API URL
+        const response = await axios.get(`${URL}/coupon-categories`); // 替換為實際的 API URL
         couponcategoriess.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
         console.log(getcouponcategoriess.value)
 
@@ -124,7 +125,7 @@ const getcouponcategoriess = async () => {
 // 新增優惠券類型
 const insertCouponcategories = async () => {
     try{
-        const response = await axios.post('http://localhost:8080/fithub/coupon-categories', couponcategories, {
+        const response = await axios.post(`${URL}/coupon-categories`, couponcategories, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -162,7 +163,7 @@ const updateCouponcategories = async () => {
     //     }
 
 
-        const response = await axios.put('http://localhost:8080/fithub/coupon-categories/update', updateSelectedCouponcategories, {
+        const response = await axios.put(`${URL}/coupon-categories/update`, updateSelectedCouponcategories, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -188,7 +189,7 @@ const deleteSelected = async () => {
     if (checkDelete) {
         try {
             // 將選中的 ClassroomID 送到後端進行刪除
-            const response = await axios.delete('http://localhost:8080/fithub/coupon-categories/delete/multiple', {
+            const response = await axios.delete(`${URL}/coupon-categories/delete/multiple`, {
                 data: selectedCouponcategoriess.value
             });
 
