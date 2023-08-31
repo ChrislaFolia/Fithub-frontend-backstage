@@ -88,7 +88,6 @@ const props = defineProps({
     courseId: Number,
     courseName: String,
 })
-// const emit = defineEmits(['submitInsertClasses-emit'])
 const classes = reactive({
     courseId: props.courseId,
     classDate: '',
@@ -108,6 +107,7 @@ const classroom = reactive({
 })
 
 
+const emit = defineEmits(['submitInsertClasses-emit'])
 const URL = import.meta.env.VITE_API_JAVAURL;
 const submitInsertClass = async (e) => {
     const resInsertCourse = await axios.post(`${URL}/classes`, classes
@@ -115,17 +115,15 @@ const submitInsertClass = async (e) => {
         console.log(error.toJSON());
     });
 
-    // emit('submitInsertClasses-emit')
-    // location.reload();
 
     //關閉Modal
     const insertModal = document.getElementById(`insertClassesModal${props.courseId}`)
     let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
     getInstanceInsertModal.toggle();
     router.push("/classes");
-    removeBackdrop();
-    removeBackdrop();
 
+    emit('submitInsertClasses-emit')
+    // location.reload();
 
 };
 
@@ -143,10 +141,8 @@ const loadAllClassrooms = async () => {
 // Load employee data
 const allCoachs = ref([]);
 const loadAllCoachs = async () => {
-    const URLAPI = `${URL}/employees/title`;
-    const response = await axios.post(URLAPI, {
-        'employeetitle': '教練'
-    });
+    const URLAPI = `${URL}/employees/coaches`;
+    const response = await axios.get(URLAPI);
     // console.log(response.data)
 
     //取得所有分類放進allClassroom變數

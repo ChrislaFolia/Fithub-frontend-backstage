@@ -143,10 +143,8 @@ const loadAllClassrooms = async () => {
 // Load employee data
 const allCoachs = ref([]);
 const loadAllCoachs = async () => {
-    const URLAPI = `${URL}/employees/title`;
-    const response = await axios.post(URLAPI, {
-        'employeetitle': '教練'
-    });
+    const URLAPI = `${URL}/employees/coaches`;
+    const response = await axios.get(URLAPI);
     // console.log(response.data)
 
     //取得所有分類放進allClassroom變數
