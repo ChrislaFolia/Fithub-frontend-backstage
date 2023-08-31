@@ -11,8 +11,7 @@
                                 <button type="button" id="insertCourse" class="btn btn btn-primary mb-1"
                                     data-bs-toggle="modal" data-bs-target="#insertModal">新增課程資料</button>
                             </div>
-                            <InsertCourse :allCourseCategories="allCourseCategories"
-                                @submitInsertCourse-emit="loadCourses()"></InsertCourse>
+
                             <table class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -33,7 +32,8 @@
                                                 :data-bs-target="`#insertClassesModal${courseId}`">
                                                 <i class="bi bi-plus"></i>
                                             </button>
-                                            <InsertClass class="text-left" :courseId="courseId" :courseName="courseName">
+                                            <InsertClass class="text-left" :courseId="courseId" :courseName="courseName"
+                                                @submitInsertCourse-emit="loadCourses">
                                             </InsertClass>
                                         </td>
                                         <td>{{ courseCategories.categoryName }} </td>
@@ -81,6 +81,8 @@
             </main>
         </div>
     </div>
+
+    <InsertCourse :allCourseCategories="allCourseCategories" @submitInsertCourse-emit="loadCourses()"></InsertCourse>
 </template>
     
 <script setup>

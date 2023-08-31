@@ -121,10 +121,11 @@ const submitInsertClass = async (e) => {
     //關閉Modal
     const insertModal = document.getElementById(`insertClassesModal${props.courseId}`)
     let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
-    getInstanceInsertModal.hide();
+    getInstanceInsertModal.toggle();
+    router.push("/classes");
+    removeBackdrop();
     removeBackdrop();
 
-    router.push("/classes");
 
 };
 
@@ -165,13 +166,11 @@ const setclassroomCapacity = (e) => {
 }
 
 // 移除modal用#id串接產生的modal-backdrop問題，待問題解決後停用
-// const modalParent = ref(document.body);
 const removeBackdrop = () => {
-    const backdrop = document.body.querySelector('.modal-backdrop fade show');
-    console.log(222);
-    if (backdrop) {
+    const backdrop = document.body.querySelector('.modal-backdrop');
+    console.log(backdrop);
+    if (backdrop != null) {
         backdrop.remove();
-        console.log(111);
     }
 };
 

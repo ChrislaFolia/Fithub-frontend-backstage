@@ -74,25 +74,32 @@ const fileChange = (e) => {
 
 const URL = import.meta.env.VITE_API_JAVAURL;
 const submitInsertCourse = async (e) => {
-
-    const resUploadFile = await axios.post(`${URL}/course/uploadImg`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
+    if (formData.get('photoContent') != null) {
+        const resUploadFile = await axios.post(`${URL}/course/uploadImg`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
         }
+        ).catch((error) => {
+            console.log(error.toJSON());
+        });
+        console.log(resUploadFile);
+        course.courseImgPath = resUploadFile.data
+        console.log(course.courseImgPath);
+
     }
-    ).catch((error) => {
-        console.log(error.toJSON());
-    });
-    console.log(resUploadFile);
-    course.courseImgPath = resUploadFile.data
-    console.log(course.courseImgPath);
     const resInsertCourse = await axios.post(`${URL}/course`, course
     ).catch((error) => {
         console.log(error.toJSON());
     });
 
-    // emit('submitInsertCourse-emit')
-    location.reload();
+    //關閉Modal
+    const insertModal = document.getElementById(`insertModal`)
+    let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal)
+    getInstanceInsertModal.toggle();
+    emit('submitInsertCourse-emit')
+
+    // location.reload();
 };
 
 </script>
