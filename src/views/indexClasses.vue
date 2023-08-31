@@ -32,12 +32,7 @@
                                         <td>{{ course.courseCategories.categoryName }}</td>
                                         <td>{{ course.courseName }}</td>
                                         <td>{{ epmloyee.employeename }}</td>
-
-                                        <td v-if="classTime == 'morning'">{{ classDate }}&nbsp;早上</td>
-                                        <td v-else-if="classTime == 'afternoon'">{{ classDate }}&nbsp;下午</td>
-                                        <td v-else-if="classTime == 'night'">{{ classDate }}&nbsp;晚上</td>
-                                        <td v-else>{{ classDate }}</td>
-
+                                        <td>{{ classDate }}&nbsp;{{ classTime }}</td>
                                         <td>{{ classroom.classroomName }}</td>
                                         <td>{{ price }}</td>
                                         <td>{{ -1 }}</td>

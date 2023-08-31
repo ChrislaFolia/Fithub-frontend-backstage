@@ -16,9 +16,9 @@
                     <div class="mb-3">
                         <label for="classTime" class="col-form-label">課程時段 :</label>
                         <select class="form-select" v-model="classes.classTime" id="classTime">
-                            <option value='morning'>早上</option>
-                            <option value='afternoon'>下午</option>
-                            <option value='night'>晚上</option>
+                            <option value='早上'>早上</option>
+                            <option value='下午'>下午</option>
+                            <option value='晚上'>晚上</option>
                         </select>
                     </div>
 
