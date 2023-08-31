@@ -92,7 +92,6 @@ const props = defineProps({
     classroom: Object,
 
 })
-const emit = defineEmits(['submitUpdateClasses-emit'])
 const classes = reactive({
     classId: props.classId,
     courseId: props.course.courseId,
@@ -106,12 +105,12 @@ const classes = reactive({
     classroomId: props.classroom.classroomId,
 });
 
+const emit = defineEmits(['submitUpdateClasses-emit'])
 const classroom = reactive({
     classroomId: props.classroom.classroomId,
     classroomName: props.classroom.classroomName,
     classroomCapacity: props.classroom.classroomCapacity,
 })
-
 
 const URL = import.meta.env.VITE_API_JAVAURL;
 const submitUpdateClass = async (e) => {
@@ -121,8 +120,13 @@ const submitUpdateClass = async (e) => {
         console.log(error.toJSON());
     });
 
-    // emit('submitUpdateClasses-emit')
-    location.reload();
+    //關閉Modal
+    const updateModal = document.getElementById(`updateClassesModal${props.classId}`)
+    let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
+    getInstanceUpdateModal.toggle()
+
+    emit('submitUpdateClasses-emit')
+    // location.reload();
 };
 
 // Load classroom data

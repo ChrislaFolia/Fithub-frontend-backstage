@@ -50,7 +50,8 @@
                                             <UpdateClass :classId="classId" :classDate="classDate" :classTime="classTime"
                                                 :epmloyee="epmloyee" :course="course" :price="price"
                                                 :applicantsCeil="applicantsCeil" :applicantsFloor="applicantsFloor"
-                                                :classroom="classroom" :coachSubstitute="coachSubstitute"></UpdateClass>
+                                                :classroom="classroom" :coachSubstitute="coachSubstitute"
+                                                @submitUpdateClasses-emit="loadClasses"></UpdateClass>
                                         </td>
                                         <td>
                                             <i type="button" class="bi bi-trash3"
