@@ -7,10 +7,18 @@
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
                     <h1 class="mt-4" style="text-align: center;">員工資料</h1>
+
                     <div class="card mb-4">
                         <div class="card-body table-responsive">
                             <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增員工</button>
+
+                            <div class="col-3" style="padding-top: 20px;">
+                                <PageSize @pageSizeChange="changeHandler"></PageSize>
+                            </div>
+                            <div class="col-3">
+                                <SearchTextBox @searchInput="inputHandler"></SearchTextBox>
+                            </div>
                             <table id="departmentsTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -31,7 +39,7 @@
                                         <td>{{ emp.employeegender }}</td>
                                         <td>{{ emp.employeephone }}</td>
                                         <td>{{ emp.employeeemail }}</td>
-                                        <td>{{ emp.jobtitle.jobtitlename }}</td>
+                                        <td>{{ emp.jobtitlename }}</td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(emp)">修改</button>
                                         </td>
@@ -41,6 +49,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <Paging :totalPages="totalPages" :thePage="datas.start + 1" @abcClick="clickHandler"></Paging>
                         </div>
                     </div>
                 </div>
@@ -272,6 +281,9 @@ import axios from 'axios';
 import { ref, reactive, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+import Paging from "../components/Paging.vue";
+import PageSize from "../components/PageSize.vue";
+import SearchTextBox from '../components/SearchTextBox.vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertEmployee = reactive({
@@ -295,40 +307,76 @@ const insertEmployee = reactive({
 const updateEmployee = reactive({});
 const deleteEmployee = reactive({});
 
-//載入所有dept資料
 const allEmps = ref([])
 const allDepts = ref([])
 const allJobTitles = ref([])
 const allManagers = ref([])
 
+const totalPages = ref(0);
+const datas = reactive({
+    start: 0,
+    rows: 5,
+    name: "",
+    sortOrder: "asc",
+    sortType: "id",
+});
+
 const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
-    const response = await axios.get(`${url}/employees`)
+    // const response = await axios.get(`${url}/employees`)
+    const response = await axios.post(`${url}/employees/findPageByName`, datas)
     const responseDept = await axios.get(`${url}/departments`)
     const responseJobTitle = await axios.get(`${url}/jobtitles`)
     const responseManager = await axios.get(`${url}/employees/managers`)
 
-    allEmps.value = response.data
+    allEmps.value = response.data.list
     allDepts.value = responseDept.data
     allJobTitles.value = responseJobTitle.data
     allManagers.value = responseManager.data
 
-    console.log("data.count")
     console.log(response.data)
+    // 計算總共幾頁
+    totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
+
 }
 
 onMounted(() => {
     loadDatas()
 });
 
+//paging 由子元件觸發
+const clickHandler = page => {
+    datas.start = page - 1
+    loadDatas()
+}
+
+//一頁幾筆資料
+const changeHandler = value => {
+    datas.rows = value
+    datas.start = 0
+    console.log("pagesize：", datas)
+    loadDatas()
+}
+
+//排序
+const sortHandler = type => {
+    datas.sortOrder = datas.sortOrder === "asc" ? "desc" : "asc"
+    datas.sortType = type
+    loadDatas()
+}
+
+//搜尋
+const inputHandler = value => {
+    datas.name = value
+    datas.start = 0
+    loadDatas()
+}
+
+
 // 點擊修改時觸發 帶入該筆資料
 const inputUpdateData = (data) => {
     Object.assign(updateEmployee, data);
-    console.log(updateEmployee)
-    console.log(updateEmployee.deptid)
-    console.log(updateEmployee.department)
-
 };
 
 // 點擊刪除時觸發 帶入該筆資料
@@ -465,6 +513,9 @@ const deleteData = async () => {
         const response = await axios.delete(`${url}/employees/${deleteEmployee.employeeid}`)
 
         if (response.status == 200) {
+            datas.start = 0;
+            datas.name = null;
+
             loadDatas(); // 重新載入資料
             alert("刪除成功")
         }
@@ -477,6 +528,7 @@ const deleteData = async () => {
         //不管是否成功 modal切換
         modal.toggle();
     }
+
 }
 
 </script>
