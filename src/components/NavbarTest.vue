@@ -11,6 +11,8 @@
 								<nav class="sb-sidenav-menu-nested nav">
 									<router-link class="nav-link" to="testUploadImg">上傳圖片</router-link>
 									<router-link class="nav-link" to="testLoadImg">讀取圖片</router-link>
+									<router-link class="nav-link" to="receiver">receiver</router-link>
+									<router-link class="nav-link" to="sender">sender</router-link>
 								</nav>
 							</div>
 </template>

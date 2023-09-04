@@ -123,6 +123,22 @@ const router = createRouter({
       meta:{
         needLogin: true
       }
+    },
+    {
+      path: '/receiver',
+      name: 'receiver',
+      component: () => import('../views/Receiver.vue'),
+      meta:{
+        needLogin: true
+      }
+    },
+    {
+      path: '/sender',
+      name: 'sender',
+      component: () => import('../views/Sender.vue'),
+      meta:{
+        needLogin: true
+      }
     }
   ]
 })
