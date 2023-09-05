@@ -255,7 +255,7 @@ const insertClassroom = async () => {
     }
 };
 
-// 更新教室
+// 修改教室
 const updateClassroom = async () => {
     try {
         // 检查是否有任何必填字段为空

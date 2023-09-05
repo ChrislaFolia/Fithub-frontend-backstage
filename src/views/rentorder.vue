@@ -105,17 +105,21 @@ const getrentorder = async () => {
 
 
 const deleteSelected = async () => {
-    try {
-        // 將選中的 rentorderid 送到後端進行刪除
-        const response = await axios.delete('http://localhost:8080/fithub/rent/delete/multiple', {
-            data: selectedRentOrderIds.value
-        });
 
-        // 刷新資料
-        getrentorder();
-        selectedRentOrderIds.value = []; // 清空選中的項目
-    } catch (error) {
-        console.error('Error deleting rent orders:', error);
+    const checkDelete = window.confirm('確定要刪除選中的教室嗎？');
+    if (checkDelete) {
+        try {
+            // 將選中的 rentorderid 送到後端進行刪除
+            const response = await axios.delete('http://localhost:8080/fithub/rent/delete/multiple', {
+                data: selectedRentOrderIds.value
+            });
+
+            // 刷新資料
+            getrentorder();
+            selectedRentOrderIds.value = []; // 清空選中的項目
+        } catch (error) {
+            console.error('Error deleting rent orders:', error);
+        }
     }
 };
 
