@@ -83,7 +83,7 @@ const props = defineProps({
     classId: Number,
     classDate: String,
     classTime: String,
-    epmloyee: Object,
+    employee: Object,
     coachSubstitute: Number,
     course: Object,
     price: Number,
@@ -97,7 +97,7 @@ const classes = reactive({
     courseId: props.course.courseId,
     classDate: props.classDate,
     classTime: props.classTime,
-    employeeId: props.epmloyee.employeeid,
+    employeeId: props.employee.employeeid,
     coachSubstitute: props.coachSubstitute,
     applicantsCeil: props.applicantsCeil,
     applicantsFloor: props.applicantsFloor,
@@ -143,7 +143,7 @@ const loadAllClassrooms = async () => {
 // Load employee data
 const allCoachs = ref([]);
 const loadAllCoachs = async () => {
-    const URLAPI = `${URL}/employees/coaches`;
+    const URLAPI = `${URL}/employees/coachs`;
     const response = await axios.get(URLAPI);
     // console.log(response.data)
 

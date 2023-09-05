@@ -27,11 +27,11 @@
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle text-center">
-                                    <tr v-for=" { classId, classDate, classTime, epmloyee, course, price, applicantsCeil, applicantsFloor, classroom, coachSubstitute }  in   classes  "
+                                    <tr v-for=" { classId, classDate, classTime, employee, course, price, applicantsCeil, applicantsFloor, classroom, coachSubstitute }  in   classes  "
                                         :key="classId">
                                         <td>{{ course.courseCategories.categoryName }}</td>
                                         <td>{{ course.courseName }}</td>
-                                        <td>{{ epmloyee.employeename }}</td>
+                                        <td>{{ employee.employeename }}</td>
                                         <td>{{ classDate }}&nbsp;{{ classTime }}</td>
                                         <td>{{ classroom.classroomName }}</td>
                                         <td>{{ price }}</td>
@@ -43,7 +43,7 @@
                                                 :id="`getUpdateClassesBtn${classId}}`" data-bs-toggle="modal"
                                                 :data-bs-target="`#updateClassesModal${classId}`"></i>
                                             <UpdateClass :classId="classId" :classDate="classDate" :classTime="classTime"
-                                                :epmloyee="epmloyee" :course="course" :price="price"
+                                                :employee="employee" :course="course" :price="price"
                                                 :applicantsCeil="applicantsCeil" :applicantsFloor="applicantsFloor"
                                                 :classroom="classroom" :coachSubstitute="coachSubstitute"
                                                 @submitUpdateClasses-emit="loadClasses"></UpdateClass>

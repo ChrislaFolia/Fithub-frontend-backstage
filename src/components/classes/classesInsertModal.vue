@@ -141,7 +141,7 @@ const loadAllClassrooms = async () => {
 // Load employee data
 const allCoachs = ref([]);
 const loadAllCoachs = async () => {
-    const URLAPI = `${URL}/employees/coaches`;
+    const URLAPI = `${URL}/employees/coachs`;
     const response = await axios.get(URLAPI);
     // console.log(response.data)
 
