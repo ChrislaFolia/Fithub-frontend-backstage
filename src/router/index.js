@@ -123,6 +123,14 @@ const router = createRouter({
       meta:{
         needLogin: true
       }
+    }, 
+    {
+      path: '/backstageaccount',
+      name: 'backstageaccount',
+      component: () => import('../views/backstageaccount.vue'),
+      meta:{
+        needLogin: true
+      }
     },
     {
       path: '/receiver',
