@@ -14,16 +14,16 @@
                                     <th>
                                         <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
                                     </th>
+                                    <th>活動編號</th>
                                     <th>活動日期</th>
                                     <th>名稱</th>
-                                    <th>內容</th>
-                                    <th>網址</th>
+                                    <th>活動內容</th>
                                     <th>顯示</th>
                                     <th>排序</th>
                                     <th>上架日期</th>
                                     <th>下架日期</th>
                                     <th>負責員工</th>
-                                    <th>圖片</th>
+                                    <th>首頁圖片</th>
                                     <th>修改</th>
                                 </tr>
                             </thead>
@@ -32,22 +32,17 @@
                                 <tr v-for="(Activity, activityindex) in Activitys" :key="activityindex">
                                     <td><input type="checkbox" v-model="selectedActivities" :value="Activity.activityid">
                                     </td>
+                                    <td>{{ Activity.activityid }}</td>
                                     <td>{{ Activity.activitydate }}</td>
                                     <td>{{ Activity.activityname }}</td>
-                                    <td>{{ Activity.activitydescription }}</td>
-                                    <td><a href="${Activity.activityurl}"><i class="fas fa-link"></i>連結</a></td>
+                                    <!-- <td>{{ Activity.activitydescription }}</td> -->
+                                    <td><a :href="'http://localhost:5175/activity?activityid='+Activity.activityid" target="_blank"><i class="fas fa-link"></i>預覽</a></td>
                                     <td>{{ Activity.activitydisplay }}</td>
                                     <td>{{ Activity.activitysort }}</td>
                                     <td>{{ Activity.activityon }}</td>
                                     <td>{{ Activity.activityoff }}</td>
                                     <td>{{ Activity.employee.employeename }}</td>
-                                    <td>
-                                        <div v-for="(pic, picIndex) in Activity.activitypic" :key="picIndex"
-                                            style="margin-bottom: 10px;">
-                                            <img :src="pic.apicfile" style="width: 150px;height: 150px;" alt="維修中">
-                                        </div>
-                                    </td>
-
+                                    <td><img :src="Activity.activitypic" style="width: 150px;height: 150px;" alt="維修中"></td>
                                     <td><button class="btn btn-outline-secondary" data-bs-toggle="modal"
                                             @click="openUpdateModal(Activity)" data-bs-target="#updateModal">修改</button>
                                     </td>
@@ -77,10 +72,6 @@
                     <div class="mb-3">
                         名稱<input v-model="updateSelectedActivities.activityname" type="text" class="form-control">
                         <span v-if="!updateSelectedActivities.activityname" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        相關連結<input v-model="updateSelectedActivities.activityurl" type="text" class="form-control">
-                        <span v-if="!updateSelectedActivities.activityurl" class="text-danger">必填</span>
                     </div>
                     顯示
                     <div class="mb-3">
@@ -116,7 +107,7 @@
                     </div>
                     <div class="mb-3">
                         活動圖片
-                        <input id="updatefile" type="file" class="form-control" accept="image/*" multiple
+                        <input id="updatefile" type="file" class="form-control" accept="image/*"
                             @change="imageUpdate">
                     </div>
                 </div>
@@ -146,10 +137,6 @@
                     <div class="mb-3">
                         名稱<input v-model="Activity.activityname" type="text" class="form-control">
                         <span v-if="!Activity.activityname" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        相關連結<input v-model="Activity.activityurl" type="text" class="form-control">
-                        <span v-if="!Activity.activityurl" class="text-danger">必填</span>
                     </div>
                     顯示
                     <div class="mb-3">
@@ -185,7 +172,7 @@
                     </div>
                     <div class="mb-3">
                         活動圖片
-                        <input id="insertfile" type="file" class="form-control" accept="image/*" multiple
+                        <input id="insertfile" type="file" class="form-control" accept="image/*" 
                             @change="imageInsert">
                     </div>
                 </div>
@@ -212,9 +199,8 @@ const Activity = reactive({
     activityoff: '',
     activityon: '',
     activitysort: '',
-    activityurl: '',
     employeeid: '',
-    pic: [],
+    activitypic: '',
 });
 
 const Activitys = ref([]); // 儲存SelectAll的活動
@@ -226,7 +212,7 @@ let updateEditor = null; //修改-文字編輯器
 
 // 将選中的活動資料複製到 updateSelectedActivities
 const openUpdateModal = (Activity) => {
-    const { activityid, activitydate, activitydescription, activityname, activitydisplay, activityoff, activityon, activitysort, activityurl, employeeid } = Activity;
+    const { activityid, activitydate, activitydescription, activityname, activitydisplay, activityoff, activityon, activitysort, employeeid,activitypic } = Activity;
 
     // 只保留update需要的屬性
     updateSelectedActivities.activityid = activityid;
@@ -237,9 +223,8 @@ const openUpdateModal = (Activity) => {
     updateSelectedActivities.activityoff = activityoff;
     updateSelectedActivities.activityon = activityon;
     updateSelectedActivities.activitysort = activitysort;
-    updateSelectedActivities.activityurl = activityurl;
+    updateSelectedActivities.activitypic = activitypic;
     updateSelectedActivities.employeeid = employeeid;
-    updateSelectedActivities.pic = [];
     updateEditor.setData(updateSelectedActivities.activitydescription);
     console.log(updateSelectedActivities)
     //清空上傳圖片欄位
@@ -261,8 +246,8 @@ const imageInsert = (event) => {
             reader.onload = (event) => {
                 const base64Data = event.target.result;
 
-                // 將 base64Data 直接塞入 activitypic 陣列中的物件
-                Activity.pic.push(base64Data);
+                // 將 base64Data 直接塞入 activitypic 
+                Activity.activitypic = base64Data;
             };
         }
     }
@@ -283,7 +268,7 @@ const imageUpdate = (event) => {
                 const base64Data = event.target.result;
 
                 // 將 base64Data 直接塞入 activitypic 陣列中的物件
-                updateSelectedActivities.pic.push(base64Data);
+                updateSelectedActivities.activitypic = base64Data;
             };
         }
     }
@@ -324,7 +309,6 @@ const insertActivity = async () => {
             !Activity.activityoff ||
             !Activity.activityon ||
             !Activity.activitysort ||
-            !Activity.activityurl ||
             !Activity.employeeid) {
             return;
         }
@@ -353,7 +337,6 @@ const insertActivity = async () => {
         Activity.activityoff = ''
         Activity.activityon = ''
         Activity.activitysort = ''
-        Activity.activityurl = ''
         Activity.employeeid = ''
         let insertfile = document.querySelector('#insertfile')
         insertfile.value = '';
@@ -377,7 +360,6 @@ const updateActivity = async () => {
             !updateSelectedActivities.activityoff ||
             !updateSelectedActivities.activityon ||
             !updateSelectedActivities.activitysort ||
-            !updateSelectedActivities.activityurl ||
             !updateSelectedActivities.employeeid) {
             return;
         }
@@ -385,7 +367,6 @@ const updateActivity = async () => {
         //取得文字編輯器內容
         const updateContent = updateEditor.getData();
         updateSelectedActivities.activitydescription = updateContent;
-        console.log(updateContent)
 
 
         console.log(updateSelectedActivities)
