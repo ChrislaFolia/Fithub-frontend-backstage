@@ -28,7 +28,7 @@
                                 <tr v-for="(coupon, couponindex) in coupons" :key="couponindex">
                                     <td><input type="checkbox" v-model="selectedCoupons" :value="coupon.couponid">
                                     </td>
-                                    <td>{{ coupon.couponCategories.couponcategoriesname}}</td>
+                                    <td>{{ coupon.couponCategories.couponcategoriesname }}</td>
                                     <td>{{ coupon.couponname }}</td>
                                     <td>{{ coupon.couponcode }}</td>
                                     <td>{{ coupon.coupongeneratedate }}至{{ coupon.couponenddate }}</td>
@@ -36,7 +36,7 @@
                                     <td>{{ coupon.coupondiscount }}</td>
                                     <td>{{ coupon.couponused }}/{{ coupon.couponamount }}</td>
 
-                                    
+
                                     <td><button class="btn btn-outline-info" data-bs-toggle="modal"
                                             @click="openUpdateModal(coupon)" data-bs-target="#updateModal">修改</button>
                                     </td>
@@ -54,43 +54,55 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">更新教室</h5>
+                    <h5 class="modal-title">更新優惠券</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        名稱<input v-model="updateSelectedCoupon.couponname" type="text" class="form-control" required="required">
+                        名稱<input v-model="updateSelectedCoupon.couponname" type="text" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedCoupon.couponname" class="text-danger">必填</span>
                     </div>
-                   <div class="mb-3">
-                        優惠碼<input v-model="updateSelectedCoupon.couponcode" type="text" class="form-control" required="required">
+                    <div class="mb-3">
+                        優惠碼<input v-model="updateSelectedCoupon.couponcode" type="text" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedCoupon.couponcode" class="text-danger">必填</span>
+                        <button @click="generateCoupon" class="btn btn-primary">生成優惠碼</button>
                     </div>
-                     <div class="mb-3">
-                        生效日期<input v-model="updateSelectedCoupon.coupongeneratedate" type="date" class="form-control" required="required">
+                    <!-- <div class="mb-3">
+                        優惠碼<input v-model="coupon.couponcode" type="text" class="form-control" required="required">
+                        <span v-if="!coupon.couponcode" class="text-danger">必填</span>
+                        <button @click="generateCoupon" class="btn btn-primary">生成優惠碼</button>
+                    </div> -->
+                    <div class="mb-3">
+                        生效日期<input v-model="updateSelectedCoupon.coupongeneratedate" type="date" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedCoupon.coupongeneratedate" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        結束日期<input v-model="updateSelectedCoupon.couponenddate" type="date" class="form-control" required="required">
+                        結束日期<input v-model="updateSelectedCoupon.couponenddate" type="date" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedCoupon.couponenddate" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        使用門檻<input v-model="updateSelectedCoupon.couponthreshold" type="text" class="form-control" required="required">
+                        使用門檻<input v-model="updateSelectedCoupon.couponthreshold" type="text" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedCoupon.couponthreshold" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        折扣金額<input v-model="updateSelectedCoupon.coupondiscount" type="text" class="form-control" required="required">
+                        折扣金額<input v-model="updateSelectedCoupon.coupondiscount" type="text" class="form-control"
+                            required="required">
                         <span v-if="!updateSelectedCoupon.coupondiscount" class="text-danger">必填</span>
                     </div>
                     <label class="form-label">分類</label>
                     <div class="mb-3">
                         <select v-model="updateSelectedCoupon.couponcategoriesid" class="form-control" required="required">
                             <option value="1">全站通用</option>
-                            <option value="3">拳擊限定</option>        
+                            <option value="3">拳擊限定</option>
                         </select>
                         <span v-if="!updateSelectedCoupon.couponcategoriesid" class="text-danger">必填</span>
-                    </div>                                  
-                    
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" @click="updateCoupon">送出</button>
@@ -116,6 +128,7 @@
                     <div class="mb-3">
                         優惠碼<input v-model="coupon.couponcode" type="text" class="form-control" required="required">
                         <span v-if="!coupon.couponcode" class="text-danger">必填</span>
+                        <button @click="generateCoupon" class="btn btn-primary">生成優惠碼</button>
                     </div>
                     <div class="mb-3">
                         生效日期<input v-model="coupon.coupongeneratedate" type="date" class="form-control" required="required">
@@ -136,12 +149,18 @@
                     <label class="form-label">分類</label>
                     <div class="mb-3">
                         <select v-model="coupon.couponcategoriesid" class="form-control" required="required">
-                            <option value="1">全站通用</option>
-                            <option value="3">拳擊限定</option>                            
+                            <option value="1">全站可使用</option>
+                            <option value="2">重量訓練類限定</option>
+                            <option value="3">有氧訓練類限定</option>
+                            <option value="4">綜合體能類限定</option>
+                            <option value="5">瑜珈類限定</option>
+                            <option value="6">格鬥訓練類限定</option>
+                            <option value="7">舞蹈類限定</option>
+                            <option value="8">伸展類限定</option>
                         </select>
                         <span v-if="!coupon.couponcategoriesid" class="text-danger">必填</span>
-                    </div>                                  
-                   
+                    </div>
+
                     <!-- 教室狀態
                     <div class="mb-3">
                         <select v-model="classroom.classroomStatus" class="form-control">
@@ -170,23 +189,40 @@ const URL = import.meta.env.VITE_API_JAVAURL
 //建立優惠券物件
 const coupon = reactive(
     {
-    couponcategoriesid: '',
-    couponname : '',
-    couponstate: '',
-    coupongeneratedate: '',
-    couponenddate: '',
-    couponcode: '',
-    couponamount: '',
-    couponceil: '',
-    coupondiscount: '',
-    couponused: '',
-    couponthreshold: '',
-});
+        couponcategoriesid: '',
+        couponname: '',
+        couponstate: '',
+        coupongeneratedate: '',
+        couponenddate: '',
+        couponcode: '',
+        couponamount: '',
+        couponceil: '',
+        coupondiscount: '',
+        couponused: '',
+        couponthreshold: '',
+    });
 
 const coupons = ref([]); // 儲存SelectAll的教室
 const selectedCoupons = ref([]); // 儲存選中的 ClassroomID
 const updateSelectedCoupon = reactive({}); // 儲存要修改的優惠券資料(預設值)
 
+//生成優惠碼按鈕
+const generateCoupon = () => {
+    coupon.couponcode = generateRandomCouponCode();
+    updateSelectedCoupon.couponcode = generateRandomCouponCode();
+};
+
+function generateRandomCouponCode() {
+    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let couponCode = "";
+
+    for (let i = 0; i < 8; i++) {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        couponCode += charset.charAt(randomIndex);
+    }
+
+    return couponCode;
+}
 
 // 将選中的教室資料複製到 updateSelectedCoupon
 const openUpdateModal = (coupon) => {
@@ -209,7 +245,7 @@ const getcoupons = async () => {
 
 // 新增優惠券
 const insertCoupon = async () => {
-    try{
+    try {
         const response = await axios.post(`${URL}/coupons`, coupon, {
             headers: {
                 'Content-Type': 'application/json'
@@ -255,20 +291,20 @@ const updateCoupon = async () => {
     //     }
 
 
-        const response = await axios.put(`${URL}/coupons/update`, updateSelectedCoupon, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+    const response = await axios.put(`${URL}/coupons/update`, updateSelectedCoupon, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
 
-        //關閉動態框
-        const updateModal = document.getElementById('updateModal')
-        let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
-        getInstanceUpdateModal.toggle();
+    //關閉動態框
+    const updateModal = document.getElementById('updateModal')
+    let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
+    getInstanceUpdateModal.toggle();
 
-        // 刷新畫面
-        getcoupons();
+    // 刷新畫面
+    getcoupons();
     // } catch (error) {
     //     console.error('Error adding new classroom:', error);
     // }
@@ -277,7 +313,7 @@ const updateCoupon = async () => {
 // 刪除多筆教室
 const deleteSelected = async () => {
 
-    const checkDelete = window.confirm('確定要刪除選中的教室嗎？');
+    const checkDelete = window.confirm('確定要刪除選中的優惠券嗎？');
     if (checkDelete) {
         try {
             // 將選中的 ClassroomID 送到後端進行刪除
@@ -296,7 +332,7 @@ const deleteSelected = async () => {
 
 onMounted(() => {
     getcoupons();
-    
+
 });
 </script>
 
