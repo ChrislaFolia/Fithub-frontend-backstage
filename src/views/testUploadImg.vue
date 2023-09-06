@@ -16,7 +16,7 @@
             <table id="departmentsTable" class="table table-bordered">
               <thead class="align-middle text-center">
                 <div>
-                  <input id="inputImg" type="file" accept="image/jpeg" />
+                  <input id="inputImg" type="file" multiple accept="image/jpeg" />
                   <button @click="uploadImage()">上傳</button>
                 </div>
               </thead>
@@ -33,7 +33,8 @@
 import { ref , onMounted } from "vue";
 import axios from "axios";
 
-const selectedFile = ref(null);
+// const selectedFile = ref(null);
+const selectedFiles = ref(null);
 const url = import.meta.env.VITE_API_JAVAURL;
 
 
@@ -41,28 +42,61 @@ onMounted(() => {
   var inputImg = document.getElementById('inputImg')
 
   inputImg.addEventListener('change',function(e){
-    selectedFile.value = e.target.files[0];
+    // selectedFile.value = e.target.files[0];
+    selectedFiles.value = e.target.files;
+    console.log(selectedFiles.value.length)
   })
 });
 
 const uploadImage = async () => {
-  if (!selectedFile.value) {
+  if (selectedFiles.value.length === 0) {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = async (event) => {
-    const base64Image = event.target.result;
-    const jsonPayload = { employeeid: 1,cpicfile: base64Image };
+  for (let i = 0; i < selectedFiles.value.length; i++) {
+    const file = selectedFiles.value[i];
+    const reader = new FileReader();
 
-    try {
-      const response = await axios.post(`${url}/coachpics`, jsonPayload);
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    reader.onload = async (event) => {
+      const base64Image = event.target.result;
+      const jsonPayload = { employeeid: 1, cpicfile: base64Image };
+      console.log(event.target);
 
-  reader.readAsDataURL(selectedFile.value);
+      // 在这里执行上传或其他处理
+      try {
+        const response = await axios.post(`${url}/coachpics`, jsonPayload);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  // 清空选定的文件列表
+  selectedFiles.value = [];
 };
+
+// const uploadImage = async () => {
+//   if (!selectedFile.value) {
+//     return;
+//   }
+
+//   const reader = new FileReader();
+//   reader.onload = async (event) => {
+//     const base64Image = event.target.result;
+//     const jsonPayload = { employeeid: 1,cpicfile: base64Image };
+//     console.log(selectedFile.value)
+
+//     // try {
+//     //   const response = await axios.post(`${url}/coachpics`, jsonPayload);
+//     //   console.log(response.data);
+//     // } catch (error) {
+//     //   console.error(error);
+//     // }
+//   };
+
+//   reader.readAsDataURL(selectedFile.value);
+// };
 </script>

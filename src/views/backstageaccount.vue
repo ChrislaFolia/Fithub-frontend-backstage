@@ -37,10 +37,10 @@
                                         <td>{{ ba.employeeaccount }}</td>
                                         <td>{{ ba.loa }}</td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#updateModal" @click="inputUpdateData(emp)">修改</button>
+                                                data-bs-target="#updateModal" @click="inputUpdateData(ba)">修改</button>
                                         </td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" @click="inputDeleteData(emp)">刪除</button>
+                                                data-bs-target="#deleteModal" @click="inputDeleteData(ba)">刪除</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -52,94 +52,41 @@
             </div>
         </div>
 
-        <!-- <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
             data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">修改員工資料</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">修改後台帳戶</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            員工編號:<input type="text" class="form-control" v-model="updateEmployee.employeeid" readonly>
-                            <span v-if="!updateEmployee.employeeid" class="text-danger">必填</span>
+                            員工編號: {{ updateBackStageAccount.employeeid }}
                         </div>
                         <div class="mb-3">
-                            姓名:<input type="text" class="form-control" v-model="updateEmployee.employeename">
-                            <span v-if="!updateEmployee.employeename" class="text-danger">必填</span>
+                            員工姓名: {{ updateBackStageAccount.employeename }}
                         </div>
                         <div class="mb-3">
-                            信箱:<input type="text" class="form-control" v-model="updateEmployee.employeeemail">
-                            <span v-if="!updateEmployee.employeeemail" class="text-danger">必填</span>
+                            員工帳號: {{ updateBackStageAccount.employeeaccount }}
                         </div>
                         <div class="mb-3">
-                            電話:<input type="text" class="form-control" v-model="updateEmployee.employeephone">
-                            <span v-if="!updateEmployee.employeephone" class="text-danger">必填</span>
+                            員工密碼(輸入即更改為新密碼 未輸入保持原樣):<input type="password" class="form-control"
+                                v-model="updateBackStageAccount.employeepassword" @keyup="checkupdatepassword">
+                            <span class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            性別:<select v-model="updateEmployee.employeegender" id="gender">
-                                <option value="男">男</option>
-                                <option value="女">女</option>
-                            </select>
-                        </div>
-                        <span v-if="!updateEmployee.employeegender" class="text-danger">必填</span>
-                        <div class="mb-3">
-                            縣市:<input type="text" class="form-control" v-model="updateEmployee.employeecity">
-                            <span v-if="!updateEmployee.employeecity" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            地區:<input type="text" class="form-control" v-model="updateEmployee.employeezone">
-                            <span v-if="!updateEmployee.employeezone" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            地址:<input type="text" class="form-control" v-model="updateEmployee.employeeaddress">
-                            <span v-if="!updateEmployee.employeeaddress" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            部門:
-                            <select v-model="updateEmployee.deptid">
-                                <option v-for="dept in allDepts" :key="dept.deptid" :value="dept.deptid">{{ dept.deptname }}
-                                </option>
-                            </select>
-                            <span v-if="!updateEmployee.deptid" class="text-danger">必填</span>
-                        </div>
+                            確認密碼(輸入即更改為新密碼 未輸入保持原樣):<input type="password" class="form-control"
+                                v-model="updateagainpassword.password" @keyup="checkupdatepassword">
+                            <span v-if="!updateagainpassword.check" class="text-danger">密碼不相符</span><br>
 
+                        </div>
                         <div class="mb-3">
-                            職稱:
-                            <select v-model="updateEmployee.jobtitleid">
-                                <option v-for="jobtitle in allJobTitles" :key="jobtitle.jobtitleid"
-                                    :value="jobtitle.jobtitleid">{{ jobtitle.jobtitlename }}
+                            權限等級:
+                            <select v-model="updateBackStageAccount.loa">
+                                <option v-for="loa in 5" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
-                            <span v-if="!updateEmployee.jobtitleid" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            主管:
-                            <select v-model="updateEmployee.managerid">
-                                <option value="">無</option>
-                                <option v-for="manager in allManagers" :key="manager.employeeid"
-                                    :value="manager.employeeid">{{ manager.employeename }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            入職時間:<input type="date" class="form-control" v-model="updateEmployee.hiredate">
-                            <span v-if="!updateEmployee.hiredate" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            離職時間:<input type="date" class="form-control" v-model="updateEmployee.resigndate">
-                        </div>
-                        <div class="mb-3">
-                            薪資:<input type="text" class="form-control" v-model="updateEmployee.salary">
-                            <span v-if="!updateEmployee.salary" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            生日:<input type="date" class="form-control" v-model="updateEmployee.employeebirthday">
-                            <span v-if="!updateEmployee.employeebirthday" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            簡介:<textarea class="form-control" v-model="updateEmployee.employeeintroduction"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -156,84 +103,39 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">新增員工</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">新增後台帳戶</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            姓名:<input type="text" class="form-control" v-model="insertEmployee.employeename">
-                            <span v-if="!insertEmployee.employeename" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            信箱:<input type="text" class="form-control" v-model="insertEmployee.employeeemail">
-                            <span v-if="!insertEmployee.employeeemail" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            電話:<input type="text" class="form-control" v-model="insertEmployee.employeephone">
-                            <span v-if="!insertEmployee.employeephone" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            性別:<select v-model="insertEmployee.employeegender" id="gender">
-                                <option value="男">男</option>
-                                <option value="女">女</option>
-                            </select>
-                        </div>
-                        <span v-if="!insertEmployee.employeegender" class="text-danger">必填</span>
-                        <div class="mb-3">
-                            縣市:<input type="text" class="form-control" v-model="insertEmployee.employeecity">
-                            <span v-if="!insertEmployee.employeecity" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            地區:<input type="text" class="form-control" v-model="insertEmployee.employeezone">
-                            <span v-if="!insertEmployee.employeezone" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            地址:<input type="text" class="form-control" v-model="insertEmployee.employeeaddress">
-                            <span v-if="!insertEmployee.employeeaddress" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            部門:
-                            <select v-model="insertEmployee.deptid">
-                                <option v-for="dept in allDepts" :key="dept.deptid" :value="dept.deptid">{{ dept.deptname }}
-                                </option>
-                            </select>
-                            <span v-if="!insertEmployee.deptid" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            職稱:
-                            <select v-model="insertEmployee.jobtitleid">
-                                <option v-for="jobtitle in allJobTitles" :key="jobtitle.jobtitleid"
-                                    :value="jobtitle.jobtitleid">{{ jobtitle.jobtitlename }}
-                                </option>
-                            </select>
-                            <span v-if="!insertEmployee.jobtitleid" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            主管:
-                            <select v-model="insertEmployee.managerid">
-                                <option value="">無</option>
-                                <option v-for="manager in allManagers" :key="manager.employeeid"
-                                    :value="manager.employeeid">{{ manager.employeename }}
+                            員工:
+                            <select v-model="insertBackStageAccount.employeeid">
+                                <option v-for="emp in allEmps" :key="emp.employeeid" :value="emp.employeeid">{{
+                                    emp.employeeid + " " + emp.employeename }}
                                 </option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            入職時間:<input type="date" class="form-control" v-model="insertEmployee.hiredate">
-                            <span v-if="!insertEmployee.hiredate" class="text-danger">必填</span>
+                            員工帳號:<input type="text" class="form-control" v-model="insertBackStageAccount.employeeaccount">
+                            <span v-if="!insertBackStageAccount.employeeaccount" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            離職時間:<input type="date" class="form-control" v-model="insertEmployee.resigndate">
+                            員工密碼:<input type="password" class="form-control"
+                                v-model="insertBackStageAccount.employeepassword" @keyup="checkinsertpassword">
+                            <span v-if="!insertBackStageAccount.employeepassword" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            薪資:<input type="text" class="form-control" v-model="insertEmployee.salary">
-                            <span v-if="!insertEmployee.salary" class="text-danger">必填</span>
+                            確認密碼:<input type="password" class="form-control" v-model="insertagainpassword.password"
+                                @keyup="checkinsertpassword">
+                            <span v-if="!insertagainpassword.password" class="text-danger">必填</span><br>
+                            <span v-if="!insertagainpassword.check" class="text-danger">密碼不相符</span>
                         </div>
                         <div class="mb-3">
-                            生日:<input type="date" class="form-control" v-model="insertEmployee.employeebirthday">
-                            <span v-if="!insertEmployee.employeebirthday" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            簡介:<textarea class="form-control" v-model="insertEmployee.employeeintroduction"></textarea>
+                            權限等級:
+                            <select v-model="insertBackStageAccount.loa">
+                                <option v-for="loa in 5" :key="loa" :value="loa">{{ loa }}
+                                </option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -249,17 +151,18 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">刪除部門</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">刪除後台帳戶</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            員工編號:<input type="text" class="form-control" v-model="deleteEmployee.employeeid" readonly>
-                            <span v-if="!deleteEmployee.employeeid" class="text-danger">必填</span>
+                            員工編號: {{ deleteBackStageAccount.employeeid }}
                         </div>
                         <div class="mb-3">
-                            姓名:<input type="text" class="form-control" v-model="deleteEmployee.employeename" readonly>
-                            <span v-if="!deleteEmployee.employeename" class="text-danger">必填</span>
+                            員工姓名: {{ deleteBackStageAccount.employeename }}
+                        </div>
+                        <div class="mb-3">
+                            員工帳號: {{ deleteBackStageAccount.employeeaccount }}
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -268,7 +171,7 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
     </body>
 </template>
 
@@ -289,6 +192,17 @@ const insertBackStageAccount = reactive({
     loa: '',
 });
 
+const insertagainpassword = reactive({
+    check: true,
+    password: '',
+});
+
+const updateagainpassword = reactive({
+    check: true,
+    password: '',
+});
+
+
 const updateBackStageAccount = reactive({});
 const deleteBackStageAccount = reactive({});
 
@@ -305,18 +219,14 @@ const datas = reactive({
 });
 
 const loadDatas = async () => {
-    //透過get方法呼叫/products/find 傳datas資料
-
-    // const response = await axios.get(`${url}/employees`)
     const response = await axios.post(`${url}/backstageaccounts/findPageByName`, datas)
-    // const responseDept = await axios.get(`${url}/departments`)
-    // const responseJobTitle = await axios.get(`${url}/jobtitles`)
-    // const responseManager = await axios.get(`${url}/employees/managers`)
+    const responseEmp = await axios.get(`${url}/employees`)
+
 
     allBackStageAccounts.value = response.data.list
-    // allDepts.value = responseDept.data
-    // allJobTitles.value = responseJobTitle.data
-    // allManagers.value = responseManager.data
+    allEmps.value = responseEmp.data.list
+
+    console.log(allEmps.value)
 
     console.log(response.data)
     // 計算總共幾頁
@@ -359,13 +269,31 @@ const inputHandler = value => {
 
 // 點擊修改時觸發 帶入該筆資料
 const inputUpdateData = (data) => {
-    Object.assign(updateEmployee, data);
+    Object.assign(updateBackStageAccount, data);
 };
 
 // 點擊刪除時觸發 帶入該筆資料
 const inputDeleteData = (data) => {
-    Object.assign(deleteEmployee, data);
+    Object.assign(deleteBackStageAccount, data);
 };
+
+
+const cleardata = () => {
+    insertBackStageAccount.employeeid = ''
+    insertBackStageAccount.employeeaccount = ''
+    insertBackStageAccount.employeepassword = ''
+    insertBackStageAccount.loa = ''
+
+    insertagainpassword.check = true
+    insertagainpassword.password = ''
+
+    for (const key in updateBackStageAccount) {
+        delete updateBackStageAccount[key]
+    }
+
+    updateagainpassword.check = true
+    updateagainpassword.password = ''
+}
 
 
 
@@ -374,40 +302,22 @@ const insertData = async () => {
     var myModalEl = document.getElementById('insertModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(!insertEmployee.employeename.trim())
-    console.log(!insertEmployee.employeeemail.trim())
-    console.log(!insertEmployee.employeephone.trim())
-    console.log(!insertEmployee.employeegender.trim())
-    console.log(!insertEmployee.employeecity.trim())
-    console.log(!insertEmployee.employeezone.trim())
-    console.log(!insertEmployee.employeeaddress.trim())
-    console.log(!insertEmployee.deptid)
-    console.log(!insertEmployee.jobtitleid)
-    console.log(!insertEmployee.hiredate.trim())
-    console.log(!insertEmployee.salary)
-    console.log(!insertEmployee.employeebirthday.trim())
-
     // //如果沒有值 return 不做
-    if (!insertEmployee.employeename.trim() ||
-        !insertEmployee.employeeemail.trim() ||
-        !insertEmployee.employeephone.trim() ||
-        !insertEmployee.employeegender.trim() ||
-        !insertEmployee.employeecity.trim() ||
-        !insertEmployee.employeezone.trim() ||
-        !insertEmployee.employeeaddress.trim() ||
-        !insertEmployee.deptid ||
-        !insertEmployee.jobtitleid ||
-        !insertEmployee.hiredate.trim() ||
-        !insertEmployee.salary ||
-        !insertEmployee.employeebirthday.trim()
-    ) {
-        alert("請輸入正確資料")
+    if (!insertBackStageAccount.employeeid ||
+        !insertBackStageAccount.employeeaccount.trim() ||
+        !insertBackStageAccount.employeepassword ||
+        !insertBackStageAccount.loa) {
+        alert("請輸入資料")
         return;
     }
 
-    console.log(insertEmployee)
+    if (!insertagainpassword.check) {
+        return
+    }
+
+    // console.log(insertEmployee)
     try {
-        const response = await axios.post(`${url}/employees`, insertEmployee)
+        const response = await axios.post(`${url}/backstageaccounts`, insertBackStageAccount)
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
@@ -421,6 +331,7 @@ const insertData = async () => {
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
+        cleardata();
     }
 }
 
@@ -429,46 +340,29 @@ const updateData = async () => {
     var myModalEl = document.getElementById('updateModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(updateEmployee.managerid)
+    console.log(!updateBackStageAccount.employeeid)
+    console.log(!updateBackStageAccount.employeeaccount.trim())
+    console.log(!updateBackStageAccount.loa)
 
-    // console.log(updateEmployee.department.deptname)
+    // delete updateEmployee.department
+    // delete updateEmployee.jobtitle
 
-    // console.log(!updateEmployee.employeename.trim())
-    // console.log(!updateEmployee.employeeemail.trim())
-    // console.log(!updateEmployee.employeephone.trim())
-    // console.log(!updateEmployee.employeegender.trim())
-    // console.log( !updateEmployee.employeecity.trim())
-    // console.log( !updateEmployee.employeezone.trim())
-    // console.log(!updateEmployee.employeeaddress.trim())
-    // console.log( !updateEmployee.deptid )
-    // console.log( !updateEmployee.jobtitleid.trim())
-    // console.log(!updateEmployee.hiredate.trim())
-    // console.log(!updateEmployee.salary)
-    // console.log( !updateEmployee.employeebirthday.trim())
-    delete updateEmployee.department
-    delete updateEmployee.jobtitle
-
-    //如果沒有值 return 不做
-    if (!updateEmployee.employeename.trim() ||
-        !updateEmployee.employeeemail.trim() ||
-        !updateEmployee.employeephone.trim() ||
-        !updateEmployee.employeegender.trim() ||
-        !updateEmployee.employeecity.trim() ||
-        !updateEmployee.employeezone.trim() ||
-        !updateEmployee.employeeaddress.trim() ||
-        !updateEmployee.deptid ||
-        !updateEmployee.jobtitleid ||
-        !updateEmployee.hiredate.trim() ||
-        !updateEmployee.salary ||
-        !updateEmployee.employeebirthday.trim()) {
+    // //如果沒有值 return 不做
+    if (!updateBackStageAccount.employeeid ||
+        !updateBackStageAccount.employeeaccount.trim() ||
+        !updateBackStageAccount.loa) {
         alert("請輸入正確資料")
         return;
     }
 
-    console.log("updateEmployee")
-    console.log(updateEmployee)
+    if (!updateagainpassword.check) {
+        return
+    }
+
+    // console.log("updateEmployee")
+    // console.log(updateEmployee)
     try {
-        const response = await axios.put(`${url}/employees/${updateEmployee.employeeid}`, updateEmployee)
+        const response = await axios.put(`${url}/backstageaccounts/${updateBackStageAccount.employeeaccount}`, updateBackStageAccount)
         console.log("test2")
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
@@ -482,6 +376,7 @@ const updateData = async () => {
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
+        cleardata();
     }
 }
 
@@ -493,11 +388,11 @@ const deleteData = async () => {
 
     //如果沒有值 return 不做
     try {
-        const response = await axios.delete(`${url}/employees/${deleteEmployee.employeeid}`)
+        const response = await axios.delete(`${url}/backstageaccounts/${deleteBackStageAccount.employeeaccount}`)
 
         if (response.status == 200) {
             datas.start = 0;
-            datas.name = null;
+            datas.name = "";
 
             loadDatas(); // 重新載入資料
             alert("刪除成功")
@@ -512,6 +407,28 @@ const deleteData = async () => {
         modal.toggle();
     }
 
+}
+
+const checkinsertpassword = () => {
+    console.log(insertBackStageAccount.employeepassword)
+    console.log(insertagainpassword.password)
+    if (insertBackStageAccount.employeepassword === insertagainpassword.password) {
+        insertagainpassword.check = true
+    } else {
+        insertagainpassword.check = false
+    }
+}
+
+const checkupdatepassword = () => {
+    console.log(updateBackStageAccount.employeepassword)
+    console.log(updateagainpassword.password)
+    if (updateBackStageAccount.employeepassword === updateagainpassword.password) {
+        updateagainpassword.check = true
+    } else {
+        updateagainpassword.check = false
+    }
+
+    console.log(updateagainpassword.check)
 }
 
 </script>
