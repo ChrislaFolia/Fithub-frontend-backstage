@@ -5,12 +5,7 @@
         <h1 class="mt-4" style="text-align: center">測試用</h1>
         <div class="card mb-4">
           <div class="card-body table-responsive">
-            <button
-              type="submit"
-              class="btn btn-outline-info"
-              data-bs-toggle="modal"
-              data-bs-target="#insertModal"
-            >
+            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#insertModal">
               新增部門
             </button>
             <table id="departmentsTable" class="table table-bordered">
@@ -30,39 +25,34 @@
 </template>
 
 <script setup>
-import { ref , onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 
-// const selectedFile = ref(null);
-const selectedFiles = ref(null);
+const selectedFile = ref(null);
 const url = import.meta.env.VITE_API_JAVAURL;
 
 
 onMounted(() => {
   var inputImg = document.getElementById('inputImg')
 
-  inputImg.addEventListener('change',function(e){
-    // selectedFile.value = e.target.files[0];
-    selectedFiles.value = e.target.files;
-    console.log(selectedFiles.value.length)
+  inputImg.addEventListener('change', function (e) {
+    selectedFile.value = e.target.files;
+
   })
 });
 
 const uploadImage = async () => {
-  if (selectedFiles.value.length === 0) {
+  if (!selectedFile.value || selectedFile.value.length === 0) {
     return;
   }
 
-  for (let i = 0; i < selectedFiles.value.length; i++) {
-    const file = selectedFiles.value[i];
+  for (let i = 0; i < selectedFile.value.length; i++) {
     const reader = new FileReader();
-
     reader.onload = async (event) => {
       const base64Image = event.target.result;
-      const jsonPayload = { employeeid: 1, cpicfile: base64Image };
-      console.log(event.target);
+      const jsonPayload = { employeeid: 4, cpicfile: base64Image };
+      console.log(event)
 
-      // 在这里执行上传或其他处理
       try {
         const response = await axios.post(`${url}/coachpics`, jsonPayload);
         console.log(response.data);
@@ -71,32 +61,8 @@ const uploadImage = async () => {
       }
     };
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(selectedFile.value[i]);
   }
 
-  // 清空选定的文件列表
-  selectedFiles.value = [];
 };
-
-// const uploadImage = async () => {
-//   if (!selectedFile.value) {
-//     return;
-//   }
-
-//   const reader = new FileReader();
-//   reader.onload = async (event) => {
-//     const base64Image = event.target.result;
-//     const jsonPayload = { employeeid: 1,cpicfile: base64Image };
-//     console.log(selectedFile.value)
-
-//     // try {
-//     //   const response = await axios.post(`${url}/coachpics`, jsonPayload);
-//     //   console.log(response.data);
-//     // } catch (error) {
-//     //   console.error(error);
-//     // }
-//   };
-
-//   reader.readAsDataURL(selectedFile.value);
-// };
 </script>

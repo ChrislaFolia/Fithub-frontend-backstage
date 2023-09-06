@@ -316,7 +316,7 @@ const totalPages = ref(0);
 const datas = reactive({
     start: 0,
     rows: 5,
-    name: "",
+    name: null,
     sortOrder: "asc",
     sortType: "id",
 });

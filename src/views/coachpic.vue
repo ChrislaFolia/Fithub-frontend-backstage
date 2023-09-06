@@ -22,25 +22,17 @@
                             <table id="departmentsTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
-                                        <th>員工編號</th>
-                                        <th>員工姓名</th>
-                                        <th>員工帳號</th>
-                                        <th>權限等級</th>
-                                        <th>修改</th>
-                                        <th>刪除</th>
+                                        <th>教練編號</th>
+                                        <th>教練姓名</th>
+                                        <th>管理照片</th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle text-center">
-                                    <tr v-for="ba in allBackStageAccounts" :key="ba.employeeid">
-                                        <td>{{ ba.employeeid }}</td>
-                                        <td>{{ ba.employeename }}</td>
-                                        <td>{{ ba.employeeaccount }}</td>
-                                        <td>{{ ba.loa }}</td>
+                                    <tr v-for="coach in allCoachs" :key="coach.employeeid">
+                                        <td>{{ coach.employeeid }}</td>
+                                        <td>{{ coach.employeename }}</td>
                                         <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#updateModal" @click="inputUpdateData(ba)">修改</button>
-                                        </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" @click="inputDeleteData(ba)">刪除</button>
+                                                data-bs-target="#updateModal" @click="inputUpdateData(coach)">修改</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -52,7 +44,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+        <!-- <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
             data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
@@ -62,17 +54,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            員工編號: {{ updateBackStageAccount.employeeid }}
+                            員工編號: {{ updateBackStageAccount.cpicid }}
                         </div>
                         <div class="mb-3">
                             員工姓名: {{ updateBackStageAccount.employeename }}
                         </div>
                         <div class="mb-3">
-                            員工帳號: {{ updateBackStageAccount.employeeaccount }}
+                            員工帳號: {{ updateBackStageAccount.employeeid }}
                         </div>
                         <div class="mb-3">
                             員工密碼(輸入即更改為新密碼 未輸入保持原樣):<input type="password" class="form-control"
-                                v-model="updateBackStageAccount.employeepassword" @keyup="checkupdatepassword">
+                                v-model="updateBackStageAccount.cpicfile" @keyup="checkupdatepassword">
                             <span class="text-danger"></span>
                         </div>
                         <div class="mb-3">
@@ -109,20 +101,20 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             員工:
-                            <select v-model="insertBackStageAccount.employeeid">
-                                <option v-for="emp in allEmps" :key="emp.employeeid" :value="emp.employeeid">{{
-                                    emp.employeeid + " " + emp.employeename }}
+                            <select v-model="insertCoachPic.cpicid">
+                                <option v-for="emp in allEmps" :key="emp.cpicid" :value="emp.cpicid">{{
+                                    emp.cpicid + " " + emp.employeename }}
                                 </option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            員工帳號:<input type="text" class="form-control" v-model="insertBackStageAccount.employeeaccount">
-                            <span v-if="!insertBackStageAccount.employeeaccount" class="text-danger">必填</span>
+                            員工帳號:<input type="text" class="form-control" v-model="insertCoachPic.employeeid">
+                            <span v-if="!insertCoachPic.employeeid" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
                             員工密碼:<input type="password" class="form-control"
-                                v-model="insertBackStageAccount.employeepassword" @keyup="checkinsertpassword">
-                            <span v-if="!insertBackStageAccount.employeepassword" class="text-danger">必填</span>
+                                v-model="insertCoachPic.cpicfile" @keyup="checkinsertpassword">
+                            <span v-if="!insertCoachPic.cpicfile" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
                             確認密碼:<input type="password" class="form-control" v-model="insertagainpassword.password"
@@ -132,7 +124,7 @@
                         </div>
                         <div class="mb-3">
                             權限等級:
-                            <select v-model="insertBackStageAccount.loa">
+                            <select v-model="insertCoachPic.loa">
                                 <option v-for="loa in 5" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
@@ -156,13 +148,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            員工編號: {{ deleteBackStageAccount.employeeid }}
+                            員工編號: {{ deleteBackStageAccount.cpicid }}
                         </div>
                         <div class="mb-3">
                             員工姓名: {{ deleteBackStageAccount.employeename }}
                         </div>
                         <div class="mb-3">
-                            員工帳號: {{ deleteBackStageAccount.employeeaccount }}
+                            員工帳號: {{ deleteBackStageAccount.employeeid }}
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -171,7 +163,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </body>
 </template>
 
@@ -185,29 +177,18 @@ import PageSize from "../components/PageSize.vue";
 import SearchTextBox from '../components/SearchTextBox.vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
-const insertBackStageAccount = reactive({
+const insertCoachPic = reactive({
+    cpicid: '',
     employeeid: '',
-    employeeaccount: '',
-    employeepassword: '',
-    loa: '',
-});
-
-const insertagainpassword = reactive({
-    check: true,
-    password: '',
-});
-
-const updateagainpassword = reactive({
-    check: true,
-    password: '',
+    cpicfile: '',
 });
 
 
-const updateBackStageAccount = reactive({});
+
+const updateCoachPic = reactive({});
 const deleteBackStageAccount = reactive({});
 
-const allBackStageAccounts = ref([])
-const allEmps = ref([])
+const allCoachs = ref([])
 
 const totalPages = ref(0);
 const datas = reactive({
@@ -219,18 +200,12 @@ const datas = reactive({
 });
 
 const loadDatas = async () => {
-    const response = await axios.post(`${url}/backstageaccounts/findPageByName`, datas)
-    const responseEmp = await axios.get(`${url}/employees`)
+    const responseCoachs = await axios.post(`${url}/employees/findCoachPageByName`, datas)
 
+    allCoachs.value = responseCoachs.data.list
 
-    allBackStageAccounts.value = response.data.list
-    allEmps.value = responseEmp.data.list
-
-    console.log(allEmps.value)
-
-    console.log(response.data)
     // 計算總共幾頁
-    totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
+    totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(responseCoachs.data.count / datas.rows)
 
 }
 
@@ -268,167 +243,133 @@ const inputHandler = value => {
 
 
 // 點擊修改時觸發 帶入該筆資料
-const inputUpdateData = (data) => {
-    Object.assign(updateBackStageAccount, data);
+const inputUpdateData = async (emp) => {
+    Object.assign(updateCoachPic, emp);
+
+    const responseCoachPics = await axios.get(`${url}/coachpics/byemp/${emp.employeeid}`)
+    
+    console.log(responseCoachPics)
+    console.log(responseCoachPics.data)
 };
 
-// 點擊刪除時觸發 帶入該筆資料
-const inputDeleteData = (data) => {
-    Object.assign(deleteBackStageAccount, data);
-};
-
-
-const cleardata = () => {
-    insertBackStageAccount.employeeid = ''
-    insertBackStageAccount.employeeaccount = ''
-    insertBackStageAccount.employeepassword = ''
-    insertBackStageAccount.loa = ''
-
-    insertagainpassword.check = true
-    insertagainpassword.password = ''
-
-    for (const key in updateBackStageAccount) {
-        delete updateBackStageAccount[key]
-    }
-
-    updateagainpassword.check = true
-    updateagainpassword.password = ''
-}
+// // 點擊刪除時觸發 帶入該筆資料
+// const inputDeleteData = (data) => {
+//     Object.assign(deleteBackStageAccount, data);
+// };
 
 
 
-const insertData = async () => {
-    // //抓彈出視窗
-    var myModalEl = document.getElementById('insertModal')
-    var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    // //如果沒有值 return 不做
-    if (!insertBackStageAccount.employeeid ||
-        !insertBackStageAccount.employeeaccount.trim() ||
-        !insertBackStageAccount.employeepassword ||
-        !insertBackStageAccount.loa) {
-        alert("請輸入資料")
-        return;
-    }
+// const insertData = async () => {
+//     // //抓彈出視窗
+//     var myModalEl = document.getElementById('insertModal')
+//     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    if (!insertagainpassword.check) {
-        return
-    }
+//     // //如果沒有值 return 不做
+//     if (!insertCoachPic.cpicid ||
+//         !insertCoachPic.employeeid.trim() ||
+//         !insertCoachPic.cpicfile ||
+//         !insertCoachPic.loa) {
+//         alert("請輸入資料")
+//         return;
+//     }
 
-    // console.log(insertEmployee)
-    try {
-        const response = await axios.post(`${url}/backstageaccounts`, insertBackStageAccount)
+//     if (!insertagainpassword.check) {
+//         return
+//     }
 
-        if (response.status == 200) {
-            loadDatas(); // 重新載入資料
-            // Object.assign(insertEmployee,{})
-            // insertEmployee.value = ''; // 清空 insertDeptName
-            alert("新增成功")
-        }
-    } catch (error) {
-        console.log(error)
-        alert("新增失敗")
-    } finally {
-        //不管是否成功 modal切換
-        modal.toggle();
-        cleardata();
-    }
-}
+//     // console.log(insertEmployee)
+//     try {
+//         const response = await axios.post(`${url}/backstageaccounts`, insertCoachPic)
 
-const updateData = async () => {
-    //抓彈出視窗
-    var myModalEl = document.getElementById('updateModal')
-    var modal = bootstrap.Modal.getInstance(myModalEl)
+//         if (response.status == 200) {
+//             loadDatas(); // 重新載入資料
+//             // Object.assign(insertEmployee,{})
+//             // insertEmployee.value = ''; // 清空 insertDeptName
+//             alert("新增成功")
+//         }
+//     } catch (error) {
+//         console.log(error)
+//         alert("新增失敗")
+//     } finally {
+//         //不管是否成功 modal切換
+//         modal.toggle();
+//         cleardata();
+//     }
+// }
 
-    console.log(!updateBackStageAccount.employeeid)
-    console.log(!updateBackStageAccount.employeeaccount.trim())
-    console.log(!updateBackStageAccount.loa)
+// const updateData = async () => {
+//     //抓彈出視窗
+//     var myModalEl = document.getElementById('updateModal')
+//     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    // delete updateEmployee.department
-    // delete updateEmployee.jobtitle
+//     console.log(!updateBackStageAccount.cpicid)
+//     console.log(!updateBackStageAccount.employeeid.trim())
+//     console.log(!updateBackStageAccount.loa)
 
-    // //如果沒有值 return 不做
-    if (!updateBackStageAccount.employeeid ||
-        !updateBackStageAccount.employeeaccount.trim() ||
-        !updateBackStageAccount.loa) {
-        alert("請輸入正確資料")
-        return;
-    }
+//     // delete updateEmployee.department
+//     // delete updateEmployee.jobtitle
 
-    if (!updateagainpassword.check) {
-        return
-    }
+//     // //如果沒有值 return 不做
+//     if (!updateBackStageAccount.cpicid ||
+//         !updateBackStageAccount.employeeid.trim() ||
+//         !updateBackStageAccount.loa) {
+//         alert("請輸入正確資料")
+//         return;
+//     }
 
-    // console.log("updateEmployee")
-    // console.log(updateEmployee)
-    try {
-        const response = await axios.put(`${url}/backstageaccounts/${updateBackStageAccount.employeeaccount}`, updateBackStageAccount)
-        console.log("test2")
-        if (response.status == 200) {
-            loadDatas(); // 重新載入資料
-            alert("修改成功")
-        }
+//     if (!updateagainpassword.check) {
+//         return
+//     }
 
-
-    } catch (error) {
-        console.log(error.response)
-        alert("修改失敗")
-    } finally {
-        //不管是否成功 modal切換
-        modal.toggle();
-        cleardata();
-    }
-}
+//     // console.log("updateEmployee")
+//     // console.log(updateEmployee)
+//     try {
+//         const response = await axios.put(`${url}/backstageaccounts/${updateBackStageAccount.employeeid}`, updateBackStageAccount)
+//         console.log("test2")
+//         if (response.status == 200) {
+//             loadDatas(); // 重新載入資料
+//             alert("修改成功")
+//         }
 
 
-const deleteData = async () => {
-    //抓彈出視窗
-    var myModalEl = document.getElementById('deleteModal')
-    var modal = bootstrap.Modal.getInstance(myModalEl)
-
-    //如果沒有值 return 不做
-    try {
-        const response = await axios.delete(`${url}/backstageaccounts/${deleteBackStageAccount.employeeaccount}`)
-
-        if (response.status == 200) {
-            datas.start = 0;
-            datas.name = "";
-
-            loadDatas(); // 重新載入資料
-            alert("刪除成功")
-        }
+//     } catch (error) {
+//         console.log(error.response)
+//         alert("修改失敗")
+//     } finally {
+//         //不管是否成功 modal切換
+//         modal.toggle();
+//         cleardata();
+//     }
+// }
 
 
-    } catch (error) {
-        console.log(error.response)
-        alert("刪除失敗")
-    } finally {
-        //不管是否成功 modal切換
-        modal.toggle();
-    }
+// const deleteData = async () => {
+//     //抓彈出視窗
+//     var myModalEl = document.getElementById('deleteModal')
+//     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-}
+//     //如果沒有值 return 不做
+//     try {
+//         const response = await axios.delete(`${url}/backstageaccounts/${deleteBackStageAccount.employeeid}`)
 
-const checkinsertpassword = () => {
-    console.log(insertBackStageAccount.employeepassword)
-    console.log(insertagainpassword.password)
-    if (insertBackStageAccount.employeepassword === insertagainpassword.password) {
-        insertagainpassword.check = true
-    } else {
-        insertagainpassword.check = false
-    }
-}
+//         if (response.status == 200) {
+//             datas.start = 0;
+//             datas.name = "";
 
-const checkupdatepassword = () => {
-    console.log(updateBackStageAccount.employeepassword)
-    console.log(updateagainpassword.password)
-    if (updateBackStageAccount.employeepassword === updateagainpassword.password) {
-        updateagainpassword.check = true
-    } else {
-        updateagainpassword.check = false
-    }
+//             loadDatas(); // 重新載入資料
+//             alert("刪除成功")
+//         }
 
-    console.log(updateagainpassword.check)
-}
+
+//     } catch (error) {
+//         console.log(error.response)
+//         alert("刪除失敗")
+//     } finally {
+//         //不管是否成功 modal切換
+//         modal.toggle();
+//     }
+
+// }
 
 </script>

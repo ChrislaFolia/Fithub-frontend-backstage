@@ -43,7 +43,7 @@ const url = import.meta.env.VITE_API_JAVAURL;
 const loadImage = async () => {
 
     try {
-      const response = await axios.get(`${url}/coachpics/4`);
+      const response = await axios.get(`${url}/coachpics/9`);
       imageData.value = `data:image/jpeg;base64,${response.data.cpicfile}`
       imageData2.value = `data:image/png;base64,${response.data.cpicfile}`
       console.log(response.data.cpicfile);

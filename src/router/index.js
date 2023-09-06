@@ -133,6 +133,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/coachpic',
+      name: 'coachpic',
+      component: () => import('../views/coachpic.vue'),
+      meta:{
+        needLogin: true
+      }
+    },
+    {
       path: '/receiver',
       name: 'receiver',
       component: () => import('../views/Receiver.vue'),
