@@ -29,55 +29,38 @@
                     <td>{{ coach.employeeid }}</td>
                     <td>{{ coach.employeename }}</td>
                     <td>
-                      <button
-                        type="submit"
-                        class="btn btn-outline-info"
-                        data-bs-toggle="modal"
-                        data-bs-target="#updateModal"
-                        @click="inputUpdateData(coach)"
-                      >
+                      <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                        data-bs-target="#updateModal" @click="inputUpdateData(coach)">
                         修改
                       </button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <Paging
-                :totalPages="totalPages"
-                :thePage="datas.start + 1"
-                @abcClick="clickHandler"
-              ></Paging>
+              <Paging :totalPages="totalPages" :thePage="datas.start + 1" @abcClick="clickHandler"></Paging>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div
-      class="modal fade"
-      id="updateModal"
-      tabindex="-1"
-      aria-labelledby="updateModal"
-      aria-hidden="true"
-      data-bs-backdrop="static"
-    >
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+      data-bs-backdrop="static">
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">修改教練照片</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <img
-              style="width: 200px"
-              v-for="cpic in updateCoachPic"
-              :src="`data:image/jpeg;base64,${cpic.cpicfile}`"
-            />
+            <div class="mb-3">
+              教練編號: {{ updateEmp.employeeid }}
+            </div>
+            <div class="mb-3">
+              教練姓名: {{ updateEmp.employeename }}
+            </div>
+            <img style="width: 200px" v-for="cpic in updateCoachPic" :src="`data:image/jpeg;base64,${cpic.cpicfile}`"
+              @click="inputDeleteData(cpic)" />
             <input id="inputImg" type="file" multiple />
             <!-- <div class="mb-3">
                             員工編號: {{ updateBackStageAccount.cpicid }}
@@ -114,80 +97,6 @@
           </div>
         </div>
       </div>
-
-      <!-- <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
-            data-bs-backdrop="static">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">新增後台帳戶</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            員工:
-                            <select v-model="insertCoachPic.cpicid">
-                                <option v-for="emp in allEmps" :key="emp.cpicid" :value="emp.cpicid">{{
-                                    emp.cpicid + " " + emp.employeename }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            員工帳號:<input type="text" class="form-control" v-model="insertCoachPic.employeeid">
-                            <span v-if="!insertCoachPic.employeeid" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            員工密碼:<input type="password" class="form-control"
-                                v-model="insertCoachPic.cpicfile" @keyup="checkinsertpassword">
-                            <span v-if="!insertCoachPic.cpicfile" class="text-danger">必填</span>
-                        </div>
-                        <div class="mb-3">
-                            確認密碼:<input type="password" class="form-control" v-model="insertagainpassword.password"
-                                @keyup="checkinsertpassword">
-                            <span v-if="!insertagainpassword.password" class="text-danger">必填</span><br>
-                            <span v-if="!insertagainpassword.check" class="text-danger">密碼不相符</span>
-                        </div>
-                        <div class="mb-3">
-                            權限等級:
-                            <select v-model="insertCoachPic.loa">
-                                <option v-for="loa in 5" :key="loa" :value="loa">{{ loa }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary" @click="insertData()">新增</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true"
-            data-bs-backdrop="static">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">刪除後台帳戶</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            員工編號: {{ deleteBackStageAccount.cpicid }}
-                        </div>
-                        <div class="mb-3">
-                            員工姓名: {{ deleteBackStageAccount.employeename }}
-                        </div>
-                        <div class="mb-3">
-                            員工帳號: {{ deleteBackStageAccount.employeeid }}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary" @click="deleteData()">刪除</button>
-                    </div>
-                </div>
-            </div>-->
     </div>
   </body>
 </template>
@@ -209,7 +118,7 @@ const insertCoachPic = reactive({
 });
 
 const updateCoachPic = reactive({});
-const deleteBackStageAccount = reactive({});
+const deleteCoachPic = reactive({});
 
 const allCoachs = ref([]);
 
@@ -243,12 +152,11 @@ onMounted(() => {
 
   inputImg.addEventListener("change", async function (e) {
     selectedFile.value = e.target.files;
-    // console.log(updateEmp.value)
-    // console.log(updateCoachPic[0].employeeid)
     try {
       await uploadImage()
-      
-    } catch (error) {}
+      let inputImg = document.getElementById("inputImg");
+      inputImg.value='';
+    } catch (error) { }
   });
 });
 
@@ -324,116 +232,39 @@ const uploadImage = async () => {
 };
 
 // // 點擊刪除時觸發 帶入該筆資料
-// const inputDeleteData = (data) => {
-//     Object.assign(deleteBackStageAccount, data);
-// };
+const inputDeleteData = (data) => {
+  Object.assign(deleteCoachPic, data);
+  let deletecheck = confirm('是否刪除')
+  if (deletecheck) {
+    console.log("true")
+    console.log(deleteCoachPic)
+    deleteData()
+  } else {
+    console.log("false")
+  }
+  console.log(data)
+};
 
-// const insertData = async () => {
-//     // //抓彈出視窗
-//     var myModalEl = document.getElementById('insertModal')
-//     var modal = bootstrap.Modal.getInstance(myModalEl)
+const deleteData = async () => {
+  //抓彈出視窗
 
-//     // //如果沒有值 return 不做
-//     if (!insertCoachPic.cpicid ||
-//         !insertCoachPic.employeeid.trim() ||
-//         !insertCoachPic.cpicfile ||
-//         !insertCoachPic.loa) {
-//         alert("請輸入資料")
-//         return;
-//     }
+  //如果沒有值 return 不做
+  try {
+    const response = await axios.delete(`${url}/coachpics/${deleteCoachPic.cpicid}`)
 
-//     if (!insertagainpassword.check) {
-//         return
-//     }
+    if (response.status == 200) {
+      datas.start = 0;
+      datas.name = "";
 
-//     // console.log(insertEmployee)
-//     try {
-//         const response = await axios.post(`${url}/backstageaccounts`, insertCoachPic)
+      loadDatas(); // 重新載入資料
+      inputUpdateData(updateEmp.value)
+      alert("刪除成功")
+    }
 
-//         if (response.status == 200) {
-//             loadDatas(); // 重新載入資料
-//             // Object.assign(insertEmployee,{})
-//             // insertEmployee.value = ''; // 清空 insertDeptName
-//             alert("新增成功")
-//         }
-//     } catch (error) {
-//         console.log(error)
-//         alert("新增失敗")
-//     } finally {
-//         //不管是否成功 modal切換
-//         modal.toggle();
-//         cleardata();
-//     }
-// }
+  } catch (error) {
+    console.log(error.response)
+    alert("刪除失敗")
+  }
 
-// const updateData = async () => {
-//     //抓彈出視窗
-//     var myModalEl = document.getElementById('updateModal')
-//     var modal = bootstrap.Modal.getInstance(myModalEl)
-
-//     console.log(!updateBackStageAccount.cpicid)
-//     console.log(!updateBackStageAccount.employeeid.trim())
-//     console.log(!updateBackStageAccount.loa)
-
-//     // delete updateEmployee.department
-//     // delete updateEmployee.jobtitle
-
-//     // //如果沒有值 return 不做
-//     if (!updateBackStageAccount.cpicid ||
-//         !updateBackStageAccount.employeeid.trim() ||
-//         !updateBackStageAccount.loa) {
-//         alert("請輸入正確資料")
-//         return;
-//     }
-
-//     if (!updateagainpassword.check) {
-//         return
-//     }
-
-//     // console.log("updateEmployee")
-//     // console.log(updateEmployee)
-//     try {
-//         const response = await axios.put(`${url}/backstageaccounts/${updateBackStageAccount.employeeid}`, updateBackStageAccount)
-//         console.log("test2")
-//         if (response.status == 200) {
-//             loadDatas(); // 重新載入資料
-//             alert("修改成功")
-//         }
-
-//     } catch (error) {
-//         console.log(error.response)
-//         alert("修改失敗")
-//     } finally {
-//         //不管是否成功 modal切換
-//         modal.toggle();
-//         cleardata();
-//     }
-// }
-
-// const deleteData = async () => {
-//     //抓彈出視窗
-//     var myModalEl = document.getElementById('deleteModal')
-//     var modal = bootstrap.Modal.getInstance(myModalEl)
-
-//     //如果沒有值 return 不做
-//     try {
-//         const response = await axios.delete(`${url}/backstageaccounts/${deleteBackStageAccount.employeeid}`)
-
-//         if (response.status == 200) {
-//             datas.start = 0;
-//             datas.name = "";
-
-//             loadDatas(); // 重新載入資料
-//             alert("刪除成功")
-//         }
-
-//     } catch (error) {
-//         console.log(error.response)
-//         alert("刪除失敗")
-//     } finally {
-//         //不管是否成功 modal切換
-//         modal.toggle();
-//     }
-
-// }
+}
 </script>
