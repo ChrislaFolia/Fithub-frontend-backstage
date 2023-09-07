@@ -224,7 +224,7 @@ function generateRandomCouponCode() {
     return couponCode;
 }
 
-// 将選中的教室資料複製到 updateSelectedCoupon
+// 将選中的資料複製到 updateSelectedCoupon
 const openUpdateModal = (coupon) => {
     Object.assign(updateSelectedCoupon, coupon);
 };
@@ -278,7 +278,7 @@ const insertCoupon = async () => {
     }
 };
 
-// 更新教室
+// 更新優惠券
 const updateCoupon = async () => {
     // try {
     //     // 检查是否有任何必填字段为空

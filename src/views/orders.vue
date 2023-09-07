@@ -202,7 +202,7 @@ const URL = import.meta.env.VITE_API_JAVAURL
 
 
 // const resInsertCourse = await axios.post(`${URL}/classes`, classes)
-//建立優惠券物件
+//建立訂單物件
 const orders = reactive(
     {
         orderid: '',
@@ -321,7 +321,7 @@ const insertOrders = async () => {
     }
 };
 
-// 更新教室
+// 更新訂單
 const updateOrders = async () => {
     // try {
     //     // 检查是否有任何必填字段为空
