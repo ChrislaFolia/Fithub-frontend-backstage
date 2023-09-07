@@ -67,7 +67,6 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             員工編號:<input type="text" class="form-control" v-model="updateEmployee.employeeid" readonly>
-                            <span v-if="!updateEmployee.employeeid" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
                             姓名:<input type="text" class="form-control" v-model="updateEmployee.employeename">

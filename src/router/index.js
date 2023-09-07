@@ -141,6 +141,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/member',
+      name: 'member',
+      component: () => import('../views/member.vue'),
+      meta:{
+        needLogin: true
+      }
+    },
+    {
       path: '/receiver',
       name: 'receiver',
       component: () => import('../views/Receiver.vue'),
