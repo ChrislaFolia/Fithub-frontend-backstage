@@ -62,7 +62,7 @@ const router = createRouter({
     {
       path: '/employee',
       name: 'employee',
-      component: () => import('../views/employeeTest.vue'),
+      component: () => import('../views/employee.vue'),
       meta:{
         needLogin: true
       }
