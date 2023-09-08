@@ -9,7 +9,9 @@
   >
     <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
     組織管理
-    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+    <div class="sb-sidenav-collapse-arrow">
+      <i class="fas fa-angle-down"></i>
+    </div>
   </a>
   <div
     class="collapse"

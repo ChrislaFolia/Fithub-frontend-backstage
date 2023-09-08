@@ -1,224 +1,223 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { authToken ,logout } from '@/api/login'
-
+import { createRouter, createWebHistory } from "vue-router";
+import { authToken, logout } from "@/api/login";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: () => import('../views/backstageView.vue'),
-      meta:{
+      path: "/",
+      name: "home",
+      component: () => import("../views/backstageView.vue"),
+      meta: {
         needLogin: true,
-        loa:1
-      }
+        loa: 1,
+      },
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/loginView.vue')
+      path: "/login",
+      name: "login",
+      component: () => import("../views/loginView.vue"),
     },
     {
-      path: '/navbartop',
-      name: 'navbartop',
-      component: () => import('../components/NavbarTop.vue'),
-      meta:{
-        needLogin: true
-      }
-    },
-    {
-      path: '/navbarleft',
-      name: 'navbarleft',
-      component: () => import('../components/NavbarLeft.vue'),
-      meta:{
-        needLogin: true
-      }
-    },
-    {
-      path: '/department',
-      name: 'department',
-      component: () => import('../views/department.vue'),
-      meta:{
+      path: "/navbartop",
+      name: "navbartop",
+      component: () => import("../components/NavbarTop.vue"),
+      meta: {
         needLogin: true,
-        loa:3
-      }
-      
+      },
     },
     {
-      path: '/testUploadImg',
-      name: 'testUploadImg',
-      component: () => import('../views/testUploadImg.vue'),
-      meta:{
-        needLogin: true
-      }
-    },
-    {
-      path: '/testLoadImg',
-      name: 'testLoadImg',
-      component: () => import('../views/testLoadImg.vue'),
-      meta:{
-        needLogin: true
-      }
-    },
-    {
-      path: '/employee',
-      name: 'employee',
-      component: () => import('../views/employee.vue'),
-      meta:{
+      path: "/navbarleft",
+      name: "navbarleft",
+      component: () => import("../components/NavbarLeft.vue"),
+      meta: {
         needLogin: true,
-        loa:3
-      }
+      },
     },
     {
-      path: '/course',
-      name: 'course',
-      component: () => import('../views/employee.vue'),
-      meta:{
+      path: "/department",
+      name: "department",
+      component: () => import("../views/department.vue"),
+      meta: {
         needLogin: true,
-        loa:1
-      }
+        loa: 3,
+      },
     },
     {
-      path: '/announcement',
-      name: 'announcement',
-      component: () => import('../views/announcement.vue'),
-      meta:{
+      path: "/testUploadImg",
+      name: "testUploadImg",
+      component: () => import("../views/testUploadImg.vue"),
+      meta: {
         needLogin: true,
-        loa:1
-      }
+      },
     },
     {
-      path: '/rentorder',
-      name: 'rentorder',
-      component: () => import('../views/rentorder.vue'),
-      meta:{
+      path: "/testLoadImg",
+      name: "testLoadImg",
+      component: () => import("../views/testLoadImg.vue"),
+      meta: {
         needLogin: true,
-        loa:1
-      }
+      },
     },
     {
-      path: '/activity',
-      name: 'activity',
-      component: () => import('../views/activity.vue'),
-      meta:{
+      path: "/employee",
+      name: "employee",
+      component: () => import("../views/employee.vue"),
+      meta: {
         needLogin: true,
-        loa:1
-      }
+        loa: 3,
+      },
     },
     {
-      path: '/classroom',
-      name: 'classroom',
-      component: () => import('../views/classroom.vue'),
-      meta:{
-        needLogin: true,
-        loa:1
-      }
+      path: "/course",
+      name: "course",
+      component: () => import("../views/indexCourse.vue"),
     },
     {
-      path: '/specialty',
-      name: 'specialty',
-      component: () => import('../views/specialty.vue'),
-      meta:{
-        needLogin: true,
-        loa:3
-      }
+      path: "/classes",
+      name: "classes",
+      component: () => import("../views/indexClasses.vue"),
     },
     {
-      path: '/coachspecialty',
-      name: 'coachspecialty',
-      component: () => import('../views/coachspecialty.vue'),
-      meta:{
+      path: "/announcement",
+      name: "announcement",
+      component: () => import("../views/announcement.vue"),
+      meta: {
         needLogin: true,
-        loa:3
-      }
+        loa: 1,
+      },
     },
     {
-      path: '/jobtitle',
-      name: 'jobtitle',
-      component: () => import('../views/jobtitle.vue'),
-      meta:{
+      path: "/rentorder",
+      name: "rentorder",
+      component: () => import("../views/rentorder.vue"),
+      meta: {
         needLogin: true,
-        loa:3
-      }
-    }, 
-    {
-      path: '/backstageaccount',
-      name: 'backstageaccount',
-      component: () => import('../views/backstageaccount.vue'),
-      meta:{
-        needLogin: true,
-        loa:3
-      }
+        loa: 1,
+      },
     },
     {
-      path: '/coachpic',
-      name: 'coachpic',
-      component: () => import('../views/coachpic.vue'),
-      meta:{
+      path: "/activity",
+      name: "activity",
+      component: () => import("../views/activity.vue"),
+      meta: {
         needLogin: true,
-        loa:3
-      }
+        loa: 1,
+      },
     },
     {
-      path: '/member',
-      name: 'member',
-      component: () => import('../views/member.vue'),
-      meta:{
+      path: "/classroom",
+      name: "classroom",
+      component: () => import("../views/classroom.vue"),
+      meta: {
         needLogin: true,
-        loa:2
-      }
+        loa: 1,
+      },
     },
     {
-      path: '/receiver',
-      name: 'receiver',
-      component: () => import('../views/Receiver.vue'),
-      meta:{
+      path: "/specialty",
+      name: "specialty",
+      component: () => import("../views/specialty.vue"),
+      meta: {
         needLogin: true,
-        loa:1
-      }
+        loa: 3,
+      },
     },
     {
-      path: '/sender',
-      name: 'sender',
-      component: () => import('../views/Sender.vue'),
-      meta:{
+      path: "/coachspecialty",
+      name: "coachspecialty",
+      component: () => import("../views/coachspecialty.vue"),
+      meta: {
         needLogin: true,
-        loa:1
-      }
+        loa: 3,
+      },
+    },
+    {
+      path: "/jobtitle",
+      name: "jobtitle",
+      component: () => import("../views/jobtitle.vue"),
+      meta: {
+        needLogin: true,
+        loa: 3,
+      },
+    },
+    {
+      path: "/backstageaccount",
+      name: "backstageaccount",
+      component: () => import("../views/backstageaccount.vue"),
+      meta: {
+        needLogin: true,
+        loa: 3,
+      },
+    },
+    {
+      path: "/coachpic",
+      name: "coachpic",
+      component: () => import("../views/coachpic.vue"),
+      meta: {
+        needLogin: true,
+        loa: 3,
+      },
+    },
+    {
+      path: "/member",
+      name: "member",
+      component: () => import("../views/member.vue"),
+      meta: {
+        needLogin: true,
+        loa: 2,
+      },
+    },
+    {
+      path: "/receiver",
+      name: "receiver",
+      component: () => import("../views/Receiver.vue"),
+      meta: {
+        needLogin: true,
+        loa: 1,
+      },
+    },
+    {
+      path: "/sender",
+      name: "sender",
+      component: () => import("../views/Sender.vue"),
+      meta: {
+        needLogin: true,
+        loa: 1,
+      },
+    },
+  ],
+});
+
+router.beforeResolve(async (to) => {
+  if (to.meta.needLogin) {
+    const isLogin = window.localStorage.getItem("isLogin");
+    const loa = window.localStorage.getItem("loa");
+
+    console.log(typeof loa);
+
+    console.log("login");
+    if (!isLogin) {
+      console.log("back to login1");
+      return { name: "login" };
     }
-  ]
-})
+    console.log(to.meta.loa);
+    console.log(loa);
+    if (loa < to.meta.loa) {
+      console.log("<");
+      logout();
+      return { name: "login" };
+    } else {
+      console.log(">=");
+    }
 
-router.beforeResolve( async to=>{
-  if(to.meta.needLogin){
-      const isLogin = window.localStorage.getItem("isLogin")
-      const loa = window.localStorage.getItem("loa")
-
-      console.log(typeof loa)
-
-      console.log('login')
-      if(!isLogin){
-        console.log('back to login1')
-        return {name: "login"}
-      } 
-      console.log(to.meta.loa);
-      console.log(loa)
-      if(loa < to.meta.loa){
-        console.log("<")
-        logout()
-        return {name: "login"}
-      }else{
-        console.log(">=")
-      }
-      
-      const token = window.localStorage.getItem("token")
-      const authResult = await authToken(token)
-      if(!authResult.status){
-        console.log('back to login2')
-        return {name: "login"}
-      } 
+    const token = window.localStorage.getItem("token");
+    const authResult = await authToken(token);
+    if (!authResult.status) {
+      console.log("back to login2");
+      return { name: "login" };
+    }
   }
-})
+});
 
-export default router
+export default router;

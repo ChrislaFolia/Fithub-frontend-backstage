@@ -3,12 +3,18 @@ import { ref , onMounted} from 'vue';
 import Activity from './Navbar_Acitivity.vue'
 import Organize from './Navbar_Organize.vue'
 import Course from './Navbar_Course.vue'
+<<<<<<< HEAD
 import Announcement from './Navbar_Announcement.vue'
 import RentOrder from './Navbar_RentOrder.vue'
 import Classroom from './Navbar_Classroom.vue'
 import TestNavbar from './NavbarTest.vue'
 import Member from './Navbar_member.vue'
 const selectedOption = ref('both'); // 預設選擇單一 Activity 組件
+=======
+import RentOrder from './Navbar_RentOrder.vue';
+import Classroom from './Navbar_Classroom.vue';
+import Announcement from './Navbar_Announcement.vue';
+>>>>>>> course
 
 onMounted(() => {
     selectedOption.value = window.localStorage.getItem("loa");
@@ -19,12 +25,12 @@ onMounted(() => {
 </script>
 
 <template>
-    
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
+<<<<<<< HEAD
                         <div v-if="selectedOption === '3'">
                             <Announcement></Announcement>
                             <Activity></Activity>
@@ -68,6 +74,14 @@ onMounted(() => {
                         <div v-else-if="selectedOption === 'both'">
                           
                         </div> -->
+=======
+                        <Activity></Activity>
+                        <Organize></Organize>
+                        <Course></Course>
+                        <Classroom></Classroom>
+                        <RentOrder></RentOrder>
+                        <Announcement></Announcement>
+>>>>>>> course
                     </div>
                 </div>
             </nav>
