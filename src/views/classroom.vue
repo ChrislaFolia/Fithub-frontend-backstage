@@ -48,7 +48,8 @@
     </div>
 
     <!-- 修改-彈出視窗 -->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+        data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -82,8 +83,8 @@
                         <span v-if="!updateSelectedClassroom.classroomStatus" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        教室圖片:
-                        <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
+                        教室圖片
+                        <input id="updatefile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -95,7 +96,8 @@
 
 
     <!-- 新增-彈出視窗 -->
-    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
+    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
+        data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -129,7 +131,7 @@
                         <span v-if="!classroom.classroomStatus" class="text-danger">必填</span>
                     </div>
                     <div class="mb-3">
-                        教室圖片:
+                        教室圖片
                         <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageInsert">
                     </div>
                 </div>
@@ -159,9 +161,13 @@ const classrooms = ref([]); // 儲存SelectAll的教室
 const selectedClassrooms = ref([]); // 儲存選中的 ClassroomID
 const updateSelectedClassroom = reactive({}); // 儲存要修改的教室資料(預設值)
 
-// 将選中的教室資料複製到 selectedClassroom
+// 将選中的教室資料複製到 updateSelectedClassroom
 const openUpdateModal = (classroom) => {
     Object.assign(updateSelectedClassroom, classroom);
+
+    //清空上傳圖片欄位
+    let updatefile = document.querySelector('#updatefile')
+    updatefile.value = '';
 };
 
 // 取得圖片轉為BASE64
@@ -249,7 +255,7 @@ const insertClassroom = async () => {
     }
 };
 
-// 更新教室
+// 修改教室
 const updateClassroom = async () => {
     try {
         // 检查是否有任何必填字段为空
@@ -261,13 +267,11 @@ const updateClassroom = async () => {
             return;
         }
 
-
         const response = await axios.put('http://localhost:8080/fithub/classroom/update', updateSelectedClassroom, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-
 
         //關閉動態框
         const updateModal = document.getElementById('updateModal')

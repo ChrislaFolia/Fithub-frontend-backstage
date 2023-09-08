@@ -58,6 +58,13 @@ onMounted(() => {
                         <div v-else-if="selectedOption === 'singleOrganize'">
                             <Organize></Organize>
                         </div>
+                        <div v-else-if="selectedOption === 'singleRentOrder'">
+                            <RentOrder></RentOrder>
+                        </div>
+                        <div v-else-if="selectedOption === 'singleClassroom'">
+                            <Classroom></Classroom>
+                        </div>
+                        
                         <div v-else-if="selectedOption === 'both'">
                           
                         </div> -->

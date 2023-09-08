@@ -70,7 +70,7 @@ const router = createRouter({
     {
       path: '/course',
       name: 'course',
-      component: () => import('../views/employee.vue'),
+      component: () => import('../views/course.vue'),
       meta:{
         needLogin: true
       }
@@ -78,7 +78,7 @@ const router = createRouter({
     {
       path: '/announcement',
       name: 'announcement',
-      component: () => import('../views/employee.vue'),
+      component: () => import('../views/announcement.vue'),
       meta:{
         needLogin: true
       }
@@ -87,7 +87,15 @@ const router = createRouter({
     {
       path: '/rentorder',
       name: 'rentorder',
-      component: () => import('../views/employee.vue'),
+      component: () => import('../views/rentorder.vue'),
+      meta:{
+        needLogin: true
+      }
+    },
+    {
+      path: '/activity',
+      name: 'activity',
+      component: () => import('../views/activity.vue'),
       meta:{
         needLogin: true
       }
