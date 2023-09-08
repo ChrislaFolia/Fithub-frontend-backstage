@@ -25,6 +25,24 @@ const router = createRouter({
       meta: {
         needLogin: true,
       },
+      path: "/coupons",
+      name: "coupons",
+      component: () => import("../views/coupons.vue"),
+    },
+    {
+      path: "/couponcategories",
+      name: "couponcategories",
+      component: () => import("../views/couponcategories.vue"),
+    },
+    {
+      path: "/orders",
+      name: "orders",
+      component: () => import("../views/orders.vue"),
+    },
+    {
+      path: "/orderitem",
+      name: "orderitem",
+      component: () => import("../views/orderitem.vue"),
     },
     {
       path: "/navbarleft",

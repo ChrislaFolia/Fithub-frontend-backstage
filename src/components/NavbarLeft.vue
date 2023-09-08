@@ -6,8 +6,10 @@ import Course from "./Navbar_Course.vue";
 import Announcement from "./Navbar_Announcement.vue";
 import RentOrder from "./Navbar_RentOrder.vue";
 import Classroom from "./Navbar_Classroom.vue";
-import TestNavbar from "./NavbarTest.vue";
 import Member from "./Navbar_member.vue";
+import Coupons from "./Navbar_Coupons.vue";
+import Orders from "./Navbar_Orders.vue";
+import TestNavbar from "./NavbarTest.vue";
 const selectedOption = ref("both"); // 預設選擇單一 Activity 組件
 
 onMounted(() => {
@@ -32,6 +34,8 @@ onMounted(() => {
               <Member></Member>
               <Organize></Organize>
               <TestNavbar></TestNavbar>
+              <Coupons></Coupons>
+              <Orders></Orders>
             </div>
             <div v-else-if="selectedOption === '2'">
               <Announcement></Announcement>
@@ -40,6 +44,8 @@ onMounted(() => {
               <RentOrder></RentOrder>
               <Classroom></Classroom>
               <Member></Member>
+              <Coupons></Coupons>
+              <Orders></Orders>
             </div>
             <div v-else-if="selectedOption === '1'">
               <Announcement></Announcement>
@@ -47,6 +53,8 @@ onMounted(() => {
               <Course></Course>
               <RentOrder></RentOrder>
               <Classroom></Classroom>
+              <Coupons></Coupons>
+              <Orders></Orders>
             </div>
 
             <!-- 條件渲染動態組件 -->
