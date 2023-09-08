@@ -41,7 +41,7 @@
                                         <td>{{ Activity.activitydate }}</td>
                                         <td>{{ Activity.activityname }}</td>
                                         <!-- <td>{{ Activity.activitydescription }}</td> -->
-                                        <td><a :href="'http://localhost:5175/activity?activityid=' + Activity.activityid"
+                                        <td><a :href="'http://localhost:5173/activity?activityid=' + Activity.activityid"
                                                 target="_blank"><i class="fas fa-link"></i>預覽</a></td>
                                         <td>{{ Activity.activitydisplay }}</td>
                                         <td>{{ Activity.activitysort }}</td>
