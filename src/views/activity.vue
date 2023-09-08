@@ -1,192 +1,200 @@
 <template>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_content">
-            <div class="container-fluid px-4">
-                <!-- 標題 -->
-                <h1 class="mt-4" style="text-align: center;">全部活動</h1>
-                <div class="card mb-4">
-                    <div class="card-body table-responsive">
-                        <button class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal"
-                            style="margin-bottom: 10px;">新增活動</button>
-                        <table class="table table-bordered">
-                            <thead class="align-middle text-center">
-                                <tr class="table-primary">
-                                    <th>
-                                        <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
-                                    </th>
-                                    <th>活動編號</th>
-                                    <th>活動日期</th>
-                                    <th>名稱</th>
-                                    <th>活動內容</th>
-                                    <th>顯示</th>
-                                    <th>排序</th>
-                                    <th>上架日期</th>
-                                    <th>下架日期</th>
-                                    <th>負責員工</th>
-                                    <th>首頁圖片</th>
-                                    <th>修改</th>
-                                </tr>
-                            </thead>
+    <body class="sb-nav-fixed">
+        <NavbarTop></NavbarTop>
+        <NavbarLeft></NavbarLeft>
 
-                            <tbody class="align-middle text-center">
-                                <tr v-for="(Activity, activityindex) in Activitys" :key="activityindex">
-                                    <td><input type="checkbox" v-model="selectedActivities" :value="Activity.activityid">
-                                    </td>
-                                    <td>{{ Activity.activityid }}</td>
-                                    <td>{{ Activity.activitydate }}</td>
-                                    <td>{{ Activity.activityname }}</td>
-                                    <!-- <td>{{ Activity.activitydescription }}</td> -->
-                                    <td><a :href="'http://localhost:5175/activity?activityid='+Activity.activityid" target="_blank"><i class="fas fa-link"></i>預覽</a></td>
-                                    <td>{{ Activity.activitydisplay }}</td>
-                                    <td>{{ Activity.activitysort }}</td>
-                                    <td>{{ Activity.activityon }}</td>
-                                    <td>{{ Activity.activityoff }}</td>
-                                    <td>{{ Activity.employee.employeename }}</td>
-                                    <td><img :src="Activity.activitypic" style="width: 150px;height: 150px;" alt="維修中"></td>
-                                    <td><button class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                            @click="openUpdateModal(Activity)" data-bs-target="#updateModal">修改</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_content">
+                <div class="container-fluid px-4">
+                    <!-- 標題 -->
+                    <h1 class="mt-4" style="text-align: center;">全部活動</h1>
+                    <div class="card mb-4">
+                        <div class="card-body table-responsive">
+                            <button class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal"
+                                style="margin-bottom: 10px;">新增活動</button>
+                            <table class="table table-bordered">
+                                <thead class="align-middle text-center">
+                                    <tr class="table-primary">
+                                        <th>
+                                            <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
+                                        </th>
+                                        <th>活動編號</th>
+                                        <th>活動日期</th>
+                                        <th>名稱</th>
+                                        <th>活動內容</th>
+                                        <th>顯示</th>
+                                        <th>排序</th>
+                                        <th>上架日期</th>
+                                        <th>下架日期</th>
+                                        <th>負責員工</th>
+                                        <th>首頁圖片</th>
+                                        <th>修改</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="align-middle text-center">
+                                    <tr v-for="(Activity, activityindex) in Activitys" :key="activityindex">
+                                        <td><input type="checkbox" v-model="selectedActivities"
+                                                :value="Activity.activityid">
+                                        </td>
+                                        <td>{{ Activity.activityid }}</td>
+                                        <td>{{ Activity.activitydate }}</td>
+                                        <td>{{ Activity.activityname }}</td>
+                                        <!-- <td>{{ Activity.activitydescription }}</td> -->
+                                        <td><a :href="'http://localhost:5175/activity?activityid=' + Activity.activityid"
+                                                target="_blank"><i class="fas fa-link"></i>預覽</a></td>
+                                        <td>{{ Activity.activitydisplay }}</td>
+                                        <td>{{ Activity.activitysort }}</td>
+                                        <td>{{ Activity.activityon }}</td>
+                                        <td>{{ Activity.activityoff }}</td>
+                                        <td>{{ Activity.employee.employeename }}</td>
+                                        <td><img :src="Activity.activitypic" style="width: 150px;height: 150px;" alt="維修中">
+                                        </td>
+                                        <td><button class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                                @click="openUpdateModal(Activity)" data-bs-target="#updateModal">修改</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 修改-彈出視窗-->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
-        data-bs-backdrop="static" data-bs-focus="false">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">修改活動</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        日期<input v-model="updateSelectedActivities.activitydate" type="date" class="form-control">
-                        <span v-if="!updateSelectedActivities.activitydate" class="text-danger">必填</span>
+        <!-- 修改-彈出視窗-->
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+            data-bs-backdrop="static" data-bs-focus="false">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">修改活動</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        名稱<input v-model="updateSelectedActivities.activityname" type="text" class="form-control">
-                        <span v-if="!updateSelectedActivities.activityname" class="text-danger">必填</span>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            日期<input v-model="updateSelectedActivities.activitydate" type="date" class="form-control">
+                            <span v-if="!updateSelectedActivities.activitydate" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            名稱<input v-model="updateSelectedActivities.activityname" type="text" class="form-control">
+                            <span v-if="!updateSelectedActivities.activityname" class="text-danger">必填</span>
+                        </div>
+                        顯示
+                        <div class="mb-3">
+                            <select v-model="updateSelectedActivities.activitydisplay" class="form-control">
+                                <option value="是">是</option>
+                                <option value="否">否</option>
+                            </select>
+                            <span v-if="!updateSelectedActivities.activitydisplay" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            排序<input v-model="updateSelectedActivities.activitysort" type="text" class="form-control">
+                            <span v-if="!updateSelectedActivities.activitysort" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            上架日期<input v-model="updateSelectedActivities.activityon" type="date" class="form-control">
+                            <span v-if="!updateSelectedActivities.activityon" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            下架日期<input v-model="updateSelectedActivities.activityoff" type="date" class="form-control">
+                            <span v-if="!updateSelectedActivities.activityoff" class="text-danger">必填</span>
+                        </div>
+                        負責員工
+                        <div class="mb-3">
+                            <select v-model="updateSelectedActivities.employeeid" class="form-control">
+                                <option v-for="employeenameAndemployeeid in AllemployeenameAndemployeeid"
+                                    :value="employeenameAndemployeeid[1]">{{ employeenameAndemployeeid[0] }}</option>
+                            </select>
+                            <span v-if="!updateSelectedActivities.employeeid" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            內容<br>
+                            <textarea id="updateEditor"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            活動圖片
+                            <input id="updatefile" type="file" class="form-control" accept="image/*" @change="imageUpdate">
+                        </div>
                     </div>
-                    顯示
-                    <div class="mb-3">
-                        <select v-model="updateSelectedActivities.activitydisplay" class="form-control">
-                            <option value="是">是</option>
-                            <option value="否">否</option>
-                        </select>
-                        <span v-if="!updateSelectedActivities.activitydisplay" class="text-danger">必填</span>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" @click="updateActivity">送出</button>
                     </div>
-                    <div class="mb-3">
-                        排序<input v-model="updateSelectedActivities.activitysort" type="text" class="form-control">
-                        <span v-if="!updateSelectedActivities.activitysort" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        上架日期<input v-model="updateSelectedActivities.activityon" type="date" class="form-control">
-                        <span v-if="!updateSelectedActivities.activityon" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        下架日期<input v-model="updateSelectedActivities.activityoff" type="date" class="form-control">
-                        <span v-if="!updateSelectedActivities.activityoff" class="text-danger">必填</span>
-                    </div>
-                    負責員工
-                    <div class="mb-3">
-                        <select v-model="updateSelectedActivities.employeeid" class="form-control">
-                            <option v-for="employeenameAndemployeeid in AllemployeenameAndemployeeid"
-                                :value="employeenameAndemployeeid[1]">{{ employeenameAndemployeeid[0] }}</option>
-                        </select>
-                        <span v-if="!updateSelectedActivities.employeeid" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        內容<br>
-                        <textarea id="updateEditor"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        活動圖片
-                        <input id="updatefile" type="file" class="form-control" accept="image/*"
-                            @change="imageUpdate">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" @click="updateActivity">送出</button>
                 </div>
             </div>
         </div>
-    </div>
 
 
 
-    <!-- 新增-彈出視窗 點擊表格外不關閉="static"  取消輸入聚焦在表格data-bs-focus="false"-->
-    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
-        data-bs-backdrop="static" data-bs-focus="false">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">新增活動</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        日期<input v-model="Activity.activitydate" type="date" class="form-control">
-                        <span v-if="!Activity.activitydate" class="text-danger">必填</span>
+        <!-- 新增-彈出視窗 點擊表格外不關閉="static"  取消輸入聚焦在表格data-bs-focus="false"-->
+        <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
+            data-bs-backdrop="static" data-bs-focus="false">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">新增活動</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        名稱<input v-model="Activity.activityname" type="text" class="form-control">
-                        <span v-if="!Activity.activityname" class="text-danger">必填</span>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            日期<input v-model="Activity.activitydate" type="date" class="form-control">
+                            <span v-if="!Activity.activitydate" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            名稱<input v-model="Activity.activityname" type="text" class="form-control">
+                            <span v-if="!Activity.activityname" class="text-danger">必填</span>
+                        </div>
+                        顯示
+                        <div class="mb-3">
+                            <select v-model="Activity.activitydisplay" class="form-control">
+                                <option value="是">是</option>
+                                <option value="否">否</option>
+                            </select>
+                            <span v-if="!Activity.activitydisplay" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            排序<input v-model="Activity.activitysort" type="text" class="form-control">
+                            <span v-if="!Activity.activitysort" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            上架日期<input v-model="Activity.activityon" type="date" class="form-control">
+                            <span v-if="!Activity.activityon" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            下架日期<input v-model="Activity.activityoff" type="date" class="form-control">
+                            <span v-if="!Activity.activityoff" class="text-danger">必填</span>
+                        </div>
+                        負責員工
+                        <div class="mb-3">
+                            <select v-model="Activity.employeeid" class="form-control">
+                                <option v-for="employeenameAndemployeeid in AllemployeenameAndemployeeid"
+                                    :value="employeenameAndemployeeid[1]">{{ employeenameAndemployeeid[0] }}</option>
+                            </select>
+                            <span v-if="!Activity.employeeid" class="text-danger">必填</span>
+                        </div>
+                        <div class="mb-3">
+                            內容<br>
+                            <textarea id="insertEditor"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            活動圖片
+                            <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageInsert">
+                        </div>
                     </div>
-                    顯示
-                    <div class="mb-3">
-                        <select v-model="Activity.activitydisplay" class="form-control">
-                            <option value="是">是</option>
-                            <option value="否">否</option>
-                        </select>
-                        <span v-if="!Activity.activitydisplay" class="text-danger">必填</span>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" @click="insertActivity">送出</button>
                     </div>
-                    <div class="mb-3">
-                        排序<input v-model="Activity.activitysort" type="text" class="form-control">
-                        <span v-if="!Activity.activitysort" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        上架日期<input v-model="Activity.activityon" type="date" class="form-control">
-                        <span v-if="!Activity.activityon" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        下架日期<input v-model="Activity.activityoff" type="date" class="form-control">
-                        <span v-if="!Activity.activityoff" class="text-danger">必填</span>
-                    </div>
-                    負責員工
-                    <div class="mb-3">
-                        <select v-model="Activity.employeeid" class="form-control">
-                            <option v-for="employeenameAndemployeeid in AllemployeenameAndemployeeid"
-                                :value="employeenameAndemployeeid[1]">{{ employeenameAndemployeeid[0] }}</option>
-                        </select>
-                        <span v-if="!Activity.employeeid" class="text-danger">必填</span>
-                    </div>
-                    <div class="mb-3">
-                        內容<br>
-                        <textarea id="insertEditor"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        活動圖片
-                        <input id="insertfile" type="file" class="form-control" accept="image/*" 
-                            @change="imageInsert">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" @click="insertActivity">送出</button>
                 </div>
             </div>
         </div>
-    </div>
+    </body>
 </template>
   
 <script setup>
 import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
+import NavbarTop from '../components/NavbarTop.vue'
+import NavbarLeft from '../components/NavbarLeft.vue'
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';  已改用CDN
 
 
@@ -212,7 +220,7 @@ let updateEditor = null; //修改-文字編輯器
 
 // 将選中的活動資料複製到 updateSelectedActivities
 const openUpdateModal = (Activity) => {
-    const { activityid, activitydate, activitydescription, activityname, activitydisplay, activityoff, activityon, activitysort, employeeid,activitypic } = Activity;
+    const { activityid, activitydate, activitydescription, activityname, activitydisplay, activityoff, activityon, activitysort, employeeid, activitypic } = Activity;
 
     // 只保留update需要的屬性
     updateSelectedActivities.activityid = activityid;

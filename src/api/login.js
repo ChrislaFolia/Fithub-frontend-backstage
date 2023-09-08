@@ -77,5 +77,12 @@ function setLoginStore(options) {
     window.localStorage.setItem("loa", options.loa)
 }
 
+const logout = () => {
+    window.localStorage.setItem("isLogin", "")
+    window.localStorage.setItem("token", "")
+    window.localStorage.setItem("username", "")
+    window.localStorage.setItem("loa", "")
+  };
 
-export { login, authToken }
+
+export { login, authToken ,logout}

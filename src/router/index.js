@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authToken } from '@/api/login'
+import { authToken ,logout } from '@/api/login'
 
 
 const router = createRouter({
@@ -10,7 +10,8 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/backstageView.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:1
       }
     },
     {
@@ -39,7 +40,8 @@ const router = createRouter({
       name: 'department',
       component: () => import('../views/department.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:3
       }
       
     },
@@ -64,15 +66,17 @@ const router = createRouter({
       name: 'employee',
       component: () => import('../views/employee.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:3
       }
     },
     {
       path: '/course',
       name: 'course',
-      component: () => import('../views/course.vue'),
+      component: () => import('../views/employee.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:1
       }
     },
     {
@@ -80,16 +84,17 @@ const router = createRouter({
       name: 'announcement',
       component: () => import('../views/announcement.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:1
       }
-    }
-    ,
+    },
     {
       path: '/rentorder',
       name: 'rentorder',
       component: () => import('../views/rentorder.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:1
       }
     },
     {
@@ -97,7 +102,8 @@ const router = createRouter({
       name: 'activity',
       component: () => import('../views/activity.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:1
       }
     },
     {
@@ -105,7 +111,8 @@ const router = createRouter({
       name: 'classroom',
       component: () => import('../views/classroom.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:1
       }
     },
     {
@@ -113,7 +120,8 @@ const router = createRouter({
       name: 'specialty',
       component: () => import('../views/specialty.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:3
       }
     },
     {
@@ -121,7 +129,8 @@ const router = createRouter({
       name: 'coachspecialty',
       component: () => import('../views/coachspecialty.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:3
       }
     },
     {
@@ -129,7 +138,8 @@ const router = createRouter({
       name: 'jobtitle',
       component: () => import('../views/jobtitle.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:3
       }
     }, 
     {
@@ -137,7 +147,8 @@ const router = createRouter({
       name: 'backstageaccount',
       component: () => import('../views/backstageaccount.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:3
       }
     },
     {
@@ -145,7 +156,8 @@ const router = createRouter({
       name: 'coachpic',
       component: () => import('../views/coachpic.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:3
       }
     },
     {
@@ -153,7 +165,8 @@ const router = createRouter({
       name: 'member',
       component: () => import('../views/member.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:2
       }
     },
     {
@@ -161,7 +174,8 @@ const router = createRouter({
       name: 'receiver',
       component: () => import('../views/Receiver.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:1
       }
     },
     {
@@ -169,7 +183,8 @@ const router = createRouter({
       name: 'sender',
       component: () => import('../views/Sender.vue'),
       meta:{
-        needLogin: true
+        needLogin: true,
+        loa:1
       }
     }
   ]
@@ -178,11 +193,24 @@ const router = createRouter({
 router.beforeResolve( async to=>{
   if(to.meta.needLogin){
       const isLogin = window.localStorage.getItem("isLogin")
+      const loa = window.localStorage.getItem("loa")
+
+      console.log(typeof loa)
+
       console.log('login')
       if(!isLogin){
         console.log('back to login1')
         return {name: "login"}
       } 
+      console.log(to.meta.loa);
+      console.log(loa)
+      if(loa < to.meta.loa){
+        console.log("<")
+        logout()
+        return {name: "login"}
+      }else{
+        console.log(">=")
+      }
       
       const token = window.localStorage.getItem("token")
       const authResult = await authToken(token)

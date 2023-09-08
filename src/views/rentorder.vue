@@ -1,92 +1,97 @@
 <template>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_content">
-            <div class="container-fluid px-4">
-                <h1 class="mt-4" style="text-align: center;">場地租借</h1>
-                <div class="card mb-4">
-                    <div class="card-body table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="align-middle text-center">
-                                <tr class="table-primary">
-                                    <th>
-                                        <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
-                                    </th>
-                                    <th>訂單日期</th>
-                                    <th>會員姓名</th>
-                                    <th>租借場地</th>
-                                    <th>預約日期</th>
-                                    <th>時段</th>
-                                    <th>租借狀態</th>
-                                    <th>修改</th>
-                                </tr>
-                            </thead>
+    <body class="sb-nav-fixed">
+        <NavbarTop></NavbarTop>
+        <NavbarLeft></NavbarLeft>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_content">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4" style="text-align: center;">場地租借</h1>
+                    <div class="card mb-4">
+                        <div class="card-body table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="align-middle text-center">
+                                    <tr class="table-primary">
+                                        <th>
+                                            <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
+                                        </th>
+                                        <th>訂單日期</th>
+                                        <th>會員姓名</th>
+                                        <th>租借場地</th>
+                                        <th>預約日期</th>
+                                        <th>時段</th>
+                                        <th>租借狀態</th>
+                                        <th>修改</th>
+                                    </tr>
+                                </thead>
 
-                            <tbody class="align-middle text-center">
-                                <tr v-for="(rentOrder, rentorderindex) in rentOrders" :key="rentorderindex">
-                                    <td><input type="checkbox" v-model="selectedRentOrderIds"
-                                            :value="rentOrder.rentorderid"></td>
-                                    <td>{{ rentOrder.rentorderdate }}</td>
-                                    <td>{{ rentOrder.member.membername }}</td>
-                                    <td>{{ rentOrder.classroom.classroomName }}</td>
-                                    <td>{{ rentOrder.rentdate }}</td>
-                                    <td>{{ rentOrder.renttime }}</td>
-                                    <td>{{ rentOrder.rentstatus }}</td>
-                                    <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                            data-bs-target="#updateModal">修改</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                <tbody class="align-middle text-center">
+                                    <tr v-for="(rentOrder, rentorderindex) in rentOrders" :key="rentorderindex">
+                                        <td><input type="checkbox" v-model="selectedRentOrderIds"
+                                                :value="rentOrder.rentorderid"></td>
+                                        <td>{{ rentOrder.rentorderdate }}</td>
+                                        <td>{{ rentOrder.member.membername }}</td>
+                                        <td>{{ rentOrder.classroom.classroomName }}</td>
+                                        <td>{{ rentOrder.rentdate }}</td>
+                                        <td>{{ rentOrder.renttime }}</td>
+                                        <td>{{ rentOrder.rentstatus }}</td>
+                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                                data-bs-target="#updateModal">修改</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 彈出視窗 -->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
-        data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">修改訂單</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        租借場地:<input type="text" class="form-control" required="required">
+        <!-- 彈出視窗 -->
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+            data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">修改訂單</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        日期:<input type="date" class="form-control" required="required">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            租借場地:<input type="text" class="form-control" required="required">
+                        </div>
+                        <div class="mb-3">
+                            日期:<input type="date" class="form-control" required="required">
+                        </div>
+                        <div class="mb-3">
+                            時段:<select class="form-control">
+                                <option>早上</option>
+                                <option>中午</option>
+                                <option>下午</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            租借狀態:<select class="form-control">
+                                <option>處理中</option>
+                                <option>已確認</option>
+                                <option>已完成</option>
+                                <option>已取消</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        時段:<select class="form-control">
-                            <option>早上</option>
-                            <option>中午</option>
-                            <option>下午</option>
-                        </select>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">送出</button>
                     </div>
-                    <div class="mb-3">
-                        租借狀態:<select class="form-control">
-                            <option>處理中</option>
-                            <option>已確認</option>
-                            <option>已完成</option>
-                            <option>已取消</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">送出</button>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
+    </body>
 </template>
   
 <script setup>
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
-
+import NavbarTop from '../components/NavbarTop.vue'
+import NavbarLeft from '../components/NavbarLeft.vue'
 
 const rentOrders = ref([]); // 使用 ref 創建一個響應式變數
 const selectedRentOrderIds = ref([]); // 儲存選中的 rentorderid
