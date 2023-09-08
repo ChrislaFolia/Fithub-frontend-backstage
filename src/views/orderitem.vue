@@ -47,7 +47,8 @@
 <script setup>
 import axios from "axios";
 import { reactive, ref, onMounted } from "vue";
-
+import NavbarTop from "../components/NavbarTop.vue";
+import NavbarLeft from "../components/NavbarLeft.vue";
 //建立優惠券物件
 const orderitem = reactive({
   itemid: "",
