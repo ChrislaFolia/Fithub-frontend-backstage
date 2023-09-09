@@ -6,11 +6,10 @@
     <div id="layoutSidenav">
       <div id="layoutSidenav_content">
         <div class="container-fluid px-4">
-          <h1 class="mt-4" style="text-align: center">教練照片</h1>
-
-          <div class="card mb-4">
+          <h1 class="mt-4 text-center">教練照片</h1>
+          <div class="card">
             <div class="card-body table-responsive">
-              <div class="col-3" style="padding-top: 20px">
+              <div class="col-3">
                 <PageSize @pageSizeChange="changeHandler"></PageSize>
               </div>
               <div class="col-3">
@@ -29,7 +28,7 @@
                     <td>{{ coach.employeeid }}</td>
                     <td>{{ coach.employeename }}</td>
                     <td>
-                      <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                      <button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                         data-bs-target="#updateModal" @click="inputUpdateData(coach)">
                         修改
                       </button>

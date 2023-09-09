@@ -5,10 +5,10 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">場地租借</h1>
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">場地租借</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button class="btn btn btn-primary" @click="exportXlsx" style="margin-bottom: 10px">
+                            <button class="btn mb-3 btn-primary" @click="exportXlsx">
                                 匯出訂單
                             </button>
                             <table id="table1" class="table table-bordered">
@@ -37,7 +37,7 @@
                                         <td>{{ rentOrder.rentdate }}</td>
                                         <td>{{ rentOrder.renttime }}</td>
                                         <td>{{ rentOrder.rentstatus }}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal">修改</button></td>
                                     </tr>
                                 </tbody>
@@ -82,7 +82,6 @@
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">送出</button>
                     </div>
-
                 </div>
             </div>
         </div>

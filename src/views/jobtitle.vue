@@ -7,10 +7,10 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">職稱管理</h1>
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">職稱管理</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                            <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增職稱</button>
                             <table id="specialtysTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
@@ -22,11 +22,11 @@
                                 </thead>
                                 <tbody class="align-middle text-center">
                                     <tr v-for="jobTitle in allJobTItles" :key="jobTitle.jobtitleid">
-                                        <td>{{ jobTitle.jobtitlename}}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td>{{ jobTitle.jobtitlename }}</td>
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(jobTitle)">修改</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal" @click="inputDeleteData(jobTitle)">刪除</button>
                                         </td>
                                     </tr>
@@ -168,7 +168,7 @@ const insertData = async () => {
     }
 
     try {
-        const response = await axios.post(`${url}/jobtitles`, { jobtitlename: insertJobTitle.jobtitlename})
+        const response = await axios.post(`${url}/jobtitles`, { jobtitlename: insertJobTitle.jobtitlename })
         if (response.status === 200) {
             loadDatas(); // 重新載入資料
             insertJobTitle.jobtitlename = ''; // 清空 insertJobTitleid

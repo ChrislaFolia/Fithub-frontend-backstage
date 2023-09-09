@@ -7,11 +7,11 @@
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
                     <!-- 標題 -->
-                    <h1 class="mt-4" style="text-align: center;">全部活動</h1>
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">全部活動</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal"
-                                style="margin-bottom: 10px;">新增活動</button>
+                            <button class="btn mb-3 btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#insertModal">新增活動</button>
                             <table class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">

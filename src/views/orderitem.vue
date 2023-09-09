@@ -5,8 +5,8 @@
     <div id="layoutSidenav">
       <div id="layoutSidenav_content">
         <div class="container-fluid px-4">
-          <h1 class="mt-4" style="text-align: center">訂單項目</h1>
-          <div class="card mb-4">
+          <h1 class="mt-4 text-center">訂單項目</h1>
+          <div class="card">
             <div class="card-body table-responsive">
               <table class="table table-bordered">
                 <thead class="align-middle text-center">
@@ -21,10 +21,7 @@
                 </thead>
 
                 <tbody class="align-middle text-center">
-                  <tr
-                    v-for="(orderitem, orderitemindex) in orderitems"
-                    :key="orderitemindex"
-                  >
+                  <tr v-for="(orderitem, orderitemindex) in orderitems" :key="orderitemindex">
                     <td>{{ orderitem.orderId }}</td>
                     <td>{{ orderitem.classes.course.courseName }}</td>
                     <td>

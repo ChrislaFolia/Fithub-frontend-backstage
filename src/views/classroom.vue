@@ -7,10 +7,9 @@
         <div class="container-fluid px-4">
           <!-- 標題 -->
           <h1 class="mt-4" style="text-align: center">教室場地</h1>
-          <div class="card mb-4">
+          <div class="card">
             <div class="card-body table-responsive">
-              <button class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal"
-                style="margin-bottom: 10px">
+              <button class="btn mb-3 btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal">
                 新增教室
               </button>
               <table class="table table-bordered">

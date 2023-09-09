@@ -7,10 +7,10 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">專長項目</h1>
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">專長項目</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                            <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增專長</button>
                             <table id="specialtysTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
@@ -25,11 +25,13 @@
                                     <tr v-for="coachSpec in allCoachSpecs" :key="coachSpec.specialtyid">
                                         <td>{{ coachSpec.employee.employeename }}</td>
                                         <td>{{ coachSpec.specialty.specialtyname }}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#updateModal" @click="inputUpdateData(coachSpec)">修改</button>
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#updateModal"
+                                                @click="inputUpdateData(coachSpec)">修改</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" @click="inputDeleteData(coachSpec)">刪除</button>
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
+                                                @click="inputDeleteData(coachSpec)">刪除</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -51,14 +53,15 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             教練名稱:
-                            <input type="text" class="form-control" v-model="updateCoachSpecialtyEmployee.employeename" readonly>
+                            <input type="text" class="form-control" v-model="updateCoachSpecialtyEmployee.employeename"
+                                readonly>
                             <span v-if="!updateCoachSpecialty.employeeid" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
                             專長名稱:
                             <select v-model="updateCoachSpecialty.specialtyid">
-                                <option v-for="spec in allSpecs" :key="spec.specialtyid"
-                                    :value="spec.specialtyid">{{ spec.specialtyname }}
+                                <option v-for="spec in allSpecs" :key="spec.specialtyid" :value="spec.specialtyid">{{
+                                    spec.specialtyname }}
                                 </option>
                             </select>
                             <span v-if="!updateCoachSpecialty.specialtyid" class="text-danger">必填</span>
@@ -85,8 +88,8 @@
                         <div class="mb-3">
                             教練名稱:
                             <select v-model="insertCoachSpecialty.employeeid">
-                                <option v-for="coach in allCoachs" :key="coach.employeeid"
-                                    :value="coach.employeeid">{{ coach.employeename }}
+                                <option v-for="coach in allCoachs" :key="coach.employeeid" :value="coach.employeeid">{{
+                                    coach.employeename }}
                                 </option>
                             </select>
                             <span v-if="!insertCoachSpecialty.employeeid" class="text-danger">必填</span>
@@ -94,8 +97,8 @@
                         <div class="mb-3">
                             專長名稱:
                             <select v-model="insertCoachSpecialty.specialtyid">
-                                <option v-for="spec in allSpecs" :key="spec.specialtyid"
-                                    :value="spec.specialtyid">{{ spec.specialtyname }}
+                                <option v-for="spec in allSpecs" :key="spec.specialtyid" :value="spec.specialtyid">{{
+                                    spec.specialtyname }}
                                 </option>
                             </select>
                             <span v-if="!insertCoachSpecialty.specialtyid" class="text-danger">必填</span>
@@ -120,12 +123,14 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             教練名稱:
-                            <input type="text" class="form-control" v-model="deleteCoachSpecialtyEmployee.employeename" readonly>
+                            <input type="text" class="form-control" v-model="deleteCoachSpecialtyEmployee.employeename"
+                                readonly>
                             <span v-if="!deleteCoachSpecialty.employeeid" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
                             專長名稱:
-                            <input type="text" class="form-control" v-model="deleteCoachSpecialtySpecialty.specialtyname" readonly>
+                            <input type="text" class="form-control" v-model="deleteCoachSpecialtySpecialty.specialtyname"
+                                readonly>
                             <span v-if="!deleteCoachSpecialty.specialtyid" class="text-danger">必填</span>
                         </div>
                     </div>
@@ -210,7 +215,7 @@ const insertData = async () => {
     }
 
     try {
-        const response = await axios.post(`${url}/coachspecialtys`, { employeeid: insertCoachSpecialty.employeeid , specialtyid: insertCoachSpecialty.specialtyid})
+        const response = await axios.post(`${url}/coachspecialtys`, { employeeid: insertCoachSpecialty.employeeid, specialtyid: insertCoachSpecialty.specialtyid })
         if (response.status === 200) {
             loadDatas(); // 重新載入資料
             insertCoachSpecialty.specialtyid = ''; // 清空 insertCoachSpecialtyid
