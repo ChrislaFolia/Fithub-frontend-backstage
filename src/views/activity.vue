@@ -48,7 +48,7 @@
                                         <td>{{ Activity.activityon }}</td>
                                         <td>{{ Activity.activityoff }}</td>
                                         <td>{{ Activity.employee.employeename }}</td>
-                                        <td><img :src="Activity.activitypic" style="width: 150px;height: 150px;" alt="維修中">
+                                        <td><img :src="Activity.activitypic" style="width: 250px;height: 250px;" alt="維修中">
                                         </td>
                                         <td><button class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 @click="openUpdateModal(Activity)" data-bs-target="#updateModal">修改</button>

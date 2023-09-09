@@ -46,22 +46,25 @@
 
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
       data-bs-backdrop="static">
-      <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-dialog  modal-lg modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">修改教練照片</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="mb-3">
-              教練編號: {{ updateEmp.employeeid }}
+            <div>
+              <span class="ms-3">教練編號: {{ updateEmp.employeeid }}</span>
+              <span class="ms-3">教練姓名: {{ updateEmp.employeename }}</span>
             </div>
-            <div class="mb-3">
-              教練姓名: {{ updateEmp.employeename }}
+            <div>
+              <img class="m-3" style="width: 300px ;height: 300px;" v-for="cpic in updateCoachPic"
+                :src="`data:image/jpeg;base64,${cpic.cpicfile}`" @click="inputDeleteData(cpic)" />
             </div>
-            <img style="width: 200px" v-for="cpic in updateCoachPic" :src="`data:image/jpeg;base64,${cpic.cpicfile}`"
-              @click="inputDeleteData(cpic)" />
-            <input id="inputImg" type="file" multiple />
+            <span class="text-danger  ms-3">*點擊圖片可刪除</span>
+            <div class="mt-3 ms-3">
+              <input id="inputImg" type="file" multiple />
+            </div>
             <!-- <div class="mb-3">
                             員工編號: {{ updateBackStageAccount.cpicid }}
                         </div>
@@ -155,7 +158,7 @@ onMounted(() => {
     try {
       await uploadImage()
       let inputImg = document.getElementById("inputImg");
-      inputImg.value='';
+      inputImg.value = '';
     } catch (error) { }
   });
 });
