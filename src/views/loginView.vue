@@ -1,38 +1,41 @@
 <template>
-
     <body class="bg-secondary">
-    <div id="layoutAuthentication">
-        <div id="layoutAuthentication_content">
-            <main>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5">
-                            <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header">
-                                    <h3 class="text-center font-weight-light my-4">登入</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-floating mb-3">
-                                        <input class="form-control" id="userAccount" name="account" type="text" v-model="account"/>
-                                        <label>帳號</label>
+        <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content"
+                style="background-image: url(src/assets/indexpic/1.jpg);background-repeat: no-repeat;background-size: cover;">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-4">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header">
+                                        <h3 class="text-center font-weight-light my-4">登入</h3>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input class="form-control" id="userPassword" name="password" type="password" v-model="password" />
-                                        <label>密碼</label>
+                                    <div class="card-body">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="userAccount" name="account" type="text"
+                                                v-model="account" />
+                                            <label>帳號</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="userPassword" name="password" type="password"
+                                                v-model="password" />
+                                            <label>密碼</label>
+                                        </div>
+                                        <div class="text-center">
+                                            <input type="button" class="btn btn-primary" id="send" value="Login"
+                                                @click="submit()">
+                                        </div>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                        <input type="button" class="btn btn-primary" id="send" value="Login" @click="submit()">
-                                    </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </template>
 <script>
 import { login } from "@/api/login"
@@ -45,10 +48,10 @@ export default {
         }
     },
     methods: {
-        async submit(){
+        async submit() {
             let res = await login(this.account, this.password)
-            if(res.status==0){
-                router.push({name:"home"})
+            if (res.status == 0) {
+                router.push({ name: "home" })
             }
         }
     }
