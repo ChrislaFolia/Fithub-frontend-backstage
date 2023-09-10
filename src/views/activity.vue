@@ -18,12 +18,12 @@
                                         <th>
                                             <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
                                         </th>
-                                        <th>活動編號</th>
-                                        <th>活動日期</th>
+                                        <!-- <th>活動編號</th> -->
+                                        <th>新增日期</th>
                                         <th>名稱</th>
                                         <th>活動內容</th>
                                         <th>顯示</th>
-                                        <th>排序</th>
+                                        <th>排序<i class="bi bi-patch-question-fill" title="請輸入正整數，數字越大首頁顯示越前面"></i></th>
                                         <th>上架日期</th>
                                         <th>下架日期</th>
                                         <th>負責員工</th>
@@ -37,9 +37,9 @@
                                         <td><input type="checkbox" v-model="selectedActivities"
                                                 :value="Activity.activityid">
                                         </td>
-                                        <td>{{ Activity.activityid }}</td>
+                                        <!-- <td>{{ Activity.activityid }}</td> -->
                                         <td>{{ Activity.activitydate }}</td>
-                                        <td>{{ Activity.activityname }}</td>
+                                        <td style="width:10%">{{ Activity.activityname }}</td>
                                         <!-- <td>{{ Activity.activitydescription }}</td> -->
                                         <td><a :href="'http://localhost:5173/activity?activityid=' + Activity.activityid"
                                                 target="_blank"><i class="fas fa-link"></i>預覽</a></td>

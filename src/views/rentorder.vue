@@ -8,6 +8,15 @@
                     <h1 class="mt-4 text-center">場地租借</h1>
                     <div class="card">
                         <div class="card-body table-responsive">
+                            <div class="col-3 mb-3">
+                                <select class="form-select" @change="changeHandler(-1)" v-model.number="row">
+                                    <option value=5 selected>每頁 5 筆資料</option>
+                                    <option value=10>每頁 10 筆資料</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <input type="search" class="form-control mb-3">
+                            </div>
                             <button class="btn mb-3 btn-primary" @click="exportXlsx">
                                 匯出訂單
                             </button>
@@ -28,7 +37,7 @@
                                 </thead>
 
                                 <tbody class="align-middle text-center">
-                                    <tr v-for="(rentOrder, rentorderindex) in rentOrders" :key="rentorderindex">
+                                    <tr v-for="(rentOrder, rentorderindex) in rentorderPage.content" :key="rentorderindex">
                                         <td><input type="checkbox" v-model="selectedRentOrderIds"
                                                 :value="rentOrder.rentorderid"></td>
                                         <td>{{ rentOrder.rentorderdate }}</td>
@@ -42,6 +51,17 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <nav>
+                                <ul class="pagination pagination-sm">
+                                    <li class="page-item" v-for="(value, index) in rentorderPage.totalPages" :key="index">
+                                        <a class="page-link"
+                                            :class="{ 'selected-page': value - 1 === rentorderPage.number }"
+                                            @click="changeHandler(value)">
+                                            {{ value }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -90,14 +110,16 @@
   
 <script setup>
 import axios from 'axios'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+
 import * as XLSX from 'xlsx'
 
 const rentOrders = ref([]); // 使用 ref 創建一個響應式變數
 const selectedRentOrderIds = ref([]); // 儲存選中的 rentorderid
 const xlsxData = ref([]) //儲存匯出xlsx需要的資料
+const rentorderPage = ref([])
 
 // 將json資料匯出xlsx檔
 function exportXlsx() {
@@ -107,13 +129,62 @@ function exportXlsx() {
     XLSX.writeFile(wb, 'RentOrder.xlsx')
 }
 
-// 從伺服器獲取 JSON 資料
-const getrentorder = async () => {
-    try {
-        const response = await axios.get('http://localhost:8080/fithub/rent/list'); // 替換為實際的 API URL
-        rentOrders.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
 
-        xlsxData.value = rentOrders.value.map(rentOrder => ({
+// 分頁 預設5筆資料 第0頁
+let row = ref(5);
+const page = reactive({
+    number: 0,
+    row: row.value,
+    sort: 0
+})
+
+const changeHandler = (value) => {
+    page.row = row.value
+    //
+    if (value >= 0) {
+        page.number = value - 1;
+    } else {
+        page.number = 0
+    }
+    getrentorderpage();
+};
+
+
+
+// 從伺服器獲取 JSON 資料
+// const getrentorder = async () => {
+//     try {
+//         const response = await axios.get('http://localhost:8080/fithub/rent/list'); // 替換為實際的 API URL
+//         rentOrders.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
+
+//         xlsxData.value = rentOrders.value.map(rentOrder => ({
+//             rentOrderId: rentOrder.rentorderid,
+//             rentOrderDate: rentOrder.rentorderdate,
+//             memberName: rentOrder.member.membername,
+//             classroomName: rentOrder.classroom.classroomName,
+//             rentDate: rentOrder.rentdate,
+//             rentTime: rentOrder.renttime,
+//             rentStatus: rentOrder.rentstatus,
+//         }));
+
+//         console.log(rentOrders.value)
+
+//     } catch (error) {
+//         console.error('Error getrentorder data:', error);
+//     }
+// };
+
+// 從伺服器獲取訂單分頁資料
+const getrentorderpage = async () => {
+    try {
+
+        // console.log(page)
+        const response = await axios.post('http://localhost:8080/fithub/rent/findallpage', page); // 替換為實際的 API URL
+        rentorderPage.value = response.data;
+        console.log(rentorderPage.value.content)
+
+        // 挑選需要的欄位輸出成檔案
+        xlsxData.value = rentorderPage.value.content.map(rentOrder => ({
             rentOrderId: rentOrder.rentorderid,
             rentOrderDate: rentOrder.rentorderdate,
             memberName: rentOrder.member.membername,
@@ -123,7 +194,7 @@ const getrentorder = async () => {
             rentStatus: rentOrder.rentstatus,
         }));
 
-        console.log(rentOrders.value)
+        // console.log(xlsxData.value)
 
     } catch (error) {
         console.error('Error getrentorder data:', error);
@@ -152,8 +223,17 @@ const deleteSelected = async () => {
 
 
 onMounted(() => {
-    getrentorder();
+    // getrentorder();
+    getrentorderpage();
 });
 </script>
 
-<style></style>
+<style scoped>
+.pagination li {
+    cursor: pointer;
+}
+
+.selected-page {
+    background-color: lightblue;
+}
+</style>
