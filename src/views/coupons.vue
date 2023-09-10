@@ -60,7 +60,7 @@
                     </td>
                     <td>{{ coupon.couponthreshold }}</td>
                     <td>{{ coupon.coupondiscount }}</td>
-                    <td>{{ coupon.couponused }}/{{ coupon.couponamount }}</td>
+                    <td>{{ coupon.couponused }}/{{ coupon.couponceil }}</td>
 
                     <td>
                       <button
@@ -190,8 +190,14 @@
                 class="form-control"
                 required="required"
               >
-                <option value="1">全站通用</option>
-                <option value="3">拳擊限定</option>
+              <option value="1">全站可使用</option>
+                <option value="2">重量訓練類限定</option>
+                <option value="3">有氧訓練類限定</option>
+                <option value="4">綜合體能類限定</option>
+                <option value="5">瑜珈類限定</option>
+                <option value="6">格鬥訓練類限定</option>
+                <option value="7">舞蹈類限定</option>
+                <option value="8">伸展類限定</option>
               </select>
               <span
                 v-if="!updateSelectedCoupon.couponcategoriesid"
