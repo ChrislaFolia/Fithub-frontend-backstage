@@ -15,7 +15,10 @@
                                 </select>
                             </div>
                             <div class="col-3">
-                                <input type="search" class="form-control mb-3">
+                                <i class="bi bi-patch-question-fill" title="請輸入西元年,年-月,年-月-日(月日請補0)"></i>
+                                <input type="search" class="form-control mb-3" @keyup="changeHandler(-1)" v-model="date"
+                                    placeholder="請輸入日期">
+
                             </div>
                             <button class="btn mb-3 btn-primary" @click="exportXlsx">
                                 匯出訂單
@@ -116,10 +119,9 @@ import NavbarLeft from '../components/NavbarLeft.vue'
 
 import * as XLSX from 'xlsx'
 
-const rentOrders = ref([]); // 使用 ref 創建一個響應式變數
+const rentorderPage = ref([])
 const selectedRentOrderIds = ref([]); // 儲存選中的 rentorderid
 const xlsxData = ref([]) //儲存匯出xlsx需要的資料
-const rentorderPage = ref([])
 
 // 將json資料匯出xlsx檔
 function exportXlsx() {
@@ -132,14 +134,16 @@ function exportXlsx() {
 
 // 分頁 預設5筆資料 第0頁
 let row = ref(5);
+let date = ref('')
 const page = reactive({
     number: 0,
     row: row.value,
-    sort: 0
+    date: date.value
 })
 
 const changeHandler = (value) => {
     page.row = row.value
+    page.date = date.value
     //
     if (value >= 0) {
         page.number = value - 1;
@@ -178,10 +182,10 @@ const changeHandler = (value) => {
 const getrentorderpage = async () => {
     try {
 
-        // console.log(page)
+        console.log(page)
         const response = await axios.post('http://localhost:8080/fithub/rent/findallpage', page); // 替換為實際的 API URL
         rentorderPage.value = response.data;
-        console.log(rentorderPage.value.content)
+        console.log(rentorderPage.value)
 
         // 挑選需要的欄位輸出成檔案
         xlsxData.value = rentorderPage.value.content.map(rentOrder => ({
