@@ -17,8 +17,7 @@
                             <div class="col-3">
                                 <i class="bi bi-patch-question-fill" title="請輸入西元年,年-月,年-月-日(月日請補0)"></i>
                                 <input type="search" class="form-control mb-3" @keyup="changeHandler(-1)" v-model="date"
-                                    placeholder="請輸入日期">
-
+                                    placeholder="請輸入訂單日期查詢">
                             </div>
                             <button class="btn mb-3 btn-primary" @click="exportXlsx">
                                 匯出訂單
@@ -217,7 +216,7 @@ const deleteSelected = async () => {
             });
 
             // 刷新資料
-            getrentorder();
+            getrentorderpage();
             selectedRentOrderIds.value = []; // 清空選中的項目
         } catch (error) {
             console.error('Error deleting rent orders:', error);
@@ -227,7 +226,6 @@ const deleteSelected = async () => {
 
 
 onMounted(() => {
-    // getrentorder();
     getrentorderpage();
 });
 </script>
