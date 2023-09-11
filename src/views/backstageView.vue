@@ -7,6 +7,7 @@
                 <div class="container-fluid px-4">
                     <!-- 標題 -->
                     <h1 class="mt-4 text-center">Dashboard</h1>
+                    <hr>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card mb-4">
@@ -30,9 +31,18 @@
                             <div class="card mb-4">
                                 <div class="card-header">
                                     <i class="fas fa-chart-bar me-1"></i>
-                                    購課比例
+                                    購課類型
                                 </div>
-                                <Doughnut :options="options" :data="doughnutData"/>
+                                <Doughnut :options="options" :data="doughnutBuyData" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card mb-4 ">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    會員年齡層
+                                </div>
+                                <Doughnut :options="options" :data="doughnutMemberData" />
                             </div>
                         </div>
                     </div>
@@ -53,9 +63,9 @@ import { PointElement, LineElement } from 'chart.js';
 // 圓餅圖
 import { Doughnut } from 'vue-chartjs'
 // 導入圖表模塊
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale ,ArcElement} from 'chart.js'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
 // 註冊導入的模塊和元素
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement,ArcElement)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement, ArcElement)
 
 // 長條圖
 const barData = {
@@ -90,22 +100,41 @@ const lineData = {
     ]
 }
 
-// 圓餅圖
-const doughnutData = {
-  labels: ['空中瑜珈', '飛輪', '自由重量訓練', '街舞', 'TRX', '散打', '機械訓練', '壺鈴', '太極', '跳繩', '拳擊'],
-  datasets: [
-    {
-      backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#9A42E1', '#F0A500', '#23D160', '#2D4059', '#EF476F', '#FFD166', '#06D6A0'],
-      data: [40, 20, 80, 10, 30, 45, 55, 15, 25, 35, 50]
-    }
-  ]
+// 購課類型圓餅圖
+const doughnutBuyData = {
+    labels: ['重量訓練', '有氧運動', '綜合體能', '瑜伽', '格鬥訓練', '舞蹈', '伸展'],
+    datasets: [
+        {
+            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#9A42E1', '#F0A500', '#23D160', '#2D4059', '#EF476F', '#FFD166', '#06D6A0'],
+            data: [40, 20, 80, 10, 30, 45, 55]
+        }
+    ]
+}
+
+// 會員年齡層圓餅圖
+const doughnutMemberData = {
+    labels: ['1-24歲', '25-49歲', '50-65歲', '66-100歲'],
+    datasets: [
+        {
+            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#9A42E1', '#F0A500', '#23D160', '#2D4059', '#EF476F', '#FFD166', '#06D6A0'],
+            data: [30, 50, 10, 3]
+        }
+    ]
 }
 
 //設定圖表
 const options = {
     responsive: true,
-    //   maintainAspectRatio: true
+    // maintainAspectRatio: true
 }
-
-
 </script>
+
+
+<style scoped>
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 40vh;
+    width: 40vw;
+}
+</style>
