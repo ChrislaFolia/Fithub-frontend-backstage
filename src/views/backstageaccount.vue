@@ -249,13 +249,6 @@ const changeHandler = value => {
     loadDatas()
 }
 
-//排序
-const sortHandler = type => {
-    datas.sortOrder = datas.sortOrder === "asc" ? "desc" : "asc"
-    datas.sortType = type
-    loadDatas()
-}
-
 //搜尋
 const inputHandler = value => {
     datas.name = value

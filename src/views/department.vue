@@ -11,6 +11,13 @@
                         <div class="card-body table-responsive">
                             <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增部門</button>
+
+                            <div class="col-3" style="padding-top: 20px;">
+                                <PageSize @pageSizeChange="changeHandler"></PageSize>
+                            </div>
+                            <div class="col-3">
+                                <SearchTextBox @searchInput="inputHandler"></SearchTextBox>
+                            </div>
                             <table id="departmentsTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -31,6 +38,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <Paging :totalPages="totalPages" :thePage="datas.start + 1" @abcClick="clickHandler"></Paging>
                         </div>
                     </div>
                 </div>
@@ -111,6 +119,9 @@ import axios from 'axios';
 import { ref, reactive, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+import Paging from "../components/Paging.vue";
+import PageSize from "../components/PageSize.vue";
+import SearchTextBox from '../components/SearchTextBox.vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertDepartment = reactive({
@@ -122,18 +133,61 @@ const deleteDepartment = reactive({});
 //存所有dept資料
 const allDepts = ref([])
 
-const loadDatas = async () => {
-    //透過get方法呼叫/products/find 傳datas資料
+const totalPages = ref(0);
+const datas = reactive({
+    start: 0,
+    rows: 5,
+    name: null,
+    sortOrder: "asc",
+    sortType: "id",
+});
 
-    const response = await axios.get(`${url}/departments`)
 
-    allDepts.value = response.data
-
-}
 
 onMounted(() => {
     loadDatas()
 });
+
+const loadDatas = async () => {
+    //透過get方法呼叫/products/find 傳datas資料
+
+    const response = await axios.post(`${url}/departments/findPageByName`,datas)
+
+    allDepts.value = response.data.list
+
+    console.log(response.data)
+    
+    totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
+
+}
+
+//paging 由子元件觸發
+const clickHandler = page => {
+    datas.start = page - 1
+    loadDatas()
+}
+
+//一頁幾筆資料
+const changeHandler = value => {
+    datas.rows = value
+    datas.start = 0
+    loadDatas()
+}
+
+//排序
+// const sortHandler = type => {
+//     datas.sortOrder = datas.sortOrder === "asc" ? "desc" : "asc"
+//     datas.sortType = type
+//     loadDatas()
+// }
+
+//搜尋
+const inputHandler = value => {
+    datas.name = value
+    datas.start = 0
+    loadDatas()
+}
+
 
 const inputUpdateData = (data) => {
     Object.assign(updateDepartment, data);
