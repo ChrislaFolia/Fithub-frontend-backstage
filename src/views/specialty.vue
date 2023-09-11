@@ -128,9 +128,6 @@ const loadDatas = async () => {
     const response = await axios.get(`${url}/specialtys`)
 
     allSpecs.value = response.data
-
-    console.log(allSpecs.value)
-
 }
 
 onMounted(() => {

@@ -9,13 +9,10 @@ import Classroom from "./Navbar_Classroom.vue";
 import Member from "./Navbar_member.vue";
 import Coupons from "./Navbar_Coupons.vue";
 import Orders from "./Navbar_Orders.vue";
-import TestNavbar from "./NavbarTest.vue";
 const selectedOption = ref("both"); // 預設選擇單一 Activity 組件
 
 onMounted(() => {
   selectedOption.value = window.localStorage.getItem("loa");
-  console.log(selectedOption.value);
-  console.log(typeof selectedOption.value);
 });
 </script>
 
@@ -31,11 +28,10 @@ onMounted(() => {
               <Course></Course>
               <RentOrder></RentOrder>
               <Classroom></Classroom>
-              <Member></Member>
-              <Organize></Organize>
-              <TestNavbar></TestNavbar>
               <Coupons></Coupons>
               <Orders></Orders>
+              <Member></Member>
+              <Organize></Organize>
             </div>
             <div v-else-if="selectedOption === '2'">
               <Announcement></Announcement>
@@ -43,9 +39,9 @@ onMounted(() => {
               <Course></Course>
               <RentOrder></RentOrder>
               <Classroom></Classroom>
-              <Member></Member>
               <Coupons></Coupons>
               <Orders></Orders>
+              <Member></Member>
             </div>
             <div v-else-if="selectedOption === '1'">
               <Announcement></Announcement>

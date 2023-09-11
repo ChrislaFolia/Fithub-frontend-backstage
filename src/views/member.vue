@@ -169,7 +169,6 @@ const clickHandler = page => {
 const changeHandler = value => {
     datas.rows = value
     datas.start = 0
-    console.log("pagesize：", datas)
     loadDatas()
 }
 
@@ -210,7 +209,6 @@ const deleteData = async () => {
 
 
     } catch (error) {
-        console.log(error.response)
         alert("刪除失敗")
     } finally {
         //不管是否成功 modal切換

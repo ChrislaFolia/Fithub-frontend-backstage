@@ -189,7 +189,6 @@ const getcouponcategoriess = async () => {
   try {
     const response = await axios.get(`${URL}/coupon-categories`); // 替換為實際的 API URL
     couponcategoriess.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
-    console.log(getcouponcategoriess.value);
   } catch (error) {
     console.error("Error getcouponcategoriess data:", error);
   }

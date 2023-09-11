@@ -101,7 +101,6 @@ const getrentorder = async () => {
     try {
         const response = await axios.get('http://localhost:8080/fithub/rent/list'); // 替換為實際的 API URL
         rentOrders.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
-        console.log(rentOrders.value)
 
     } catch (error) {
         console.error('Error getrentorder data:', error);

@@ -175,7 +175,6 @@ const loadDatas = async () => {
     allSpecs.value = responseSpecialtys.data
     allCoachs.value = responseCoachs.data
 
-    console.log(allCoachSpecs.value)
 
 }
 
@@ -201,8 +200,6 @@ const insertData = async () => {
     var myModalEl = document.getElementById('insertModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(!insertCoachSpecialty.employeeid)
-    console.log(!insertCoachSpecialty.specialtyid)
     //如果沒有值 return 不做
     if (!insertCoachSpecialty.employeeid || !insertCoachSpecialty.specialtyid) {
         alert("請輸入正確資料")
@@ -259,8 +256,6 @@ const deleteData = async () => {
     //抓彈出視窗
     var myModalEl = document.getElementById('deleteModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
-
-    console.log(deleteCoachSpecialty)
 
     // 如果沒有值 return 不做
     if (!deleteCoachSpecialty.coachspecialtyid) {

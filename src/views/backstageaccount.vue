@@ -133,7 +133,7 @@
                         <div class="mb-3">
                             權限等級:
                             <select v-model="insertBackStageAccount.loa">
-                                <option v-for="loa in 5" :key="loa" :value="loa">{{ loa }}
+                                <option v-for="loa in 3" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
                         </div>
@@ -226,9 +226,7 @@ const loadDatas = async () => {
     allBackStageAccounts.value = response.data.list
     allEmps.value = responseEmp.data.list
 
-    console.log(allEmps.value)
 
-    console.log(response.data)
     // 計算總共幾頁
     totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
 
@@ -248,7 +246,6 @@ const clickHandler = page => {
 const changeHandler = value => {
     datas.rows = value
     datas.start = 0
-    console.log("pagesize：", datas)
     loadDatas()
 }
 
@@ -315,7 +312,6 @@ const insertData = async () => {
         return
     }
 
-    // console.log(insertEmployee)
     try {
         const response = await axios.post(`${url}/backstageaccounts`, insertBackStageAccount)
 
@@ -326,7 +322,6 @@ const insertData = async () => {
             alert("新增成功")
         }
     } catch (error) {
-        console.log(error)
         alert("新增失敗")
     } finally {
         //不管是否成功 modal切換
@@ -340,9 +335,7 @@ const updateData = async () => {
     var myModalEl = document.getElementById('updateModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(!updateBackStageAccount.employeeid)
-    console.log(!updateBackStageAccount.employeeaccount.trim())
-    console.log(!updateBackStageAccount.loa)
+
 
     // delete updateEmployee.department
     // delete updateEmployee.jobtitle
@@ -359,11 +352,8 @@ const updateData = async () => {
         return
     }
 
-    // console.log("updateEmployee")
-    // console.log(updateEmployee)
     try {
         const response = await axios.put(`${url}/backstageaccounts/${updateBackStageAccount.employeeaccount}`, updateBackStageAccount)
-        console.log("test2")
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
             alert("修改成功")
@@ -371,7 +361,6 @@ const updateData = async () => {
 
 
     } catch (error) {
-        console.log(error.response)
         alert("修改失敗")
     } finally {
         //不管是否成功 modal切換
@@ -400,7 +389,6 @@ const deleteData = async () => {
 
 
     } catch (error) {
-        console.log(error.response)
         alert("刪除失敗")
     } finally {
         //不管是否成功 modal切換
@@ -410,8 +398,6 @@ const deleteData = async () => {
 }
 
 const checkinsertpassword = () => {
-    console.log(insertBackStageAccount.employeepassword)
-    console.log(insertagainpassword.password)
     if (insertBackStageAccount.employeepassword === insertagainpassword.password) {
         insertagainpassword.check = true
     } else {
@@ -420,15 +406,11 @@ const checkinsertpassword = () => {
 }
 
 const checkupdatepassword = () => {
-    console.log(updateBackStageAccount.employeepassword)
-    console.log(updateagainpassword.password)
     if (updateBackStageAccount.employeepassword === updateagainpassword.password) {
         updateagainpassword.check = true
     } else {
         updateagainpassword.check = false
     }
-
-    console.log(updateagainpassword.check)
 }
 
 </script>

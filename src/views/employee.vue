@@ -334,7 +334,6 @@ const loadDatas = async () => {
     allJobTitles.value = responseJobTitle.data
     allManagers.value = responseManager.data
 
-    console.log(response.data)
     // 計算總共幾頁
     totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
 
@@ -354,7 +353,6 @@ const clickHandler = page => {
 const changeHandler = value => {
     datas.rows = value
     datas.start = 0
-    console.log("pagesize：", datas)
     loadDatas()
 }
 
@@ -390,19 +388,6 @@ const insertData = async () => {
     var myModalEl = document.getElementById('insertModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(!insertEmployee.employeename.trim())
-    console.log(!insertEmployee.employeeemail.trim())
-    console.log(!insertEmployee.employeephone.trim())
-    console.log(!insertEmployee.employeegender.trim())
-    console.log(!insertEmployee.employeecity.trim())
-    console.log(!insertEmployee.employeezone.trim())
-    console.log(!insertEmployee.employeeaddress.trim())
-    console.log(!insertEmployee.deptid)
-    console.log(!insertEmployee.jobtitleid)
-    console.log(!insertEmployee.hiredate.trim())
-    console.log(!insertEmployee.salary)
-    console.log(!insertEmployee.employeebirthday.trim())
-
     // //如果沒有值 return 不做
     if (!insertEmployee.employeename.trim() ||
         !insertEmployee.employeeemail.trim() ||
@@ -421,7 +406,6 @@ const insertData = async () => {
         return;
     }
 
-    console.log(insertEmployee)
     try {
         const response = await axios.post(`${url}/employees`, insertEmployee)
 
@@ -432,7 +416,6 @@ const insertData = async () => {
             alert("新增成功")
         }
     } catch (error) {
-        console.log(error)
         alert("新增失敗")
     } finally {
         //不管是否成功 modal切換
@@ -445,22 +428,6 @@ const updateData = async () => {
     var myModalEl = document.getElementById('updateModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(updateEmployee.managerid)
-
-    // console.log(updateEmployee.department.deptname)
-
-    // console.log(!updateEmployee.employeename.trim())
-    // console.log(!updateEmployee.employeeemail.trim())
-    // console.log(!updateEmployee.employeephone.trim())
-    // console.log(!updateEmployee.employeegender.trim())
-    // console.log( !updateEmployee.employeecity.trim())
-    // console.log( !updateEmployee.employeezone.trim())
-    // console.log(!updateEmployee.employeeaddress.trim())
-    // console.log( !updateEmployee.deptid )
-    // console.log( !updateEmployee.jobtitleid.trim())
-    // console.log(!updateEmployee.hiredate.trim())
-    // console.log(!updateEmployee.salary)
-    // console.log( !updateEmployee.employeebirthday.trim())
     delete updateEmployee.department
     delete updateEmployee.jobtitle
 
@@ -481,11 +448,8 @@ const updateData = async () => {
         return;
     }
 
-    console.log("updateEmployee")
-    console.log(updateEmployee)
     try {
         const response = await axios.put(`${url}/employees/${updateEmployee.employeeid}`, updateEmployee)
-        console.log("test2")
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
             alert("修改成功")
@@ -493,7 +457,6 @@ const updateData = async () => {
 
 
     } catch (error) {
-        console.log(error.response)
         alert("修改失敗")
     } finally {
         //不管是否成功 modal切換
@@ -521,7 +484,6 @@ const deleteData = async () => {
 
 
     } catch (error) {
-        console.log(error.response)
         alert("刪除失敗")
     } finally {
         //不管是否成功 modal切換

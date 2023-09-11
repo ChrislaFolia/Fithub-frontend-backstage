@@ -137,7 +137,6 @@ const loadDatas = async () => {
 
     allJobTItles.value = responsJobTitles.data
 
-    console.log(allJobTItles.value)
 
 }
 
@@ -160,7 +159,6 @@ const insertData = async () => {
     var myModalEl = document.getElementById('insertModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(!insertJobTitle.jobtitlename)
     //如果沒有值 return 不做
     if (!insertJobTitle.jobtitlename) {
         alert("請輸入正確資料")
@@ -217,8 +215,6 @@ const deleteData = async () => {
     //抓彈出視窗
     var myModalEl = document.getElementById('deleteModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
-
-    console.log(deleteJobTitle)
 
     // 如果沒有值 return 不做
     if (!deleteJobTitle.jobtitleid) {

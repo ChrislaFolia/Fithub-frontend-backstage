@@ -178,7 +178,6 @@ const updateData = async () => {
 
 
     //如果沒有值 return 不做
-    console.log(updateDepartment.deptid + " " + updateDepartment.deptname.trim())
     if (!updateDepartment.deptid || !updateDepartment.deptname.trim()) {
         alert("請輸入正確資料")
         return;

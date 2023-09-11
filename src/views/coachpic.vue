@@ -170,7 +170,6 @@ const clickHandler = (page) => {
 const changeHandler = (value) => {
   datas.rows = value;
   datas.start = 0;
-  console.log("pagesize：", datas);
   loadDatas();
 };
 
@@ -190,7 +189,6 @@ const inputHandler = (value) => {
 
 // 點擊修改時觸發 帶入該筆資料
 const inputUpdateData = async (emp) => {
-  console.log("inputUpdateData");
   for (const key in updateCoachPic) {
     delete updateCoachPic[key];
   }
@@ -198,12 +196,9 @@ const inputUpdateData = async (emp) => {
   const responseCoachPics = await axios.get(`${url}/coachpics/byemp/${emp.employeeid}`);
   Object.assign(updateCoachPic, responseCoachPics.data);
 
-  console.log("updateCoachPic");
-  console.log(updateCoachPic);
 };
 
 const uploadImage = async () => {
-  console.log("uploadImage");
 
   if (!selectedFile.value || selectedFile.value.length === 0) {
     return;
@@ -220,7 +215,6 @@ const uploadImage = async () => {
 
       try {
         const response = await axios.post(`${url}/coachpics`, jsonPayload);
-        console.log(response.status)
         inputUpdateData(updateEmp.value)
       } catch (error) {
         console.error(error);
@@ -236,13 +230,8 @@ const inputDeleteData = (data) => {
   Object.assign(deleteCoachPic, data);
   let deletecheck = confirm('是否刪除')
   if (deletecheck) {
-    console.log("true")
-    console.log(deleteCoachPic)
     deleteData()
-  } else {
-    console.log("false")
   }
-  console.log(data)
 };
 
 const deleteData = async () => {
@@ -262,7 +251,6 @@ const deleteData = async () => {
     }
 
   } catch (error) {
-    console.log(error.response)
     alert("刪除失敗")
   }
 
