@@ -2,7 +2,6 @@
     <body class="sb-nav-fixed">
         <NavbarTop></NavbarTop>
         <NavbarLeft></NavbarLeft>
-
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
