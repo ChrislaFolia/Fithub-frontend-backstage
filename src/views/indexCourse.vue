@@ -11,13 +11,8 @@
             <div class="card mb-4">
               <div class="card-body table-responsive">
                 <div class="mb-3">
-                  <button
-                    type="button"
-                    id="insertCourse"
-                    class="btn btn btn-primary mb-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#insertModal"
-                  >
+                  <button type="button" id="insertCourse" class="btn btn btn-primary mb-1" data-bs-toggle="modal"
+                    data-bs-target="#insertModal">
                     新增課程資料
                   </button>
                 </div>
@@ -35,93 +30,54 @@
                     </tr>
                   </thead>
                   <tbody class="align-middle text-center">
-                    <tr
-                      v-for="{
-                        courseId,
-                        courseName,
-                        courseCategories,
-                        courseImgPath,
-                        courseDescription,
-                      } in courses"
-                      :key="courseId"
-                    >
+                    <tr v-for="{
+                      courseId,
+                      courseName,
+                      courseCategories,
+                      courseImgPath,
+                      courseDescription,
+                    } in courses" :key="courseId">
                       <td>
-                        <button
-                          type="button"
-                          class="btn btn-primary btn-sm"
-                          data-bs-toggle="modal"
-                          :data-bs-target="`#insertClassesModal${courseId}`"
-                        >
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                          :data-bs-target="`#insertClassesModal${courseId}`">
                           <i class="bi bi-plus"></i>
                         </button>
-                        <InsertClass
-                          class="text-left"
-                          :courseId="courseId"
-                          :courseName="courseName"
-                          @submitInsertCourse-emit="loadCourses"
-                        >
+                        <InsertClass class="text-left" :courseId="courseId" :courseName="courseName"
+                          @submitInsertCourse-emit="loadCourses">
                         </InsertClass>
                       </td>
                       <td>{{ courseCategories.categoryName }}</td>
                       <td>{{ courseName }}</td>
                       <td>
-                        <button
-                          type="button"
-                          class="btn btn-secondary btn-sm"
-                          data-bs-toggle="modal"
-                          :data-bs-target="`#staticBackdropPic${courseId}`"
-                        >
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                          :data-bs-target="`#staticBackdropPic${courseId}`">
                           檢視圖片
                         </button>
-                        <courseImg
-                          :parentId="courseId"
-                          :parentImgName="courseName"
-                          :parentImgPath="courseImgPath"
-                          modalTitle="課程圖片"
-                        ></courseImg>
+                        <courseImg :parentId="courseId" :parentImgName="courseName" :parentImgPath="courseImgPath"
+                          modalTitle="課程圖片"></courseImg>
                       </td>
                       <td>
-                        <button
-                          type="button"
-                          class="btn btn-secondary btn-sm"
-                          data-bs-toggle="modal"
-                          :data-bs-target="`#staticBackdrop${courseId}`"
-                        >
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                          :data-bs-target="`#staticBackdrop${courseId}`">
                           詳細內容
                         </button>
-                        <courseDescription
-                          :parentId="courseId"
-                          :parentDescription="courseDescription"
-                          modalTitle="課程描述"
-                        >
+                        <courseDescription :parentId="courseId" :parentDescription="courseDescription" modalTitle="課程描述">
                         </courseDescription>
                       </td>
                       <td>
-                        <button
-                          :id="`getUpdateCourseBtn${courseId}}`"
-                          class="btn btn-outline-secondary btn-sm"
-                          data-bs-toggle="modal"
-                          :data-bs-target="`#updateModal${courseId}`"
-                        >
+                        <button :id="`getUpdateCourseBtn${courseId}}`" class="btn btn-outline-secondary btn-sm"
+                          data-bs-toggle="modal" :data-bs-target="`#updateModal${courseId}`">
                           修改
                         </button>
-                        <UpdateCourse
-                          :categories="courseCategories"
-                          :courseId="courseId"
-                          :courseName="courseName"
-                          :courseImgPath="courseImgPath"
-                          :courseCategories="courseCategories"
-                          :courseDescription="courseDescription"
-                          :allCourseCategories="allCourseCategories"
-                          @submitUpdateCourse-emit="loadCourses"
-                        >
+                        <UpdateCourse :categories="courseCategories" :courseId="courseId" :courseName="courseName"
+                          :courseImgPath="courseImgPath" :courseCategories="courseCategories"
+                          :courseDescription="courseDescription" :allCourseCategories="allCourseCategories"
+                          @submitUpdateCourse-emit="loadCourses">
                         </UpdateCourse>
                       </td>
                       <td>
-                        <button
-                          @click="deleteCourse(`${courseId}`, `${courseName}`)"
-                          class="btn btn-outline-danger btn-sm"
-                        >
+                        <button @click="deleteCourse(`${courseId}`, `${courseName}`)"
+                          class="btn btn-outline-danger btn-sm">
                           刪除
                         </button>
                       </td>
@@ -135,10 +91,7 @@
       </div>
     </div>
 
-    <InsertCourse
-      :allCourseCategories="allCourseCategories"
-      @submitInsertCourse-emit="loadCourses()"
-    ></InsertCourse>
+    <InsertCourse :allCourseCategories="allCourseCategories" @submitInsertCourse-emit="loadCourses()"></InsertCourse>
   </body>
 </template>
 

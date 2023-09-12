@@ -8,9 +8,9 @@
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
                     <h1 class="mt-4" style="text-align: center;">專長項目</h1>
-                    <div class="card mb-4">
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                            <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增專長</button>
                             <table id="specialtysTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
@@ -23,10 +23,10 @@
                                 <tbody class="align-middle text-center">
                                     <tr v-for="spec in allSpecs" :key="spec.specialtyid">
                                         <td>{{ spec.specialtyname }}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(spec)">修改</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal" @click="inputDeleteData(spec)">刪除</button>
                                         </td>
                                     </tr>

@@ -6,10 +6,10 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">部門資料</h1>
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">部門資料</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                            <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增部門</button>
 
                             <div class="col-3" style="padding-top: 20px;">
@@ -29,10 +29,10 @@
                                 <tbody class="align-middle text-center">
                                     <tr v-for="dept in allDepts" :key="dept.deptid">
                                         <td>{{ dept.deptname }}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(dept)">修改</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal" @click="inputDeleteData(dept)">刪除</button>
                                         </td>
                                     </tr>

@@ -6,19 +6,17 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">員工資料</h1>
-
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">員工資料</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                data-bs-target="#insertModal">新增員工</button>
-
-                            <div class="col-3" style="padding-top: 20px;">
+                            <div class="col-3">
                                 <PageSize @pageSizeChange="changeHandler"></PageSize>
                             </div>
                             <div class="col-3">
                                 <SearchTextBox @searchInput="inputHandler"></SearchTextBox>
                             </div>
+                            <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                                data-bs-target="#insertModal">新增員工</button>
                             <table id="departmentsTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -40,10 +38,10 @@
                                         <td>{{ emp.employeephone }}</td>
                                         <td>{{ emp.employeeemail }}</td>
                                         <td>{{ emp.jobtitlename }}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(emp)">修改</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal" @click="inputDeleteData(emp)">刪除</button>
                                         </td>
                                     </tr>

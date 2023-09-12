@@ -2,28 +2,27 @@
     <body class="sb-nav-fixed">
         <NavbarTop></NavbarTop>
         <NavbarLeft></NavbarLeft>
-
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
                     <!-- 標題 -->
-                    <h1 class="mt-4" style="text-align: center;">全部活動</h1>
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">全部活動</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal"
-                                style="margin-bottom: 10px;">新增活動</button>
+                            <button class="btn mb-3 btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#insertModal">新增活動</button>
                             <table class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
                                         <th>
                                             <button class="btn btn-outline-danger" @click="deleteSelected">刪除</button>
                                         </th>
-                                        <th>活動編號</th>
-                                        <th>活動日期</th>
+                                        <!-- <th>活動編號</th> -->
+                                        <th>新增日期</th>
                                         <th>名稱</th>
                                         <th>活動內容</th>
                                         <th>顯示</th>
-                                        <th>排序</th>
+                                        <th>排序<i class="bi bi-patch-question-fill" title="請輸入正整數，數字越大首頁顯示越前面"></i></th>
                                         <th>上架日期</th>
                                         <th>下架日期</th>
                                         <th>負責員工</th>
@@ -37,18 +36,18 @@
                                         <td><input type="checkbox" v-model="selectedActivities"
                                                 :value="Activity.activityid">
                                         </td>
-                                        <td>{{ Activity.activityid }}</td>
+                                        <!-- <td>{{ Activity.activityid }}</td> -->
                                         <td>{{ Activity.activitydate }}</td>
-                                        <td>{{ Activity.activityname }}</td>
+                                        <td style="width:10%">{{ Activity.activityname }}</td>
                                         <!-- <td>{{ Activity.activitydescription }}</td> -->
-                                        <td><a :href="'http://localhost:5175/activity?activityid=' + Activity.activityid"
+                                        <td><a :href="'http://localhost:5173/activity?activityid=' + Activity.activityid"
                                                 target="_blank"><i class="fas fa-link"></i>預覽</a></td>
                                         <td>{{ Activity.activitydisplay }}</td>
                                         <td>{{ Activity.activitysort }}</td>
                                         <td>{{ Activity.activityon }}</td>
                                         <td>{{ Activity.activityoff }}</td>
                                         <td>{{ Activity.employee.employeename }}</td>
-                                        <td><img :src="Activity.activitypic" style="width: 150px;height: 150px;" alt="維修中">
+                                        <td><img :src="Activity.activitypic" style="width: 250px;height: 250px;" alt="維修中">
                                         </td>
                                         <td><button class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 @click="openUpdateModal(Activity)" data-bs-target="#updateModal">修改</button>

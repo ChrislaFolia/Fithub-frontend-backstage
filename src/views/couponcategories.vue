@@ -5,25 +5,17 @@
     <div id="layoutSidenav">
       <div id="layoutSidenav_content">
         <div class="container-fluid px-4">
-          <h1 class="mt-4" style="text-align: center">優惠券</h1>
+          <h1 class="mt-4 text-center">優惠券</h1>
           <div class="card mb-4">
             <div class="card-body table-responsive">
-              <button
-                class="btn btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#insertModal"
-                style="margin-bottom: 10px"
-              >
+              <button class="btn mb-3 btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal">
                 新增分類
               </button>
               <table class="table table-bordered">
                 <thead class="align-middle text-center">
                   <tr class="table-primary">
                     <th>
-                      <button
-                        class="btn btn-outline-danger"
-                        @click="deleteSelected"
-                      >
+                      <button class="btn btn-outline-danger" @click="deleteSelected">
                         刪除
                       </button>
                     </th>
@@ -33,28 +25,18 @@
                 </thead>
 
                 <tbody class="align-middle text-center">
-                  <tr
-                    v-for="(
+                  <tr v-for="(
                       couponcategories, couponcategoriesindex
-                    ) in couponcategoriess"
-                    :key="couponcategoriesindex"
-                  >
+                    ) in couponcategoriess" :key="couponcategoriesindex">
                     <td>
-                      <input
-                        type="checkbox"
-                        v-model="selectedCouponcategoriess"
-                        :value="couponcategories.couponcategoriesid"
-                      />
+                      <input type="checkbox" v-model="selectedCouponcategoriess"
+                        :value="couponcategories.couponcategoriesid" />
                     </td>
                     <td>{{ couponcategories.couponcategoriesname }}</td>
 
                     <td>
-                      <button
-                        class="btn btn-outline-info"
-                        data-bs-toggle="modal"
-                        @click="openUpdateModal(couponcategories)"
-                        data-bs-target="#updateModal"
-                      >
+                      <button class="btn btn-outline-info" data-bs-toggle="modal"
+                        @click="openUpdateModal(couponcategories)" data-bs-target="#updateModal">
                         修改
                       </button>
                     </td>
@@ -68,45 +50,22 @@
     </div>
 
     <!-- 修改-彈出視窗 -->
-    <div
-      class="modal fade"
-      id="updateModal"
-      tabindex="-1"
-      aria-labelledby="updateModal"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">更新教室</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              分類名稱<input
-                v-model="updateSelectedCouponcategories.couponcategoriesname"
-                type="text"
-                class="form-control"
-                required="required"
-              />
-              <span
-                v-if="!updateSelectedCouponcategories.couponcategoriesname"
-                class="text-danger"
-                >必填</span
-              >
+              分類名稱<input v-model="updateSelectedCouponcategories.couponcategoriesname" type="text" class="form-control"
+                required="required" />
+              <span v-if="!updateSelectedCouponcategories.couponcategoriesname" class="text-danger">必填</span>
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              @click="updateCouponcategories"
-            >
+            <button type="submit" class="btn btn-primary" @click="updateCouponcategories">
               送出
             </button>
           </div>
@@ -115,45 +74,22 @@
     </div>
 
     <!-- 新增-彈出視窗 -->
-    <div
-      class="modal fade"
-      id="insertModal"
-      tabindex="-1"
-      aria-labelledby="insertModal"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">新增分類</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              名稱<input
-                v-model="couponcategories.couponcategoriesname"
-                type="text"
-                class="form-control"
-                required="required"
-              />
-              <span
-                v-if="!couponcategories.couponcategoriesname"
-                class="text-danger"
-                >必填</span
-              >
+              名稱<input v-model="couponcategories.couponcategoriesname" type="text" class="form-control"
+                required="required" />
+              <span v-if="!couponcategories.couponcategoriesname" class="text-danger">必填</span>
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              @click="insertCouponcategories"
-            >
+            <button type="submit" class="btn btn-primary" @click="insertCouponcategories">
               送出
             </button>
           </div>
