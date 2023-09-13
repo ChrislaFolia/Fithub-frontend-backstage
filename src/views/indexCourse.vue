@@ -119,6 +119,10 @@ const datas = reactive({
   sortType: "id",
 });
 
+/*
+  Load datas
+*/
+
 // Load course data
 const courses = ref([]);
 const URL = import.meta.env.VITE_API_JAVAURL;
@@ -146,6 +150,10 @@ const loadAllCourseCategories = async () => {
   allCourseCategories.value = response.data;
   // console.log(allCourseCategories)
 };
+
+/*
+  methods
+*/
 
 // deleteCourse
 const deleteCourse = async (courseId, courseName) => {
@@ -183,6 +191,10 @@ const deleteCourse = async (courseId, courseName) => {
         })
   }
 };
+
+/*
+  LifeCycle Hooks
+*/
 
 onMounted(() => {
   loadCourses();
