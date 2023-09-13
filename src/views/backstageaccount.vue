@@ -81,7 +81,7 @@
                         </div>
                         <div class="mb-3">
                             權限等級:
-                            <select v-model="updateBackStageAccount.loa">
+                            <select class="form-control" v-model="updateBackStageAccount.loa">
                                 <option v-for="loa in 3" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
@@ -107,7 +107,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             員工:
-                            <select v-model="insertBackStageAccount.employeeid">
+                            <select class="form-select" v-model="insertBackStageAccount.employeeid">
                                 <option v-for="emp in allEmps" :key="emp.employeeid" :value="emp.employeeid">{{
                                     emp.employeeid + " " + emp.employeename }}
                                 </option>
@@ -130,7 +130,7 @@
                         </div>
                         <div class="mb-3">
                             權限等級:
-                            <select v-model="insertBackStageAccount.loa">
+                            <select class="form-control" v-model="insertBackStageAccount.loa">
                                 <option v-for="loa in 3" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>

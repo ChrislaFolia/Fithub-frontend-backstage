@@ -23,7 +23,6 @@ onMounted(() => {
         <div class="sb-sidenav-menu">
           <div class="nav">
             <div v-if="selectedOption === '3'">
-              <Announcement></Announcement>
               <Activity></Activity>
               <Course></Course>
               <RentOrder></RentOrder>
@@ -34,7 +33,6 @@ onMounted(() => {
               <Organize></Organize>
             </div>
             <div v-else-if="selectedOption === '2'">
-              <Announcement></Announcement>
               <Activity></Activity>
               <Course></Course>
               <RentOrder></RentOrder>
@@ -44,7 +42,6 @@ onMounted(() => {
               <Member></Member>
             </div>
             <div v-else-if="selectedOption === '1'">
-              <Announcement></Announcement>
               <Activity></Activity>
               <Course></Course>
               <RentOrder></RentOrder>

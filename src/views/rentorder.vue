@@ -87,14 +87,14 @@
                             預約日期:<input type="date" class="form-control" required="required">
                         </div>
                         <div class="mb-3">
-                            時段:<select class="form-control">
+                            時段:<select class="form-select">
                                 <option>早上</option>
                                 <option>下午</option>
                                 <option>晚上</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            租借狀態:<select class="form-control">
+                            租借狀態:<select class="form-select">
                                 <option>未付款</option>
                                 <option>已付款</option>
                                 <option>取消</option>

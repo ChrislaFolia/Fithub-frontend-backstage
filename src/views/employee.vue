@@ -79,7 +79,7 @@
                             <span v-if="!updateEmployee.employeephone" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            性別:<select v-model="updateEmployee.employeegender" id="gender">
+                            性別:<select class="form-select" v-model="updateEmployee.employeegender" id="gender">
                                 <option value="男">男</option>
                                 <option value="女">女</option>
                             </select>
@@ -99,7 +99,7 @@
                         </div>
                         <div class="mb-3">
                             部門:
-                            <select v-model="updateEmployee.deptid">
+                            <select class="form-select" v-model="updateEmployee.deptid">
                                 <option v-for="dept in allDepts" :key="dept.deptid" :value="dept.deptid">{{ dept.deptname }}
                                 </option>
                             </select>
@@ -108,7 +108,7 @@
 
                         <div class="mb-3">
                             職稱:
-                            <select v-model="updateEmployee.jobtitleid">
+                            <select class="form-select" v-model="updateEmployee.jobtitleid">
                                 <option v-for="jobtitle in allJobTitles" :key="jobtitle.jobtitleid"
                                     :value="jobtitle.jobtitleid">{{ jobtitle.jobtitlename }}
                                 </option>
@@ -117,7 +117,7 @@
                         </div>
                         <div class="mb-3">
                             主管:
-                            <select v-model="updateEmployee.managerid">
+                            <select class="form-select" v-model="updateEmployee.managerid">
                                 <option value="">無</option>
                                 <option v-for="manager in allManagers" :key="manager.employeeid"
                                     :value="manager.employeeid">{{ manager.employeename }}
@@ -174,7 +174,7 @@
                             <span v-if="!insertEmployee.employeephone" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            性別:<select v-model="insertEmployee.employeegender" id="gender">
+                            性別:<select class="form-select" v-model="insertEmployee.employeegender" id="gender">
                                 <option value="男">男</option>
                                 <option value="女">女</option>
                             </select>
@@ -194,7 +194,7 @@
                         </div>
                         <div class="mb-3">
                             部門:
-                            <select v-model="insertEmployee.deptid">
+                            <select class="form-select" v-model="insertEmployee.deptid">
                                 <option v-for="dept in allDepts" :key="dept.deptid" :value="dept.deptid">{{ dept.deptname }}
                                 </option>
                             </select>
@@ -202,7 +202,7 @@
                         </div>
                         <div class="mb-3">
                             職稱:
-                            <select v-model="insertEmployee.jobtitleid">
+                            <select class="form-select" v-model="insertEmployee.jobtitleid">
                                 <option v-for="jobtitle in allJobTitles" :key="jobtitle.jobtitleid"
                                     :value="jobtitle.jobtitleid">{{ jobtitle.jobtitlename }}
                                 </option>
@@ -211,7 +211,7 @@
                         </div>
                         <div class="mb-3">
                             主管:
-                            <select v-model="insertEmployee.managerid">
+                            <select class="form-select" v-model="insertEmployee.managerid">
                                 <option value="">無</option>
                                 <option v-for="manager in allManagers" :key="manager.employeeid"
                                     :value="manager.employeeid">{{ manager.employeename }}
@@ -326,6 +326,7 @@ const loadDatas = async () => {
     const responseDept = await axios.get(`${url}/departments`)
     const responseJobTitle = await axios.get(`${url}/jobtitles`)
     const responseManager = await axios.get(`${url}/employees/managers`)
+
 
     allEmps.value = response.data.list
     allDepts.value = responseDept.data
@@ -506,6 +507,6 @@ const deleteData = async () => {
 
 }
 
-</script>
+</script >
 
 <style></style>

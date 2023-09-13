@@ -66,7 +66,7 @@
                         </div>
                         <div class="mb-3">
                             專長名稱:
-                            <select v-model="updateCoachSpecialty.specialtyid">
+                            <select class="form-select" v-model="updateCoachSpecialty.specialtyid">
                                 <option v-for="spec in allSpecs" :key="spec.specialtyid" :value="spec.specialtyid">{{
                                     spec.specialtyname }}
                                 </option>
@@ -94,7 +94,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             教練名稱:
-                            <select v-model="insertCoachSpecialty.employeeid">
+                            <select class="form-select" v-model="insertCoachSpecialty.employeeid">
                                 <option v-for="coach in allCoachs" :key="coach.employeeid" :value="coach.employeeid">{{
                                     coach.employeename }}
                                 </option>
@@ -103,7 +103,7 @@
                         </div>
                         <div class="mb-3">
                             專長名稱:
-                            <select v-model="insertCoachSpecialty.specialtyid">
+                            <select class="form-select" v-model="insertCoachSpecialty.specialtyid">
                                 <option v-for="spec in allSpecs" :key="spec.specialtyid" :value="spec.specialtyid">{{
                                     spec.specialtyname }}
                                 </option>

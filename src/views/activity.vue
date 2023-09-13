@@ -81,7 +81,7 @@
                         </div>
                         顯示
                         <div class="mb-3">
-                            <select v-model="updateSelectedActivities.activitydisplay" class="form-control">
+                            <select v-model="updateSelectedActivities.activitydisplay" class="form-select">
                                 <option value="是">是</option>
                                 <option value="否">否</option>
                             </select>
@@ -101,7 +101,7 @@
                         </div>
                         負責員工
                         <div class="mb-3">
-                            <select v-model="updateSelectedActivities.employeeid" class="form-control">
+                            <select v-model="updateSelectedActivities.employeeid" class="form-select">
                                 <option v-for="employeenameAndemployeeid in AllemployeenameAndemployeeid"
                                     :value="employeenameAndemployeeid[1]">{{ employeenameAndemployeeid[0] }}</option>
                             </select>
@@ -145,7 +145,7 @@
                         </div>
                         顯示
                         <div class="mb-3">
-                            <select v-model="Activity.activitydisplay" class="form-control">
+                            <select v-model="Activity.activitydisplay" class="form-select">
                                 <option value="是">是</option>
                                 <option value="否">否</option>
                             </select>
@@ -165,7 +165,7 @@
                         </div>
                         負責員工
                         <div class="mb-3">
-                            <select v-model="Activity.employeeid" class="form-control">
+                            <select v-model="Activity.employeeid" class="form-select">
                                 <option v-for="employeenameAndemployeeid in AllemployeenameAndemployeeid"
                                     :value="employeenameAndemployeeid[1]">{{ employeenameAndemployeeid[0] }}</option>
                             </select>
