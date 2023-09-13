@@ -7,24 +7,16 @@
         <div class="container-fluid px-4">
           <!-- 標題 -->
           <h1 class="mt-4" style="text-align: center">教室場地</h1>
-          <div class="card mb-4">
+          <div class="card">
             <div class="card-body table-responsive">
-              <button
-                class="btn btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#insertModal"
-                style="margin-bottom: 10px"
-              >
+              <button class="btn mb-3 btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal">
                 新增教室
               </button>
               <table class="table table-bordered">
                 <thead class="align-middle text-center">
                   <tr class="table-primary">
                     <th>
-                      <button
-                        class="btn btn-outline-danger"
-                        @click="deleteSelected"
-                      >
+                      <button class="btn btn-outline-danger" @click="deleteSelected">
                         刪除
                       </button>
                     </th>
@@ -39,16 +31,9 @@
                 </thead>
 
                 <tbody class="align-middle text-center">
-                  <tr
-                    v-for="(classroom, classroomindex) in classrooms"
-                    :key="classroomindex"
-                  >
+                  <tr v-for="(classroom, classroomindex) in classrooms" :key="classroomindex">
                     <td>
-                      <input
-                        type="checkbox"
-                        v-model="selectedClassrooms"
-                        :value="classroom.classroomId"
-                      />
+                      <input type="checkbox" v-model="selectedClassrooms" :value="classroom.classroomId" />
                     </td>
                     <td>{{ classroom.classroomName }}</td>
                     <td>{{ classroom.classroomCapacity }}</td>
@@ -56,19 +41,11 @@
                     <td>{{ classroom.classroomPrice }}</td>
                     <td>{{ classroom.classroomStatus }}</td>
                     <td>
-                      <img
-                        :src="classroom.classroomPic"
-                        style="width: 150px; height: 150px"
-                        alt="維修中"
-                      />
+                      <img :src="classroom.classroomPic" style="width: 150px; height: 150px" alt="維修中" />
                     </td>
                     <td>
-                      <button
-                        class="btn btn-outline-secondary"
-                        data-bs-toggle="modal"
-                        @click="openUpdateModal(classroom)"
-                        data-bs-target="#updateModal"
-                      >
+                      <button class="btn btn-outline-secondary" data-bs-toggle="modal" @click="openUpdateModal(classroom)"
+                        data-bs-target="#updateModal">
                         修改
                       </button>
                     </td>
@@ -82,107 +59,47 @@
     </div>
 
     <!-- 修改-彈出視窗 -->
-    <div
-      class="modal fade"
-      id="updateModal"
-      tabindex="-1"
-      aria-labelledby="updateModal"
-      aria-hidden="true"
-      data-bs-backdrop="static"
-    >
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
+      data-bs-backdrop="static">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">更新教室</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              教室名稱<input
-                v-model="updateSelectedClassroom.classroomName"
-                type="text"
-                class="form-control"
-              />
-              <span
-                v-if="!updateSelectedClassroom.classroomName"
-                class="text-danger"
-                >必填</span
-              >
+              教室名稱<input v-model="updateSelectedClassroom.classroomName" type="text" class="form-control" />
+              <span v-if="!updateSelectedClassroom.classroomName" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              容納人數<input
-                v-model="updateSelectedClassroom.classroomCapacity"
-                type="text"
-                class="form-control"
-              />
-              <span
-                v-if="!updateSelectedClassroom.classroomCapacity"
-                class="text-danger"
-                >必填</span
-              >
+              容納人數<input v-model="updateSelectedClassroom.classroomCapacity" type="text" class="form-control" />
+              <span v-if="!updateSelectedClassroom.classroomCapacity" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              設備介紹<input
-                v-model="updateSelectedClassroom.classroomDescription"
-                type="text"
-                class="form-control"
-              />
-              <span
-                v-if="!updateSelectedClassroom.classroomDescription"
-                class="text-danger"
-                >必填</span
-              >
+              設備介紹<input v-model="updateSelectedClassroom.classroomDescription" type="text" class="form-control" />
+              <span v-if="!updateSelectedClassroom.classroomDescription" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              租借價格<input
-                v-model="updateSelectedClassroom.classroomPrice"
-                type="text"
-                class="form-control"
-              />
-              <span
-                v-if="!updateSelectedClassroom.classroomPrice"
-                class="text-danger"
-                >必填</span
-              >
+              租借價格<input v-model="updateSelectedClassroom.classroomPrice" type="text" class="form-control" />
+              <span v-if="!updateSelectedClassroom.classroomPrice" class="text-danger">必填</span>
             </div>
             教室狀態
             <div class="mb-3">
-              <select
-                v-model="updateSelectedClassroom.classroomStatus"
-                class="form-control"
-              >
+              <select v-model="updateSelectedClassroom.classroomStatus" class="form-select">
                 <option value="開放">開放</option>
                 <option value="關閉">關閉</option>
                 <option value="維修中">維修中</option>
               </select>
-              <span
-                v-if="!updateSelectedClassroom.classroomStatus"
-                class="text-danger"
-                >必填</span
-              >
+              <span v-if="!updateSelectedClassroom.classroomStatus" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
               教室圖片
-              <input
-                id="updatefile"
-                type="file"
-                class="form-control"
-                accept="image/*"
-                @change="imageUpdate"
-              />
+              <input id="updatefile" type="file" class="form-control" accept="image/*" @change="imageUpdate" />
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              @click="updateClassroom"
-            >
+            <button type="submit" class="btn btn-primary" @click="updateClassroom">
               送出
             </button>
           </div>
@@ -191,94 +108,47 @@
     </div>
 
     <!-- 新增-彈出視窗 -->
-    <div
-      class="modal fade"
-      id="insertModal"
-      tabindex="-1"
-      aria-labelledby="insertModal"
-      aria-hidden="true"
-      data-bs-backdrop="static"
-    >
+    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true"
+      data-bs-backdrop="static">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">新增教室</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              教室名稱<input
-                v-model="classroom.classroomName"
-                type="text"
-                class="form-control"
-              />
-              <span v-if="!classroom.classroomName" class="text-danger"
-                >必填</span
-              >
+              教室名稱<input v-model="classroom.classroomName" type="text" class="form-control" />
+              <span v-if="!classroom.classroomName" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              容納人數<input
-                v-model="classroom.classroomCapacity"
-                type="text"
-                class="form-control"
-              />
-              <span v-if="!classroom.classroomCapacity" class="text-danger"
-                >必填</span
-              >
+              容納人數<input v-model="classroom.classroomCapacity" type="text" class="form-control" />
+              <span v-if="!classroom.classroomCapacity" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              設備介紹<input
-                v-model="classroom.classroomDescription"
-                type="text"
-                class="form-control"
-              />
-              <span v-if="!classroom.classroomDescription" class="text-danger"
-                >必填</span
-              >
+              設備介紹<input v-model="classroom.classroomDescription" type="text" class="form-control" />
+              <span v-if="!classroom.classroomDescription" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              租借價格<input
-                v-model="classroom.classroomPrice"
-                type="text"
-                class="form-control"
-              />
-              <span v-if="!classroom.classroomPrice" class="text-danger"
-                >必填</span
-              >
+              租借價格<input v-model="classroom.classroomPrice" type="text" class="form-control" />
+              <span v-if="!classroom.classroomPrice" class="text-danger">必填</span>
             </div>
             教室狀態
             <div class="mb-3">
-              <select v-model="classroom.classroomStatus" class="form-control">
+              <select v-model="classroom.classroomStatus" class="form-select">
                 <option value="開放">開放</option>
                 <option value="關閉">關閉</option>
                 <option value="維修中">維修中</option>
               </select>
-              <span v-if="!classroom.classroomStatus" class="text-danger"
-                >必填</span
-              >
+              <span v-if="!classroom.classroomStatus" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
               教室圖片
-              <input
-                id="insertfile"
-                type="file"
-                class="form-control"
-                accept="image/*"
-                @change="imageInsert"
-              />
+              <input id="insertfile" type="file" class="form-control" accept="image/*" @change="imageInsert" />
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              @click="insertClassroom"
-            >
+            <button type="submit" class="btn btn-primary" @click="insertClassroom">
               送出
             </button>
           </div>

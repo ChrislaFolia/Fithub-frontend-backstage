@@ -7,11 +7,15 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">職稱管理</h1>
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">職稱管理</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                            <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增職稱</button>
+
+                            <div class="col-3" style="padding-top: 20px;padding-bottom: 20px;">
+                                <PageSize @pageSizeChange="changeHandler"></PageSize>
+                            </div>
                             <table id="specialtysTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -22,16 +26,17 @@
                                 </thead>
                                 <tbody class="align-middle text-center">
                                     <tr v-for="jobTitle in allJobTItles" :key="jobTitle.jobtitleid">
-                                        <td>{{ jobTitle.jobtitlename}}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td>{{ jobTitle.jobtitlename }}</td>
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(jobTitle)">修改</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal" @click="inputDeleteData(jobTitle)">刪除</button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <Paging :totalPages="totalPages" :thePage="datas.start + 1" @abcClick="clickHandler"></Paging>
                         </div>
                     </div>
                 </div>
@@ -116,6 +121,10 @@ import axios from 'axios';
 import { ref, reactive, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+import Paging from "../components/Paging.vue";
+import PageSize from "../components/PageSize.vue";
+import Swal from 'sweetalert2'
+
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertJobTitle = reactive({
@@ -130,14 +139,25 @@ const deleteJobTitle = reactive({});
 //存所有dept資料
 const allJobTItles = ref([])
 
+const totalPages = ref(0);
+const datas = reactive({
+    start: 0,
+    rows: 5,
+    sortOrder: "asc",
+    sortType: "id",
+});
+
 const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
-    const responsJobTitles = await axios.get(`${url}/jobtitles`)
+    // const responsJobTitles = await axios.get(`${url}/jobtitles`)
+    const responsJobTitles = await axios.post(`${url}/jobtitles/findPage`,datas)
 
-    allJobTItles.value = responsJobTitles.data
+    console.log(responsJobTitles)
 
-    console.log(allJobTItles.value)
+    allJobTItles.value = responsJobTitles.data.list
+
+    totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(responsJobTitles.data.count / datas.rows)
 
 }
 
@@ -153,6 +173,18 @@ const inputDeleteData = async (data) => {
     await Object.assign(deleteJobTitle, data);
 };
 
+//paging 由子元件觸發
+const clickHandler = page => {
+    datas.start = page - 1
+    loadDatas()
+}
+
+//一頁幾筆資料
+const changeHandler = value => {
+    datas.rows = value
+    datas.start = 0
+    loadDatas()
+}
 
 
 const insertData = async () => {
@@ -160,22 +192,36 @@ const insertData = async () => {
     var myModalEl = document.getElementById('insertModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(!insertJobTitle.jobtitlename)
     //如果沒有值 return 不做
-    if (!insertJobTitle.jobtitlename) {
-        alert("請輸入正確資料")
+    if (!insertJobTitle.jobtitlename || !insertJobTitle.jobtitlename.trim()) {
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
     try {
-        const response = await axios.post(`${url}/jobtitles`, { jobtitlename: insertJobTitle.jobtitlename})
+        const response = await axios.post(`${url}/jobtitles`, { jobtitlename: insertJobTitle.jobtitlename })
         if (response.status === 200) {
             loadDatas(); // 重新載入資料
             insertJobTitle.jobtitlename = ''; // 清空 insertJobTitleid
-            alert("新增成功")
+            // alert("新增成功")
+        Swal.fire({
+            title: '新增成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
     } catch (error) {
-        alert("新增失敗")
+        // alert("新增失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -189,8 +235,13 @@ const updateData = async () => {
 
 
     //如果沒有值 return 不做
-    if (!updateJobTitle.jobtitleid || !updateJobTitle.jobtitlename) {
-        alert("請輸入正確資料")
+    if (!updateJobTitle.jobtitlename || !updateJobTitle.jobtitlename.trim()) {
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -200,12 +251,22 @@ const updateData = async () => {
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            alert("修改成功")
+            // alert("修改成功")
+        Swal.fire({
+            title: '修改成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        alert("修改失敗")
+        // alert("修改失敗")
+        Swal.fire({
+            title: '修改失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -218,8 +279,6 @@ const deleteData = async () => {
     var myModalEl = document.getElementById('deleteModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(deleteJobTitle)
-
     // 如果沒有值 return 不做
     if (!deleteJobTitle.jobtitleid) {
         return;
@@ -230,12 +289,22 @@ const deleteData = async () => {
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            alert("刪除成功")
+            // alert("刪除成功")
+        Swal.fire({
+            title: '刪除成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();

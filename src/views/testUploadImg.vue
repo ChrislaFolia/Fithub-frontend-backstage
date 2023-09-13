@@ -51,11 +51,9 @@ const uploadImage = async () => {
     reader.onload = async (event) => {
       const base64Image = event.target.result;
       const jsonPayload = { employeeid: 4, cpicfile: base64Image };
-      console.log(event)
 
       try {
         const response = await axios.post(`${url}/coachpics`, jsonPayload);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }

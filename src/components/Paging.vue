@@ -25,8 +25,6 @@ const props = defineProps({
 const emit = defineEmits(["abcClick"]);
 
 const clickHandler = (page) => {
-  console.log("Paging");
-  console.log(page);
   emit("abcClick", page);
 };
 </script>

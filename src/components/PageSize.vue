@@ -14,7 +14,6 @@ const rows = ref(5)
 const emit = defineEmits(["PageSizeChange"])
 
     const changeHandler = ()=>{
-        console.log(rows.value)
         emit("PageSizeChange",rows.value)
     }
 </script>

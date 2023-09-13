@@ -6,12 +6,10 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">會員管理</h1>
-
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">會員管理</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-
-                            <div class="col-3" style="padding-top: 20px;">
+                            <div class="col-3">
                                 <PageSize @pageSizeChange="changeHandler"></PageSize>
                             </div>
                             <div class="col-3">
@@ -34,10 +32,10 @@
                                         <td>{{ member.membername }}</td>
                                         <td>{{ member.memberemail }}</td>
                                         <td>{{ member.memberphoneno }}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(member)">查看</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal" @click="inputDeleteData(member)">刪除</button>
                                         </td>
                                     </tr>
@@ -63,28 +61,28 @@
                             會員編號: {{ updateMember.memberid }}
                         </div>
                         <div class="mb-3">
-                            會員姓名: {{updateMember.membername}}
+                            會員姓名: {{ updateMember.membername }}
                         </div>
                         <div class="mb-3">
-                            信箱: {{updateMember.memberemail}}
+                            信箱: {{ updateMember.memberemail }}
                         </div>
                         <div class="mb-3">
-                            性別: {{updateMember.membergender}}
+                            性別: {{ updateMember.membergender }}
                         </div>
                         <div class="mb-3">
-                            縣市: {{updateMember.membercity}}
+                            縣市: {{ updateMember.membercity }}
                         </div>
                         <div class="mb-3">
-                            地區: {{updateMember.memberzone}}
+                            地區: {{ updateMember.memberzone }}
                         </div>
                         <div class="mb-3">
-                            地址: {{updateMember.memberaddress}}
+                            地址: {{ updateMember.memberaddress }}
                         </div>
                         <div class="mb-3">
-                            生日: {{updateMember.memberbirthday}}
+                            生日: {{ updateMember.memberbirthday }}
                         </div>
                         <div class="mb-3">
-                            帳戶建立日期: {{updateMember.memberaccountsince}}
+                            帳戶建立日期: {{ updateMember.memberaccountsince }}
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -130,6 +128,7 @@ import NavbarLeft from '../components/NavbarLeft.vue'
 import Paging from "../components/Paging.vue";
 import PageSize from "../components/PageSize.vue";
 import SearchTextBox from '../components/SearchTextBox.vue'
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL
 
@@ -169,7 +168,6 @@ const clickHandler = page => {
 const changeHandler = value => {
     datas.rows = value
     datas.start = 0
-    console.log("pagesize：", datas)
     loadDatas()
 }
 
@@ -205,13 +203,22 @@ const deleteData = async () => {
             datas.name = "";
 
             loadDatas(); // 重新載入資料
-            alert("刪除成功")
+            // alert("刪除成功")
+        Swal.fire({
+            title: '刪除成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        console.log(error.response)
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
