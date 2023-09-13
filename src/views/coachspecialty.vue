@@ -61,8 +61,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             教練名稱:
-                            <input type="text" class="form-control" v-model="updateCoachSpecialty.employeename"
-                                readonly>
+                            <input type="text" class="form-control" v-model="updateCoachSpecialty.employeename" readonly>
                         </div>
                         <div class="mb-3">
                             專長名稱:
@@ -130,14 +129,12 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             教練名稱:
-                            <input type="text" class="form-control" v-model="deleteCoachSpecialty.employeename"
-                                readonly>
+                            <input type="text" class="form-control" v-model="deleteCoachSpecialty.employeename" readonly>
                             <span v-if="!deleteCoachSpecialty.employeeid" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
                             專長名稱:
-                            <input type="text" class="form-control" v-model="deleteCoachSpecialty.specialtyname"
-                                readonly>
+                            <input type="text" class="form-control" v-model="deleteCoachSpecialty.specialtyname" readonly>
                             <span v-if="!deleteCoachSpecialty.specialtyid" class="text-danger">必填</span>
                         </div>
                     </div>
@@ -160,6 +157,7 @@ import NavbarLeft from '../components/NavbarLeft.vue'
 import Paging from "../components/Paging.vue";
 import PageSize from "../components/PageSize.vue";
 import SearchTextBox from '../components/SearchTextBox.vue'
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertCoachSpecialty = reactive({
@@ -188,7 +186,7 @@ const datas = reactive({
 const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
-    const responseCoachSpecialtys = await axios.post(`${url}/coachspecialtys/findPageByName`,datas)
+    const responseCoachSpecialtys = await axios.post(`${url}/coachspecialtys/findPageByName`, datas)
     const responseSpecialtys = await axios.get(`${url}/specialtys`)
     const responseCoachs = await axios.get(`${url}/employees/coachs`)
 
@@ -244,7 +242,12 @@ const insertData = async () => {
 
     //如果沒有值 return 不做
     if (!insertCoachSpecialty.employeeid || !insertCoachSpecialty.specialtyid) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -253,10 +256,20 @@ const insertData = async () => {
         if (response.status === 200) {
             loadDatas(); // 重新載入資料
             insertCoachSpecialty.specialtyid = ''; // 清空 insertCoachSpecialtyid
-            alert("新增成功")
+            // alert("新增成功")
+            Swal.fire({
+                title: '新增成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
     } catch (error) {
-        alert("新增失敗")
+        // alert("新增失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -271,7 +284,12 @@ const updateData = async () => {
 
     //如果沒有值 return 不做
     if (!updateCoachSpecialty.specialtyid) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -281,12 +299,22 @@ const updateData = async () => {
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            alert("修改成功")
+            // alert("修改成功")
+            Swal.fire({
+                title: '修改成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
     } catch (error) {
-        alert("修改失敗")
+        // alert("修改失敗")
+        Swal.fire({
+            title: '修改失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -309,12 +337,22 @@ const deleteData = async () => {
 
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            alert("刪除成功")
+            // alert("刪除成功")
+            Swal.fire({
+                title: '刪除成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
     } catch (error) {
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();

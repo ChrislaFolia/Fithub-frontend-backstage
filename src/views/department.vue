@@ -122,6 +122,7 @@ import NavbarLeft from '../components/NavbarLeft.vue'
 import Paging from "../components/Paging.vue";
 import PageSize from "../components/PageSize.vue";
 import SearchTextBox from '../components/SearchTextBox.vue'
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertDepartment = reactive({
@@ -151,12 +152,12 @@ onMounted(() => {
 const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
-    const response = await axios.post(`${url}/departments/findPageByName`,datas)
+    const response = await axios.post(`${url}/departments/findPageByName`, datas)
 
     allDepts.value = response.data.list
 
     console.log(response.data)
-    
+
     totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
 
 }
@@ -206,7 +207,12 @@ const insertData = async () => {
 
     //如果沒有值 return 不做
     if (!insertDepartment.deptname.trim()) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -215,10 +221,20 @@ const insertData = async () => {
         if (response.status === 200) {
             loadDatas(); // 重新載入資料
             insertDepartment.deptname = ''; // 清空 insertDeptName
-            alert("新增成功")
+            // alert("新增成功")
+            Swal.fire({
+                title: '新增成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
     } catch (error) {
-        alert("新增失敗")
+        // alert("新增失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -233,7 +249,12 @@ const updateData = async () => {
 
     //如果沒有值 return 不做
     if (!updateDepartment.deptid || !updateDepartment.deptname.trim()) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -245,12 +266,22 @@ const updateData = async () => {
             loadDatas(); // 重新載入資料
             updateDepartment.deptid = ''
             updateDepartment.deptname = ''; // 清空 insertDeptName
-            alert("修改成功")
+            // alert("修改成功")
+            Swal.fire({
+                title: '修改成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
     } catch (error) {
-        alert("修改失敗")
+        // alert("修改失敗")
+        Swal.fire({
+            title: '修改失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -275,12 +306,22 @@ const deleteData = async () => {
             loadDatas(); // 重新載入資料
             deleteDepartment.deptid = ''
             deleteDepartment.deptname = ''; // 清空 insertDeptName
-            alert("刪除成功")
+            // alert("刪除成功")
+            Swal.fire({
+                title: '刪除成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
     } catch (error) {
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();

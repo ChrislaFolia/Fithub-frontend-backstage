@@ -194,6 +194,7 @@ import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+import Swal from 'sweetalert2'
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';  已改用CDN
 
 
@@ -407,7 +408,12 @@ const deleteSelected = async () => {
                 data: selectedActivities.value
             });
 
-            alert('已刪除')
+            // alert('已刪除')
+            Swal.fire({
+            title: '已刪除',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
             // 刷新資料
             getActivitys();
             selectedActivities.value = []; // 清空選中的項目
@@ -415,7 +421,12 @@ const deleteSelected = async () => {
             console.error('Error deleteSelected:', error);
         }
     } else {
-        alert('已取消');
+        Swal.fire({
+            title: '已取消',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
+        // alert('已取消');
         selectedActivities.value = []; // 清空選中的項目
     }
 };
