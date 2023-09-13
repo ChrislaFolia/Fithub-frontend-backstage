@@ -49,7 +49,8 @@
                                         <td>{{ rentOrder.renttime }}</td>
                                         <td>{{ rentOrder.rentstatus }}</td>
                                         <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                                data-bs-target="#updateModal">修改</button></td>
+                                                data-bs-target="#updateModal"
+                                                @click="openUpdateModal(rentOrder)">修改</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -81,7 +82,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            租借場地:<input type="text" class="form-control" required="required">
+                            時段:<select class="form-select">
+                                <option v-for="classroomNameId in classroomNameIds" :value="classroomNameId.classroomId">
+                                    {{ classroomNameId.classroomName }}</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             預約日期:<input type="date" class="form-control" required="required">
@@ -115,12 +119,18 @@ import axios from 'axios'
 import { ref, onMounted, reactive } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
-
 import * as XLSX from 'xlsx'
+const url = import.meta.env.VITE_API_JAVAURL
 
 const rentorderPage = ref([])
-const selectedRentOrderIds = ref([]); // 儲存選中的 rentorderid
+const classroomNameIds = ref([])
+const selectedRentOrderIds = ref([]) // 儲存選中的 rentorderid
 const xlsxData = ref([]) //儲存匯出xlsx需要的資料
+const updateRentOrder = reactive({
+    rentdate: '',
+    renttime: '',
+    rentstatus: ''
+})
 
 // 將json資料匯出xlsx檔
 function exportXlsx() {
@@ -153,36 +163,36 @@ const changeHandler = (value) => {
 };
 
 
+// 取得全部教室名稱ID
+const getclassroomNameId = async () => {
+    try {
+        const response = await axios.get(`${url}/classroom/listName`);
+        classroomNameIds.value = response.data;
+        console.log(classroomNameIds.value)
 
-// 從伺服器獲取 JSON 資料
-// const getrentorder = async () => {
-//     try {
-//         const response = await axios.get('http://localhost:8080/fithub/rent/list'); // 替換為實際的 API URL
-//         rentOrders.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
+    } catch (error) {
+        console.error('Error getclassroomNameId data:', error);
+    }
+};
 
-//         xlsxData.value = rentOrders.value.map(rentOrder => ({
-//             rentOrderId: rentOrder.rentorderid,
-//             rentOrderDate: rentOrder.rentorderdate,
-//             memberName: rentOrder.member.membername,
-//             classroomName: rentOrder.classroom.classroomName,
-//             rentDate: rentOrder.rentdate,
-//             rentTime: rentOrder.renttime,
-//             rentStatus: rentOrder.rentstatus,
-//         }));
+// 将選中的訂單複製到 updateRentOrder
+const openUpdateModal = (rentorder) => {
+    const { rentdate, renttime, rentstatus } = rentorder;
 
-//         console.log(rentOrders.value)
+    // 只保留update需要的屬性
+    updateRentOrder.rentdate = rentdate;
+    updateRentOrder.renttime = renttime;
+    updateRentOrder.rentstatus = rentstatus;
+    console.log(updateRentOrder)
+};
 
-//     } catch (error) {
-//         console.error('Error getrentorder data:', error);
-//     }
-// };
 
 // 從伺服器獲取訂單分頁資料
 const getrentorderpage = async () => {
     try {
 
-        console.log(page)
-        const response = await axios.post('http://localhost:8080/fithub/rent/findallpage', page); // 替換為實際的 API URL
+        // console.log(page)
+        const response = await axios.post(`${url}/rent/findallpage`, page); // 替換為實際的 API URL
         rentorderPage.value = response.data;
         console.log(rentorderPage.value)
 
@@ -200,9 +210,12 @@ const getrentorderpage = async () => {
         // console.log(xlsxData.value)
 
     } catch (error) {
-        console.error('Error getrentorder data:', error);
+        console.error('Error getrentorderpage data:', error);
     }
 };
+
+
+
 
 // 刪除多筆教室
 const deleteSelected = async () => {
@@ -211,7 +224,7 @@ const deleteSelected = async () => {
     if (checkDelete) {
         try {
             // 將選中的 rentorderid 送到後端進行刪除
-            const response = await axios.delete('http://localhost:8080/fithub/rent/delete/multiple', {
+            const response = await axios.delete(`${url}/rent/delete/multiple`, {
                 data: selectedRentOrderIds.value
             });
 
@@ -219,7 +232,7 @@ const deleteSelected = async () => {
             getrentorderpage();
             selectedRentOrderIds.value = []; // 清空選中的項目
         } catch (error) {
-            console.error('Error deleting rent orders:', error);
+            console.error('Error deleteSelected:', error);
         }
     }
 };
@@ -227,6 +240,7 @@ const deleteSelected = async () => {
 
 onMounted(() => {
     getrentorderpage();
+    getclassroomNameId();
 });
 </script>
 
