@@ -108,6 +108,8 @@ import UpdateCourse from "../components/course/courseUpdateModal.vue";
 import InsertClass from "../components/classes/classesInsertModal.vue";
 import courseImg from "../components/util/imageModal.vue";
 import courseDescription from "../components/util/textModal.vue";
+import Swal from 'sweetalert2'
+
 const totalPages = ref(0);
 const datas = reactive({
   start: 0,
@@ -156,14 +158,29 @@ const deleteCourse = async (courseId, courseName) => {
     console.log(response);
     console.log(response.status);
     if (response.status == 200) {
-      alert("刪除成功");
+      // alert("刪除成功");
+        Swal.fire({
+            title: '刪除成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
     } else {
-      alert("刪除失敗");
+      // alert("刪除失敗");
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     }
     loadCourses();
   } else if (msg == null) {
   } else {
-    alert("輸入錯誤");
+    // alert("輸入錯誤");
+        Swal.fire({
+            title: '輸入錯誤',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
   }
 };
 

@@ -194,6 +194,7 @@ import axios from 'axios'
 import { reactive, ref, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+import Swal from 'sweetalert2'
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';  已改用CDN
 
 

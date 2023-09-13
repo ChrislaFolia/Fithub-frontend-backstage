@@ -111,6 +111,7 @@ import axios from 'axios';
 import { ref, reactive, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertSpecialty = reactive({
@@ -151,7 +152,12 @@ const insertData = async () => {
 
     //如果沒有值 return 不做
     if (!insertSpecialty.specialtyname.trim()) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -160,10 +166,20 @@ const insertData = async () => {
         if (response.status === 200) {
             loadDatas(); // 重新載入資料
             insertSpecialty.specialtyname = ''; // 清空 insertSpecialtyname
-            alert("新增成功")
+            // alert("新增成功")
+        Swal.fire({
+            title: '新增成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
     } catch (error) {
-        alert("新增失敗")
+        // alert("新增失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -178,7 +194,12 @@ const updateData = async () => {
 
     //如果沒有值 return 不做
     if (!updateSpecialty.specialtyid || !updateSpecialty.specialtyname.trim()) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -190,12 +211,22 @@ const updateData = async () => {
             loadDatas(); // 重新載入資料
             updateSpecialty.specialtyid = ''
             updateSpecialty.specialtyname = ''; // 清空 insertSpecialtyname
-            alert("修改成功")
+            // alert("修改成功")
+        Swal.fire({
+            title: '修改成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        alert("修改失敗")
+        // alert("修改失敗")
+        Swal.fire({
+            title: '修改失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -220,12 +251,22 @@ const deleteData = async () => {
             loadDatas(); // 重新載入資料
             deleteSpecialty.specialtyid = ''
             deleteSpecialty.specialtyname = ''; // 清空 insertSpecialtyname
-            alert("刪除成功")
+            // alert("刪除成功")
+        Swal.fire({
+            title: '刪除成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();

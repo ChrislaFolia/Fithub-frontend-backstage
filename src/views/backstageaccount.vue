@@ -81,7 +81,7 @@
                         </div>
                         <div class="mb-3">
                             權限等級:
-                            <select class="form-control" v-model="updateBackStageAccount.loa">
+                            <select class="form-select" v-model="updateBackStageAccount.loa">
                                 <option v-for="loa in 3" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
@@ -130,7 +130,7 @@
                         </div>
                         <div class="mb-3">
                             權限等級:
-                            <select class="form-control" v-model="insertBackStageAccount.loa">
+                            <select class="form-select" v-model="insertBackStageAccount.loa">
                                 <option v-for="loa in 3" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
@@ -181,6 +181,7 @@ import NavbarLeft from '../components/NavbarLeft.vue'
 import Paging from "../components/Paging.vue";
 import PageSize from "../components/PageSize.vue";
 import SearchTextBox from '../components/SearchTextBox.vue'
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertBackStageAccount = reactive({
@@ -295,7 +296,12 @@ const insertData = async () => {
         !insertBackStageAccount.employeeaccount.trim() ||
         !insertBackStageAccount.employeepassword ||
         !insertBackStageAccount.loa) {
-        alert("請輸入資料")
+        // alert("請輸入資料")
+        Swal.fire({
+            title: '請輸入資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -310,10 +316,20 @@ const insertData = async () => {
             loadDatas(); // 重新載入資料
             // Object.assign(insertEmployee,{})
             // insertEmployee.value = ''; // 清空 insertDeptName
-            alert("新增成功")
+            // alert("新增成功")
+            Swal.fire({
+                title: '新增成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
     } catch (error) {
-        alert("新增失敗")
+        // alert("新增失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -335,7 +351,12 @@ const updateData = async () => {
     if (!updateBackStageAccount.employeeid ||
         !updateBackStageAccount.employeeaccount.trim() ||
         !updateBackStageAccount.loa) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -347,12 +368,22 @@ const updateData = async () => {
         const response = await axios.put(`${url}/backstageaccounts/${updateBackStageAccount.employeeaccount}`, updateBackStageAccount)
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            alert("修改成功")
+            // alert("修改成功")
+            Swal.fire({
+                title: '修改成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
     } catch (error) {
-        alert("修改失敗")
+        // alert("修改失敗")
+        Swal.fire({
+            title: '修改失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -375,12 +406,22 @@ const deleteData = async () => {
             datas.name = "";
 
             loadDatas(); // 重新載入資料
-            alert("刪除成功")
+            // alert("刪除成功")
+            Swal.fire({
+                title: '刪除成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
     } catch (error) {
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();

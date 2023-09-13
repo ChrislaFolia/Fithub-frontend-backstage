@@ -40,6 +40,8 @@
 <script>
 import { login } from "@/api/login"
 import router from "@/router"
+import Swal from 'sweetalert2'
+
 export default {
     data() {
         return {
@@ -52,8 +54,13 @@ export default {
             let res = await login(this.account, this.password)
             if (res.status == 0) {
                 router.push({ name: "home" })
-            }else{
-                alert("帳號密碼錯誤")
+            } else {
+                // alert("帳號密碼錯誤")
+                Swal.fire({
+                    title: '帳號密碼錯誤',
+                    icon: 'warning',
+                    confirmButtonText: '確定'
+                })
             }
         }
     }

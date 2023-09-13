@@ -281,6 +281,7 @@ import NavbarLeft from '../components/NavbarLeft.vue'
 import Paging from "../components/Paging.vue";
 import PageSize from "../components/PageSize.vue";
 import SearchTextBox from '../components/SearchTextBox.vue'
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertEmployee = reactive({
@@ -401,7 +402,12 @@ const insertData = async () => {
         !insertEmployee.salary || !insertEmployee.salary.trim() ||
         !insertEmployee.employeebirthday.trim()
     ) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -427,10 +433,20 @@ const insertData = async () => {
             insertEmployee.salary = ''
             insertEmployee.employeebirthday = ''
             insertEmployee.employeeintroduction = ''
-            alert("新增成功")
+            // alert("新增成功")
+        Swal.fire({
+            title: '新增成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
     } catch (error) {
-        alert("新增失敗")
+        // alert("新增失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -458,7 +474,12 @@ const updateData = async () => {
         !updateEmployee.hiredate.trim() ||
         !updateEmployee.salary ||
         !updateEmployee.employeebirthday.trim()) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -467,12 +488,22 @@ const updateData = async () => {
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
 
-            alert("修改成功")
+            // alert("修改成功")
+        Swal.fire({
+            title: '修改成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        alert("修改失敗")
+        // alert("修改失敗")
+        Swal.fire({
+            title: '修改失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -494,12 +525,22 @@ const deleteData = async () => {
             // datas.name = null;
 
             loadDatas(); // 重新載入資料
-            alert("刪除成功")
+            // alert("刪除成功")
+        Swal.fire({
+            title: '刪除成功',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();

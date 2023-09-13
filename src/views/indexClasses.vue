@@ -111,6 +111,8 @@ import axios from "axios";
 import UpdateClass from "../components/classes/classesUpdateModal.vue";
 import NavbarTop from "../components/NavbarTop.vue";
 import NavbarLeft from "../components/NavbarLeft.vue";
+import Swal from 'sweetalert2'
+
 // Load Classes data
 const URL = import.meta.env.VITE_API_JAVAURL;
 const classes = ref([]);
@@ -135,14 +137,29 @@ const deleteClass = async (classId, courseName) => {
     console.log(response);
     console.log(response.status);
     if (response.status == 200) {
-      alert("刪除成功");
+      // alert("刪除成功");
+        Swal.fire({
+            title: '刪除成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
     } else {
-      alert("刪除失敗");
+      // alert("刪除失敗");
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     }
     loadClasses();
   } else if (msg == null) {
   } else {
-    alert("輸入錯誤");
+    // alert("輸入錯誤");
+        Swal.fire({
+            title: '輸入錯誤',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
   }
 };
 
