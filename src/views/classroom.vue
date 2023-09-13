@@ -86,7 +86,7 @@
             </div>
             教室狀態
             <div class="mb-3">
-              <select v-model="updateSelectedClassroom.classroomStatus" class="form-control">
+              <select v-model="updateSelectedClassroom.classroomStatus" class="form-select">
                 <option value="開放">開放</option>
                 <option value="關閉">關閉</option>
                 <option value="維修中">維修中</option>
@@ -135,7 +135,7 @@
             </div>
             教室狀態
             <div class="mb-3">
-              <select v-model="classroom.classroomStatus" class="form-control">
+              <select v-model="classroom.classroomStatus" class="form-select">
                 <option value="開放">開放</option>
                 <option value="關閉">關閉</option>
                 <option value="維修中">維修中</option>

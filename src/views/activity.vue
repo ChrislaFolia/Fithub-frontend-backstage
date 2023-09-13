@@ -72,7 +72,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            日期<input v-model="updateSelectedActivities.activitydate" type="date" class="form-control">
+                            新增日期<input v-model="updateSelectedActivities.activitydate" type="date" class="form-control">
                             <span v-if="!updateSelectedActivities.activitydate" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
@@ -136,7 +136,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            日期<input v-model="Activity.activitydate" type="date" class="form-control">
+                            新增日期<input v-model="Activity.activitydate" type="date" class="form-control">
                             <span v-if="!Activity.activitydate" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
