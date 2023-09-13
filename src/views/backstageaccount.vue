@@ -82,7 +82,7 @@
                         <div class="mb-3">
                             權限等級:
                             <select v-model="updateBackStageAccount.loa">
-                                <option v-for="loa in 5" :key="loa" :value="loa">{{ loa }}
+                                <option v-for="loa in 3" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
                         </div>

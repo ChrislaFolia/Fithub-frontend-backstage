@@ -12,6 +12,10 @@
                         <div class="card-body table-responsive">
                             <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增職稱</button>
+
+                            <div class="col-3" style="padding-top: 20px;padding-bottom: 20px;">
+                                <PageSize @pageSizeChange="changeHandler"></PageSize>
+                            </div>
                             <table id="specialtysTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -32,6 +36,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <Paging :totalPages="totalPages" :thePage="datas.start + 1" @abcClick="clickHandler"></Paging>
                         </div>
                     </div>
                 </div>
@@ -116,6 +121,9 @@ import axios from 'axios';
 import { ref, reactive, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+import Paging from "../components/Paging.vue";
+import PageSize from "../components/PageSize.vue";
+
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertJobTitle = reactive({
@@ -130,13 +138,25 @@ const deleteJobTitle = reactive({});
 //存所有dept資料
 const allJobTItles = ref([])
 
+const totalPages = ref(0);
+const datas = reactive({
+    start: 0,
+    rows: 5,
+    sortOrder: "asc",
+    sortType: "id",
+});
+
 const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
-    const responsJobTitles = await axios.get(`${url}/jobtitles`)
+    // const responsJobTitles = await axios.get(`${url}/jobtitles`)
+    const responsJobTitles = await axios.post(`${url}/jobtitles/findPage`,datas)
 
-    allJobTItles.value = responsJobTitles.data
+    console.log(responsJobTitles)
 
+    allJobTItles.value = responsJobTitles.data.list
+
+    totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(responsJobTitles.data.count / datas.rows)
 
 }
 
@@ -152,6 +172,18 @@ const inputDeleteData = async (data) => {
     await Object.assign(deleteJobTitle, data);
 };
 
+//paging 由子元件觸發
+const clickHandler = page => {
+    datas.start = page - 1
+    loadDatas()
+}
+
+//一頁幾筆資料
+const changeHandler = value => {
+    datas.rows = value
+    datas.start = 0
+    loadDatas()
+}
 
 
 const insertData = async () => {
@@ -160,7 +192,7 @@ const insertData = async () => {
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
     //如果沒有值 return 不做
-    if (!insertJobTitle.jobtitlename) {
+    if (!insertJobTitle.jobtitlename || !insertJobTitle.jobtitlename.trim()) {
         alert("請輸入正確資料")
         return;
     }
@@ -187,7 +219,7 @@ const updateData = async () => {
 
 
     //如果沒有值 return 不做
-    if (!updateJobTitle.jobtitleid || !updateJobTitle.jobtitlename) {
+    if (!updateJobTitle.jobtitlename || !updateJobTitle.jobtitlename.trim()) {
         alert("請輸入正確資料")
         return;
     }

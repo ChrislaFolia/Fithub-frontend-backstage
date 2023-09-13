@@ -52,6 +52,8 @@ export default {
             let res = await login(this.account, this.password)
             if (res.status == 0) {
                 router.push({ name: "home" })
+            }else{
+                alert("帳號密碼錯誤")
             }
         }
     }

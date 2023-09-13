@@ -12,6 +12,13 @@
                         <div class="card-body table-responsive">
                             <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
                                 data-bs-target="#insertModal">新增專長</button>
+
+                            <div class="col-3">
+                                <PageSize @pageSizeChange="changeHandler"></PageSize>
+                            </div>
+                            <div class="col-3">
+                                <SearchTextBox @searchInput="inputHandler"></SearchTextBox>
+                            </div>
                             <table id="specialtysTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -23,8 +30,8 @@
                                 </thead>
                                 <tbody class="align-middle text-center">
                                     <tr v-for="coachSpec in allCoachSpecs" :key="coachSpec.specialtyid">
-                                        <td>{{ coachSpec.employee.employeename }}</td>
-                                        <td>{{ coachSpec.specialty.specialtyname }}</td>
+                                        <td>{{ coachSpec.employeename }}</td>
+                                        <td>{{ coachSpec.specialtyname }}</td>
                                         <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal"
                                                 @click="inputUpdateData(coachSpec)">修改</button>
@@ -36,6 +43,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <Paging :totalPages="totalPages" :thePage="datas.start + 1" @abcClick="clickHandler"></Paging>
                         </div>
                     </div>
                 </div>
@@ -53,9 +61,8 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             教練名稱:
-                            <input type="text" class="form-control" v-model="updateCoachSpecialtyEmployee.employeename"
+                            <input type="text" class="form-control" v-model="updateCoachSpecialty.employeename"
                                 readonly>
-                            <span v-if="!updateCoachSpecialty.employeeid" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
                             專長名稱:
@@ -123,13 +130,13 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             教練名稱:
-                            <input type="text" class="form-control" v-model="deleteCoachSpecialtyEmployee.employeename"
+                            <input type="text" class="form-control" v-model="deleteCoachSpecialty.employeename"
                                 readonly>
                             <span v-if="!deleteCoachSpecialty.employeeid" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
                             專長名稱:
-                            <input type="text" class="form-control" v-model="deleteCoachSpecialtySpecialty.specialtyname"
+                            <input type="text" class="form-control" v-model="deleteCoachSpecialty.specialtyname"
                                 readonly>
                             <span v-if="!deleteCoachSpecialty.specialtyid" class="text-danger">必填</span>
                         </div>
@@ -150,6 +157,9 @@ import axios from 'axios';
 import { ref, reactive, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
+import Paging from "../components/Paging.vue";
+import PageSize from "../components/PageSize.vue";
+import SearchTextBox from '../components/SearchTextBox.vue'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertCoachSpecialty = reactive({
@@ -157,30 +167,39 @@ const insertCoachSpecialty = reactive({
     specialtyid: '',
 });
 const updateCoachSpecialty = reactive({});
-const updateCoachSpecialtyEmployee = reactive({});
 
 
 const deleteCoachSpecialty = reactive({});
-const deleteCoachSpecialtyEmployee = reactive({});
-const deleteCoachSpecialtySpecialty = reactive({});
 
 //存所有dept資料
 const allCoachSpecs = ref([])
 const allSpecs = ref([])
 const allCoachs = ref([])
 
+const totalPages = ref(0);
+const datas = reactive({
+    start: 0,
+    rows: 5,
+    name: null,
+    sortOrder: "asc",
+    sortType: "id",
+});
+
 const loadDatas = async () => {
     //透過get方法呼叫/products/find 傳datas資料
 
-    const responseCoachSpecialtys = await axios.get(`${url}/coachspecialtys`)
+    const responseCoachSpecialtys = await axios.post(`${url}/coachspecialtys/findPageByName`,datas)
     const responseSpecialtys = await axios.get(`${url}/specialtys`)
     const responseCoachs = await axios.get(`${url}/employees/coachs`)
 
-    allCoachSpecs.value = responseCoachSpecialtys.data
+    allCoachSpecs.value = responseCoachSpecialtys.data.list
     allSpecs.value = responseSpecialtys.data
     allCoachs.value = responseCoachs.data
 
+    console.log(responseCoachSpecialtys)
+    console.log(allCoachSpecs.value)
 
+    totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(responseCoachSpecialtys.data.count / datas.rows)
 }
 
 onMounted(() => {
@@ -189,14 +208,32 @@ onMounted(() => {
 
 const inputUpdateData = (data) => {
     Object.assign(updateCoachSpecialty, data);
-    Object.assign(updateCoachSpecialtyEmployee, data.employee);
 };
 
 const inputDeleteData = async (data) => {
     await Object.assign(deleteCoachSpecialty, data);
-    await Object.assign(deleteCoachSpecialtyEmployee, data.employee);
-    await Object.assign(deleteCoachSpecialtySpecialty, data.specialty);
 };
+
+//paging 由子元件觸發
+const clickHandler = page => {
+    datas.start = page - 1
+    loadDatas()
+}
+
+//一頁幾筆資料
+const changeHandler = value => {
+    datas.rows = value
+    datas.start = 0
+    loadDatas()
+}
+
+//搜尋
+const inputHandler = value => {
+    datas.name = value
+    datas.start = 0
+    loadDatas()
+}
+
 
 
 

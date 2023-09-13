@@ -397,7 +397,7 @@ const insertData = async () => {
         !insertEmployee.deptid ||
         !insertEmployee.jobtitleid ||
         !insertEmployee.hiredate.trim() ||
-        !insertEmployee.salary ||
+        !insertEmployee.salary || !insertEmployee.salary.trim() ||
         !insertEmployee.employeebirthday.trim()
     ) {
         alert("請輸入正確資料")
@@ -411,6 +411,21 @@ const insertData = async () => {
             loadDatas(); // 重新載入資料
             // Object.assign(insertEmployee,{})
             // insertEmployee.value = ''; // 清空 insertDeptName
+            insertEmployee.employeename = ''
+            insertEmployee.employeeemail = ''
+            insertEmployee.employeephone = ''
+            insertEmployee.employeegender = ''
+            insertEmployee.employeecity = ''
+            insertEmployee.employeezone = ''
+            insertEmployee.employeeaddress = ''
+            insertEmployee.deptid = ''
+            insertEmployee.jobtitleid = ''
+            insertEmployee.managerid = ''
+            insertEmployee.hiredate = ''
+            insertEmployee.resigndate = ''
+            insertEmployee.salary = ''
+            insertEmployee.employeebirthday = ''
+            insertEmployee.employeeintroduction = ''
             alert("新增成功")
         }
     } catch (error) {
@@ -450,6 +465,7 @@ const updateData = async () => {
         const response = await axios.put(`${url}/employees/${updateEmployee.employeeid}`, updateEmployee)
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
+
             alert("修改成功")
         }
 
@@ -473,8 +489,8 @@ const deleteData = async () => {
         const response = await axios.delete(`${url}/employees/${deleteEmployee.employeeid}`)
 
         if (response.status == 200) {
-            datas.start = 0;
-            datas.name = null;
+            // datas.start = 0;
+            // datas.name = null;
 
             loadDatas(); // 重新載入資料
             alert("刪除成功")
