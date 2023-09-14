@@ -6,19 +6,17 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">後台帳戶</h1>
-
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">後台帳戶</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                data-bs-target="#insertModal">新增帳戶</button>
-
-                            <div class="col-3" style="padding-top: 20px;">
+                            <div class="col-3">
                                 <PageSize @pageSizeChange="changeHandler"></PageSize>
                             </div>
                             <div class="col-3">
                                 <SearchTextBox @searchInput="inputHandler"></SearchTextBox>
                             </div>
+                            <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                                data-bs-target="#insertModal">新增帳戶</button>
                             <table id="departmentsTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -36,10 +34,10 @@
                                         <td>{{ ba.employeename }}</td>
                                         <td>{{ ba.employeeaccount }}</td>
                                         <td>{{ ba.loa }}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(ba)">修改</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal" @click="inputDeleteData(ba)">刪除</button>
                                         </td>
                                     </tr>
@@ -83,8 +81,8 @@
                         </div>
                         <div class="mb-3">
                             權限等級:
-                            <select v-model="updateBackStageAccount.loa">
-                                <option v-for="loa in 5" :key="loa" :value="loa">{{ loa }}
+                            <select class="form-select" v-model="updateBackStageAccount.loa">
+                                <option v-for="loa in 3" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
                         </div>
@@ -109,7 +107,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             員工:
-                            <select v-model="insertBackStageAccount.employeeid">
+                            <select class="form-select" v-model="insertBackStageAccount.employeeid">
                                 <option v-for="emp in allEmps" :key="emp.employeeid" :value="emp.employeeid">{{
                                     emp.employeeid + " " + emp.employeename }}
                                 </option>
@@ -132,8 +130,8 @@
                         </div>
                         <div class="mb-3">
                             權限等級:
-                            <select v-model="insertBackStageAccount.loa">
-                                <option v-for="loa in 5" :key="loa" :value="loa">{{ loa }}
+                            <select class="form-select" v-model="insertBackStageAccount.loa">
+                                <option v-for="loa in 3" :key="loa" :value="loa">{{ loa }}
                                 </option>
                             </select>
                         </div>
@@ -183,6 +181,7 @@ import NavbarLeft from '../components/NavbarLeft.vue'
 import Paging from "../components/Paging.vue";
 import PageSize from "../components/PageSize.vue";
 import SearchTextBox from '../components/SearchTextBox.vue'
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertBackStageAccount = reactive({
@@ -226,9 +225,7 @@ const loadDatas = async () => {
     allBackStageAccounts.value = response.data.list
     allEmps.value = responseEmp.data.list
 
-    console.log(allEmps.value)
 
-    console.log(response.data)
     // 計算總共幾頁
     totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
 
@@ -248,14 +245,6 @@ const clickHandler = page => {
 const changeHandler = value => {
     datas.rows = value
     datas.start = 0
-    console.log("pagesize：", datas)
-    loadDatas()
-}
-
-//排序
-const sortHandler = type => {
-    datas.sortOrder = datas.sortOrder === "asc" ? "desc" : "asc"
-    datas.sortType = type
     loadDatas()
 }
 
@@ -307,7 +296,12 @@ const insertData = async () => {
         !insertBackStageAccount.employeeaccount.trim() ||
         !insertBackStageAccount.employeepassword ||
         !insertBackStageAccount.loa) {
-        alert("請輸入資料")
+        // alert("請輸入資料")
+        Swal.fire({
+            title: '請輸入資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -315,7 +309,6 @@ const insertData = async () => {
         return
     }
 
-    // console.log(insertEmployee)
     try {
         const response = await axios.post(`${url}/backstageaccounts`, insertBackStageAccount)
 
@@ -323,11 +316,20 @@ const insertData = async () => {
             loadDatas(); // 重新載入資料
             // Object.assign(insertEmployee,{})
             // insertEmployee.value = ''; // 清空 insertDeptName
-            alert("新增成功")
+            // alert("新增成功")
+            Swal.fire({
+                title: '新增成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
     } catch (error) {
-        console.log(error)
-        alert("新增失敗")
+        // alert("新增失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -340,9 +342,7 @@ const updateData = async () => {
     var myModalEl = document.getElementById('updateModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(!updateBackStageAccount.employeeid)
-    console.log(!updateBackStageAccount.employeeaccount.trim())
-    console.log(!updateBackStageAccount.loa)
+
 
     // delete updateEmployee.department
     // delete updateEmployee.jobtitle
@@ -351,7 +351,12 @@ const updateData = async () => {
     if (!updateBackStageAccount.employeeid ||
         !updateBackStageAccount.employeeaccount.trim() ||
         !updateBackStageAccount.loa) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
@@ -359,20 +364,26 @@ const updateData = async () => {
         return
     }
 
-    // console.log("updateEmployee")
-    // console.log(updateEmployee)
     try {
         const response = await axios.put(`${url}/backstageaccounts/${updateBackStageAccount.employeeaccount}`, updateBackStageAccount)
-        console.log("test2")
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            alert("修改成功")
+            // alert("修改成功")
+            Swal.fire({
+                title: '修改成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
     } catch (error) {
-        console.log(error.response)
-        alert("修改失敗")
+        // alert("修改失敗")
+        Swal.fire({
+            title: '修改失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -395,13 +406,22 @@ const deleteData = async () => {
             datas.name = "";
 
             loadDatas(); // 重新載入資料
-            alert("刪除成功")
+            // alert("刪除成功")
+            Swal.fire({
+                title: '刪除成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
     } catch (error) {
-        console.log(error.response)
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -410,8 +430,6 @@ const deleteData = async () => {
 }
 
 const checkinsertpassword = () => {
-    console.log(insertBackStageAccount.employeepassword)
-    console.log(insertagainpassword.password)
     if (insertBackStageAccount.employeepassword === insertagainpassword.password) {
         insertagainpassword.check = true
     } else {
@@ -420,15 +438,11 @@ const checkinsertpassword = () => {
 }
 
 const checkupdatepassword = () => {
-    console.log(updateBackStageAccount.employeepassword)
-    console.log(updateagainpassword.password)
     if (updateBackStageAccount.employeepassword === updateagainpassword.password) {
         updateagainpassword.check = true
     } else {
         updateagainpassword.check = false
     }
-
-    console.log(updateagainpassword.check)
 }
 
 </script>

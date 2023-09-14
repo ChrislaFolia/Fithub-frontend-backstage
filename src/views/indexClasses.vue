@@ -27,7 +27,7 @@
                       <th>課程時間</th>
                       <th>課程教室</th>
                       <th>課程價格<br />(新台幣)</th>
-                      <th>目前課程人數</th>
+                      <!-- <th>目前報名人數</th> -->
                       <th>課程人數上限</th>
                       <th>開課人數下限</th>
                       <th>修改</th>
@@ -38,25 +38,30 @@
                     <tr
                       v-for="{
                         classId,
+                        courseId,
                         classDate,
                         classTime,
-                        employee,
-                        course,
+                        employeeId,
+                        employeename,
+                        courseName,
+                        categoryName,
                         price,
                         applicantsCeil,
                         applicantsFloor,
-                        classroom,
+                        classroomId,
+                        classroomName,
+                        classroomCapacity,
                         coachSubstitute,
                       } in classes"
                       :key="classId"
                     >
-                      <td>{{ course.courseCategories.categoryName }}</td>
-                      <td>{{ course.courseName }}</td>
-                      <td>{{ employee.employeename }}</td>
+                      <td>{{ categoryName }}</td>
+                      <td>{{ courseName }}</td>
+                      <td>{{ employeename }}</td>
                       <td>{{ classDate }}&nbsp;{{ classTime }}</td>
-                      <td>{{ classroom.classroomName }}</td>
+                      <td>{{ classroomName }}</td>
                       <td>{{ price }}</td>
-                      <td>{{ -1 }}</td>
+                      <!-- <td>{{ -1 }}</td> -->
                       <td>{{ applicantsCeil }}</td>
                       <td>{{ applicantsFloor }}</td>
                       <td>
@@ -71,12 +76,15 @@
                           :classId="classId"
                           :classDate="classDate"
                           :classTime="classTime"
-                          :employee="employee"
-                          :course="course"
+                          :employeeId="employeeId"
+                          :courseId="courseId"
+                          :courseName="courseName"
                           :price="price"
                           :applicantsCeil="applicantsCeil"
                           :applicantsFloor="applicantsFloor"
-                          :classroom="classroom"
+                          :classroomId="classroomId"
+                          :classroomName="classroomName"
+                          :classroomCapacity="classroomCapacity"
                           :coachSubstitute="coachSubstitute"
                           @submitUpdateClasses-emit="loadClasses"
                         ></UpdateClass>
@@ -85,9 +93,7 @@
                         <i
                           type="button"
                           class="bi bi-trash3"
-                          @click="
-                            deleteClass(`${classId}`, `${course.courseName}`)
-                          "
+                          @click="deleteClass(`${classId}`, `${courseName}`)"
                         ></i>
                       </td>
                     </tr>
@@ -111,18 +117,32 @@ import axios from "axios";
 import UpdateClass from "../components/classes/classesUpdateModal.vue";
 import NavbarTop from "../components/NavbarTop.vue";
 import NavbarLeft from "../components/NavbarLeft.vue";
+import Swal from "sweetalert2";
+
 // Load Classes data
 const URL = import.meta.env.VITE_API_JAVAURL;
 const classes = ref([]);
 const loadClasses = async () => {
-  const URLAPI = `${URL}/classes/findAll`;
-  const response = await axios.get(URLAPI);
-  // console.log(response.data)
+  const URLAPI = `${URL}/classes/findAllInMonthRange`;
+  const response = await axios
+    .get(URLAPI, {
+      params: {
+        monthBefore: 1,
+        monthAfter: 1,
+      },
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+    });
+  // console.log(response.data);
 
-  //classes
   classes.value = response.data;
-  // console.log(classes)
+  console.log(classes);
 };
+
+/*
+  Delete Datas
+*/
 
 // deleteCourse
 const deleteClass = async (classId, courseName) => {
@@ -131,20 +151,39 @@ const deleteClass = async (classId, courseName) => {
   const URLAPI = `${URL}/classes/${classId}`;
   let msg = prompt(`您確定要刪除嗎?\n請輸入想要刪除的課程名稱:`);
   if (msg == `${courseName}`) {
-    const response = await axios.delete(URLAPI);
-    console.log(response);
-    console.log(response.status);
+    const response = await axios.delete(URLAPI).catch((error) => {
+      console.log(error.toJSON());
+    });
     if (response.status == 200) {
-      alert("刪除成功");
+      // alert("刪除成功");
+      Swal.fire({
+        title: "刪除成功",
+        icon: "success",
+        confirmButtonText: "確定",
+      });
     } else {
-      alert("刪除失敗");
+      // alert("刪除失敗");
+      Swal.fire({
+        title: "刪除失敗",
+        icon: "warning",
+        confirmButtonText: "確定",
+      });
     }
     loadClasses();
   } else if (msg == null) {
   } else {
-    alert("輸入錯誤");
+    // alert("輸入錯誤");
+    Swal.fire({
+      title: "輸入錯誤",
+      icon: "warning",
+      confirmButtonText: "確定",
+    });
   }
 };
+
+/*
+  LifeCycle Hooks
+ */
 
 onMounted(() => {
   loadClasses();

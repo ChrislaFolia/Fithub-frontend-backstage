@@ -5,15 +5,10 @@
     <div id="layoutSidenav">
       <div id="layoutSidenav_content">
         <div class="container-fluid px-4">
-          <h1 class="mt-4" style="text-align: center">訂單</h1>
-          <div class="card mb-4">
+          <h1 class="mt-4 text-center">訂單</h1>
+          <div class="card">
             <div class="card-body table-responsive">
-              <button
-                class="btn btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#insertModal"
-                style="margin-bottom: 10px"
-              >
+              <button class="btn mb-3 btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal">
                 新增訂單
               </button>
               <table class="table table-bordered">
@@ -33,10 +28,7 @@
                 </thead>
 
                 <tbody class="align-middle text-center">
-                  <tr
-                    v-for="(orders, ordersindex) in orderss"
-                    :key="ordersindex"
-                  >
+                  <tr v-for="(orders, ordersindex) in orderss" :key="ordersindex">
                     <td>{{ orders.orderId }}</td>
                     <td>{{ orders.orderDate }}</td>
                     <td>{{ orders.member.memberid }}</td>
@@ -47,22 +39,14 @@
                     <td>{{ orders.orderCondition }}</td>
 
                     <td>
-                      <button
-                        class="btn btn-outline-info"
-                        data-bs-toggle="modal"
-                        @click="openUpdateModal(orders)"
-                        data-bs-target="#updateModal"
-                      >
+                      <button class="btn btn-outline-secondary" data-bs-toggle="modal" @click="openUpdateModal(orders)"
+                        data-bs-target="#updateModal">
                         修改
                       </button>
                     </td>
                     <td>
-                      <button
-                        class="btn btn-outline-info"
-                        data-bs-toggle="modal"
-                        @click="openModalWithOrderItem(orders.orderId)"
-                        data-bs-target="#updateModal2"
-                      >
+                      <button class="btn btn-outline-danger" data-bs-toggle="modal"
+                        @click="openModalWithOrderItem(orders.orderId)" data-bs-target="#updateModal2">
                         查看
                       </button>
                     </td>
@@ -75,23 +59,12 @@
       </div>
     </div>
     <!-- 詳細資料彈出視窗 -->
-    <div
-      class="modal fade"
-      id="updateModal2"
-      tabindex="-1"
-      aria-labelledby="updateModal2"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">詳細資料</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <table class="table">
@@ -108,10 +81,7 @@
                 </tr>
               </thead>
               <tbody class="align-middle text-center">
-                <tr
-                  v-for="(orderitem, orderitemsindex) in selectedOrderItems"
-                  :key="orderitemsindex"
-                >
+                <tr v-for="(orderitem, orderitemsindex) in selectedOrderItems" :key="orderitemsindex">
                   <td>{{ orderitem.itemId }}</td>
                   <td>{{ orderitem.classes.course.courseName }}</td>
                   <td>
@@ -135,93 +105,46 @@
     </div>
 
     <!-- 修改-彈出視窗 -->
-    <div
-      class="modal fade"
-      id="updateModal"
-      tabindex="-1"
-      aria-labelledby="updateModal"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">更新訂單</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              日期<input
-                v-model="updateSelectedOrders.orderDate"
-                type="date"
-                class="form-control"
-                required="required"
-              />
-              <span v-if="!updateSelectedOrders.orderDate" class="text-danger"
-                >必填</span
-              >
+              日期<input v-model="updateSelectedOrders.orderDate" type="date" class="form-control" required="required" />
+              <span v-if="!updateSelectedOrders.orderDate" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              會員編號<input
-                v-model="updateSelectedOrders.memberId"
-                type="text"
-                class="form-control"
-                required="required"
-              />
-              <span v-if="!updateSelectedOrders.memberId" class="text-danger"
-                >必填</span
-              >
+              會員編號<input v-model="updateSelectedOrders.memberId" type="text" class="form-control" required="required" />
+              <span v-if="!updateSelectedOrders.memberId" class="text-danger">必填</span>
             </div>
             <!-- <div class="mb-3">
                         總金額<input v-model="updateSelectedOrders.orderTotalAmount" type="text" class="form-control" required="required">
                         <span v-if="!updateSelectedOrders.orderTotalAmount" class="text-danger">必填</span>
                     </div> -->
             <div class="mb-3">
-              付款方式<input
-                v-model="updateSelectedOrders.orderPaymentMethod"
-                type="text"
-                class="form-control"
-                required="required"
-              />
-              <span
-                v-if="!updateSelectedOrders.orderPaymentMethod"
-                class="text-danger"
-                >必填</span
-              >
+              付款方式<input v-model="updateSelectedOrders.orderPaymentMethod" type="text" class="form-control"
+                required="required" />
+              <span v-if="!updateSelectedOrders.orderPaymentMethod" class="text-danger">必填</span>
             </div>
             <label class="form-label">付款狀態</label>
             <div class="mb-3">
-              <select
-                v-model="updateSelectedOrders.orderstate"
-                class="form-control"
-                required="required"
-              >
+              <select v-model="updateSelectedOrders.orderstate" class="form-control" required="required">
                 <option value="0">未付款</option>
                 <option value="1">已付款</option>
               </select>
-              <span v-if="!updateSelectedOrders.orderstate" class="text-danger"
-                >必填</span
-              >
+              <span v-if="!updateSelectedOrders.orderstate" class="text-danger">必填</span>
             </div>
             <label class="form-label">訂單狀態</label>
             <div class="mb-3">
-              <select
-                v-model="updateSelectedOrders.orderCondition"
-                class="form-control"
-                required="required"
-              >
+              <select v-model="updateSelectedOrders.orderCondition" class="form-control" required="required">
                 <option value="Pending">Pending</option>
                 <option value="Processing">Processing</option>
               </select>
-              <span
-                v-if="!updateSelectedOrders.orderCondition"
-                class="text-danger"
-                >必填</span
-              >
+              <span v-if="!updateSelectedOrders.orderCondition" class="text-danger">必填</span>
             </div>
           </div>
           <div class="modal-footer">
@@ -234,41 +157,20 @@
     </div>
 
     <!-- 新增-彈出視窗 -->
-    <div
-      class="modal fade"
-      id="insertModal"
-      tabindex="-1"
-      aria-labelledby="insertModal"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">新增訂單</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              日期<input
-                v-model="orders.orderDate"
-                type="date"
-                class="form-control"
-                required="required"
-              />
+              日期<input v-model="orders.orderDate" type="date" class="form-control" required="required" />
               <span v-if="!orders.orderDate" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              會員編號<input
-                v-model="orders.memberId"
-                type="text"
-                class="form-control"
-                required="required"
-              />
+              會員編號<input v-model="orders.memberId" type="text" class="form-control" required="required" />
               <span v-if="!orders.memberId" class="text-danger">必填</span>
             </div>
             <!-- <div class="mb-3">
@@ -276,23 +178,12 @@
                         <span v-if="!orders.orderTotalAmount" class="text-danger">必填</span>
                     </div> -->
             <div class="mb-3">
-              付款方式<input
-                v-model="orders.orderPaymentMethod"
-                type="text"
-                class="form-control"
-                required="required"
-              />
-              <span v-if="!orders.orderPaymentMethod" class="text-danger"
-                >必填</span
-              >
+              付款方式<input v-model="orders.orderPaymentMethod" type="text" class="form-control" required="required" />
+              <span v-if="!orders.orderPaymentMethod" class="text-danger">必填</span>
             </div>
             <label class="form-label">付款狀態</label>
             <div class="mb-3">
-              <select
-                v-model="orders.orderstate"
-                class="form-control"
-                required="required"
-              >
+              <select v-model="orders.orderstate" class="form-control" required="required">
                 <option value="0">未付款</option>
                 <option value="1">已付款</option>
               </select>
@@ -300,17 +191,11 @@
             </div>
             <label class="form-label">訂單狀態</label>
             <div class="mb-3">
-              <select
-                v-model="orders.orderCondition"
-                class="form-control"
-                required="required"
-              >
+              <select v-model="orders.orderCondition" class="form-control" required="required">
                 <option value="Pending">Pending</option>
                 <option value="Processing">Processing</option>
               </select>
-              <span v-if="!orders.orderCondition" class="text-danger"
-                >必填</span
-              >
+              <span v-if="!orders.orderCondition" class="text-danger">必填</span>
             </div>
           </div>
           <div class="modal-footer">

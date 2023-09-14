@@ -6,19 +6,17 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_content">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4" style="text-align: center;">員工資料</h1>
-
-                    <div class="card mb-4">
+                    <h1 class="mt-4 text-center">員工資料</h1>
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
-                                data-bs-target="#insertModal">新增員工</button>
-
-                            <div class="col-3" style="padding-top: 20px;">
+                            <div class="col-3">
                                 <PageSize @pageSizeChange="changeHandler"></PageSize>
                             </div>
                             <div class="col-3">
                                 <SearchTextBox @searchInput="inputHandler"></SearchTextBox>
                             </div>
+                            <button type="submit" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                                data-bs-target="#insertModal">新增員工</button>
                             <table id="departmentsTable" class="table table-bordered">
                                 <thead class="align-middle text-center">
                                     <tr class="table-primary">
@@ -40,10 +38,10 @@
                                         <td>{{ emp.employeephone }}</td>
                                         <td>{{ emp.employeeemail }}</td>
                                         <td>{{ emp.jobtitlename }}</td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#updateModal" @click="inputUpdateData(emp)">修改</button>
                                         </td>
-                                        <td><button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        <td><button type="submit" class="btn btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal" @click="inputDeleteData(emp)">刪除</button>
                                         </td>
                                     </tr>
@@ -81,7 +79,7 @@
                             <span v-if="!updateEmployee.employeephone" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            性別:<select v-model="updateEmployee.employeegender" id="gender">
+                            性別:<select class="form-select" v-model="updateEmployee.employeegender" id="gender">
                                 <option value="男">男</option>
                                 <option value="女">女</option>
                             </select>
@@ -101,7 +99,7 @@
                         </div>
                         <div class="mb-3">
                             部門:
-                            <select v-model="updateEmployee.deptid">
+                            <select class="form-select" v-model="updateEmployee.deptid">
                                 <option v-for="dept in allDepts" :key="dept.deptid" :value="dept.deptid">{{ dept.deptname }}
                                 </option>
                             </select>
@@ -110,7 +108,7 @@
 
                         <div class="mb-3">
                             職稱:
-                            <select v-model="updateEmployee.jobtitleid">
+                            <select class="form-select" v-model="updateEmployee.jobtitleid">
                                 <option v-for="jobtitle in allJobTitles" :key="jobtitle.jobtitleid"
                                     :value="jobtitle.jobtitleid">{{ jobtitle.jobtitlename }}
                                 </option>
@@ -119,7 +117,7 @@
                         </div>
                         <div class="mb-3">
                             主管:
-                            <select v-model="updateEmployee.managerid">
+                            <select class="form-select" v-model="updateEmployee.managerid">
                                 <option value="">無</option>
                                 <option v-for="manager in allManagers" :key="manager.employeeid"
                                     :value="manager.employeeid">{{ manager.employeename }}
@@ -176,7 +174,7 @@
                             <span v-if="!insertEmployee.employeephone" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            性別:<select v-model="insertEmployee.employeegender" id="gender">
+                            性別:<select class="form-select" v-model="insertEmployee.employeegender" id="gender">
                                 <option value="男">男</option>
                                 <option value="女">女</option>
                             </select>
@@ -196,7 +194,7 @@
                         </div>
                         <div class="mb-3">
                             部門:
-                            <select v-model="insertEmployee.deptid">
+                            <select class="form-select" v-model="insertEmployee.deptid">
                                 <option v-for="dept in allDepts" :key="dept.deptid" :value="dept.deptid">{{ dept.deptname }}
                                 </option>
                             </select>
@@ -204,7 +202,7 @@
                         </div>
                         <div class="mb-3">
                             職稱:
-                            <select v-model="insertEmployee.jobtitleid">
+                            <select class="form-select" v-model="insertEmployee.jobtitleid">
                                 <option v-for="jobtitle in allJobTitles" :key="jobtitle.jobtitleid"
                                     :value="jobtitle.jobtitleid">{{ jobtitle.jobtitlename }}
                                 </option>
@@ -213,7 +211,7 @@
                         </div>
                         <div class="mb-3">
                             主管:
-                            <select v-model="insertEmployee.managerid">
+                            <select class="form-select" v-model="insertEmployee.managerid">
                                 <option value="">無</option>
                                 <option v-for="manager in allManagers" :key="manager.employeeid"
                                     :value="manager.employeeid">{{ manager.employeename }}
@@ -283,6 +281,7 @@ import NavbarLeft from '../components/NavbarLeft.vue'
 import Paging from "../components/Paging.vue";
 import PageSize from "../components/PageSize.vue";
 import SearchTextBox from '../components/SearchTextBox.vue'
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL
 const insertEmployee = reactive({
@@ -329,12 +328,12 @@ const loadDatas = async () => {
     const responseJobTitle = await axios.get(`${url}/jobtitles`)
     const responseManager = await axios.get(`${url}/employees/managers`)
 
+
     allEmps.value = response.data.list
     allDepts.value = responseDept.data
     allJobTitles.value = responseJobTitle.data
     allManagers.value = responseManager.data
 
-    console.log(response.data)
     // 計算總共幾頁
     totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
 
@@ -354,7 +353,6 @@ const clickHandler = page => {
 const changeHandler = value => {
     datas.rows = value
     datas.start = 0
-    console.log("pagesize：", datas)
     loadDatas()
 }
 
@@ -390,19 +388,6 @@ const insertData = async () => {
     var myModalEl = document.getElementById('insertModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(!insertEmployee.employeename.trim())
-    console.log(!insertEmployee.employeeemail.trim())
-    console.log(!insertEmployee.employeephone.trim())
-    console.log(!insertEmployee.employeegender.trim())
-    console.log(!insertEmployee.employeecity.trim())
-    console.log(!insertEmployee.employeezone.trim())
-    console.log(!insertEmployee.employeeaddress.trim())
-    console.log(!insertEmployee.deptid)
-    console.log(!insertEmployee.jobtitleid)
-    console.log(!insertEmployee.hiredate.trim())
-    console.log(!insertEmployee.salary)
-    console.log(!insertEmployee.employeebirthday.trim())
-
     // //如果沒有值 return 不做
     if (!insertEmployee.employeename.trim() ||
         !insertEmployee.employeeemail.trim() ||
@@ -414,14 +399,18 @@ const insertData = async () => {
         !insertEmployee.deptid ||
         !insertEmployee.jobtitleid ||
         !insertEmployee.hiredate.trim() ||
-        !insertEmployee.salary ||
+        !insertEmployee.salary || !insertEmployee.salary.trim() ||
         !insertEmployee.employeebirthday.trim()
     ) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
-    console.log(insertEmployee)
     try {
         const response = await axios.post(`${url}/employees`, insertEmployee)
 
@@ -429,11 +418,35 @@ const insertData = async () => {
             loadDatas(); // 重新載入資料
             // Object.assign(insertEmployee,{})
             // insertEmployee.value = ''; // 清空 insertDeptName
-            alert("新增成功")
+            insertEmployee.employeename = ''
+            insertEmployee.employeeemail = ''
+            insertEmployee.employeephone = ''
+            insertEmployee.employeegender = ''
+            insertEmployee.employeecity = ''
+            insertEmployee.employeezone = ''
+            insertEmployee.employeeaddress = ''
+            insertEmployee.deptid = ''
+            insertEmployee.jobtitleid = ''
+            insertEmployee.managerid = ''
+            insertEmployee.hiredate = ''
+            insertEmployee.resigndate = ''
+            insertEmployee.salary = ''
+            insertEmployee.employeebirthday = ''
+            insertEmployee.employeeintroduction = ''
+            // alert("新增成功")
+        Swal.fire({
+            title: '新增成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
     } catch (error) {
-        console.log(error)
-        alert("新增失敗")
+        // alert("新增失敗")
+        Swal.fire({
+            title: '新增失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -445,22 +458,6 @@ const updateData = async () => {
     var myModalEl = document.getElementById('updateModal')
     var modal = bootstrap.Modal.getInstance(myModalEl)
 
-    console.log(updateEmployee.managerid)
-
-    // console.log(updateEmployee.department.deptname)
-
-    // console.log(!updateEmployee.employeename.trim())
-    // console.log(!updateEmployee.employeeemail.trim())
-    // console.log(!updateEmployee.employeephone.trim())
-    // console.log(!updateEmployee.employeegender.trim())
-    // console.log( !updateEmployee.employeecity.trim())
-    // console.log( !updateEmployee.employeezone.trim())
-    // console.log(!updateEmployee.employeeaddress.trim())
-    // console.log( !updateEmployee.deptid )
-    // console.log( !updateEmployee.jobtitleid.trim())
-    // console.log(!updateEmployee.hiredate.trim())
-    // console.log(!updateEmployee.salary)
-    // console.log( !updateEmployee.employeebirthday.trim())
     delete updateEmployee.department
     delete updateEmployee.jobtitle
 
@@ -477,24 +474,36 @@ const updateData = async () => {
         !updateEmployee.hiredate.trim() ||
         !updateEmployee.salary ||
         !updateEmployee.employeebirthday.trim()) {
-        alert("請輸入正確資料")
+        // alert("請輸入正確資料")
+        Swal.fire({
+            title: '請輸入正確資料',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
         return;
     }
 
-    console.log("updateEmployee")
-    console.log(updateEmployee)
     try {
         const response = await axios.put(`${url}/employees/${updateEmployee.employeeid}`, updateEmployee)
-        console.log("test2")
         if (response.status == 200) {
             loadDatas(); // 重新載入資料
-            alert("修改成功")
+
+            // alert("修改成功")
+        Swal.fire({
+            title: '修改成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        console.log(error.response)
-        alert("修改失敗")
+        // alert("修改失敗")
+        Swal.fire({
+            title: '修改失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -512,17 +521,26 @@ const deleteData = async () => {
         const response = await axios.delete(`${url}/employees/${deleteEmployee.employeeid}`)
 
         if (response.status == 200) {
-            datas.start = 0;
-            datas.name = null;
+            // datas.start = 0;
+            // datas.name = null;
 
             loadDatas(); // 重新載入資料
-            alert("刪除成功")
+            // alert("刪除成功")
+        Swal.fire({
+            title: '刪除成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
         }
 
 
     } catch (error) {
-        console.log(error.response)
-        alert("刪除失敗")
+        // alert("刪除失敗")
+        Swal.fire({
+            title: '刪除失敗',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        })
     } finally {
         //不管是否成功 modal切換
         modal.toggle();
@@ -530,6 +548,6 @@ const deleteData = async () => {
 
 }
 
-</script>
+</script >
 
 <style></style>
