@@ -5,14 +5,13 @@
     <div id="layoutSidenav">
       <div id="layoutSidenav_content">
         <div class="container-fluid px-4">
-          <h1 class="mt-4" style="text-align: center">優惠券</h1>
+          <h1 class="mt-4 text-center">優惠券</h1>
           <div class="card mb-4">
             <div class="card-body table-responsive">
               <button
-                class="btn btn btn-primary"
+                class="btn mb-3 btn-primary"
                 data-bs-toggle="modal"
                 data-bs-target="#insertModal"
-                style="margin-bottom: 10px"
               >
                 新增優惠券
               </button>
@@ -64,7 +63,7 @@
 
                     <td>
                       <button
-                        class="btn btn-outline-info"
+                        class="btn btn-outline-secondary"
                         data-bs-toggle="modal"
                         @click="openUpdateModal(coupon)"
                         data-bs-target="#updateModal"
@@ -190,7 +189,7 @@
                 class="form-control"
                 required="required"
               >
-              <option value="1">全站可使用</option>
+                <option value="1">全站可使用</option>
                 <option value="2">重量訓練類限定</option>
                 <option value="3">有氧訓練類限定</option>
                 <option value="4">綜合體能類限定</option>

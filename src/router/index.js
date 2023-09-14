@@ -212,27 +212,17 @@ router.beforeResolve(async (to) => {
     const isLogin = window.localStorage.getItem("isLogin");
     const loa = window.localStorage.getItem("loa");
 
-    console.log(typeof loa);
-
-    console.log("login");
     if (!isLogin) {
-      console.log("back to login1");
       return { name: "login" };
     }
-    console.log(to.meta.loa);
-    console.log(loa);
     if (loa < to.meta.loa) {
-      console.log("<");
       logout();
       return { name: "login" };
-    } else {
-      console.log(">=");
     }
 
     const token = window.localStorage.getItem("token");
     const authResult = await authToken(token);
     if (!authResult.status) {
-      console.log("back to login2");
       return { name: "login" };
     }
   }

@@ -6,11 +6,10 @@
     <div id="layoutSidenav">
       <div id="layoutSidenav_content">
         <div class="container-fluid px-4">
-          <h1 class="mt-4" style="text-align: center">教練照片</h1>
-
-          <div class="card mb-4">
+          <h1 class="mt-4 text-center">教練照片</h1>
+          <div class="card">
             <div class="card-body table-responsive">
-              <div class="col-3" style="padding-top: 20px">
+              <div class="col-3">
                 <PageSize @pageSizeChange="changeHandler"></PageSize>
               </div>
               <div class="col-3">
@@ -29,7 +28,7 @@
                     <td>{{ coach.employeeid }}</td>
                     <td>{{ coach.employeename }}</td>
                     <td>
-                      <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal"
+                      <button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
                         data-bs-target="#updateModal" @click="inputUpdateData(coach)">
                         修改
                       </button>
@@ -46,22 +45,25 @@
 
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
       data-bs-backdrop="static">
-      <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-dialog  modal-lg modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">修改教練照片</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="mb-3">
-              教練編號: {{ updateEmp.employeeid }}
+            <div>
+              <span class="ms-3">教練編號: {{ updateEmp.employeeid }}</span>
+              <span class="ms-3">教練姓名: {{ updateEmp.employeename }}</span>
             </div>
-            <div class="mb-3">
-              教練姓名: {{ updateEmp.employeename }}
+            <div>
+              <img class="m-3" style="width: 300px ;height: 300px;" v-for="cpic in updateCoachPic"
+                :src="`data:image/jpeg;base64,${cpic.cpicfile}`" @click="inputDeleteData(cpic)" />
             </div>
-            <img style="width: 200px" v-for="cpic in updateCoachPic" :src="`data:image/jpeg;base64,${cpic.cpicfile}`"
-              @click="inputDeleteData(cpic)" />
-            <input id="inputImg" type="file" multiple />
+            <span class="text-danger  ms-3">*點擊圖片可刪除</span>
+            <div class="mt-3 ms-3">
+              <input id="inputImg" type="file" multiple />
+            </div>
             <!-- <div class="mb-3">
                             員工編號: {{ updateBackStageAccount.cpicid }}
                         </div>
@@ -109,6 +111,7 @@ import NavbarLeft from "../components/NavbarLeft.vue";
 import Paging from "../components/Paging.vue";
 import PageSize from "../components/PageSize.vue";
 import SearchTextBox from "../components/SearchTextBox.vue";
+import Swal from 'sweetalert2'
 
 const url = import.meta.env.VITE_API_JAVAURL;
 const insertCoachPic = reactive({
@@ -155,7 +158,7 @@ onMounted(() => {
     try {
       await uploadImage()
       let inputImg = document.getElementById("inputImg");
-      inputImg.value='';
+      inputImg.value = '';
     } catch (error) { }
   });
 });
@@ -170,7 +173,6 @@ const clickHandler = (page) => {
 const changeHandler = (value) => {
   datas.rows = value;
   datas.start = 0;
-  console.log("pagesize：", datas);
   loadDatas();
 };
 
@@ -190,7 +192,6 @@ const inputHandler = (value) => {
 
 // 點擊修改時觸發 帶入該筆資料
 const inputUpdateData = async (emp) => {
-  console.log("inputUpdateData");
   for (const key in updateCoachPic) {
     delete updateCoachPic[key];
   }
@@ -198,12 +199,9 @@ const inputUpdateData = async (emp) => {
   const responseCoachPics = await axios.get(`${url}/coachpics/byemp/${emp.employeeid}`);
   Object.assign(updateCoachPic, responseCoachPics.data);
 
-  console.log("updateCoachPic");
-  console.log(updateCoachPic);
 };
 
 const uploadImage = async () => {
-  console.log("uploadImage");
 
   if (!selectedFile.value || selectedFile.value.length === 0) {
     return;
@@ -220,7 +218,6 @@ const uploadImage = async () => {
 
       try {
         const response = await axios.post(`${url}/coachpics`, jsonPayload);
-        console.log(response.status)
         inputUpdateData(updateEmp.value)
       } catch (error) {
         console.error(error);
@@ -236,13 +233,8 @@ const inputDeleteData = (data) => {
   Object.assign(deleteCoachPic, data);
   let deletecheck = confirm('是否刪除')
   if (deletecheck) {
-    console.log("true")
-    console.log(deleteCoachPic)
     deleteData()
-  } else {
-    console.log("false")
   }
-  console.log(data)
 };
 
 const deleteData = async () => {
@@ -258,12 +250,21 @@ const deleteData = async () => {
 
       loadDatas(); // 重新載入資料
       inputUpdateData(updateEmp.value)
-      alert("刪除成功")
+      // alert("刪除成功")
+      Swal.fire({
+        title: '刪除成功',
+        icon: 'success',
+        confirmButtonText: '確定'
+      })
     }
 
   } catch (error) {
-    console.log(error.response)
-    alert("刪除失敗")
+    // alert("刪除失敗")
+    Swal.fire({
+      title: '刪除失敗',
+      icon: 'warning',
+      confirmButtonText: '確定'
+    })
   }
 
 }

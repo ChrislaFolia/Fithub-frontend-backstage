@@ -46,7 +46,6 @@ const loadImage = async () => {
       const response = await axios.get(`${url}/coachpics/9`);
       imageData.value = `data:image/jpeg;base64,${response.data.cpicfile}`
       imageData2.value = `data:image/png;base64,${response.data.cpicfile}`
-      console.log(response.data.cpicfile);
     } catch (error) {
       console.error(error);
     }
