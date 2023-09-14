@@ -361,8 +361,8 @@ const coupon = reactive({
   couponthreshold: "",
 });
 
-const coupons = ref([]); // 儲存SelectAll的教室
-const selectedCoupons = ref([]); // 儲存選中的 ClassroomID
+const coupons = ref([]); // 儲存SelectAll的優惠券
+const selectedCoupons = ref([]); // 儲存選中的 CouponID
 const updateSelectedCoupon = reactive({}); // 儲存要修改的優惠券資料(預設值)
 
 //生成優惠碼按鈕
