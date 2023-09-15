@@ -192,12 +192,16 @@ const courses = ref([]);
 const URL = import.meta.env.VITE_API_JAVAURL;
 const loadCourses = async () => {
   const URLAPI = `${URL}/course/page`;
-  const response = await axios.get(URLAPI, {
-    params: {
-      p: paginationData.page,
-      size: 10,
-    },
-  });
+  const response = await axios
+    .get(URLAPI, {
+      params: {
+        p: paginationData.page,
+        size: 10,
+      },
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+    });
   // console.log(response.data)
 
   //取得所有課程放進courses變數
