@@ -100,7 +100,17 @@
                   </tbody>
                 </table>
               </div>
+              <!-- pagination start -->
+              <div class="mb-4">
+                <Pagination
+                  :page="paginationData.page"
+                  :total-pages="paginationData.totalPages"
+                  @page-emit="pageHandler"
+                ></Pagination>
+              </div>
+              <!-- pagination end -->
             </div>
+            <!-- card end -->
           </div>
         </main>
       </div>
@@ -117,18 +127,36 @@ import axios from "axios";
 import UpdateClass from "../components/classes/classesUpdateModal.vue";
 import NavbarTop from "../components/NavbarTop.vue";
 import NavbarLeft from "../components/NavbarLeft.vue";
+import Pagination from "../components/util/pagination.vue";
 import Swal from "sweetalert2";
+const URL = import.meta.env.VITE_API_JAVAURL;
+
+/* 
+  pagination
+*/
+const paginationData = reactive({
+  page: 1,
+  totalPages: 1,
+  numberOfCourses: 10,
+});
+
+const pageHandler = (page) => {
+  console.log("out" + page);
+  paginationData.page = page;
+  loadClasses();
+};
 
 // Load Classes data
-const URL = import.meta.env.VITE_API_JAVAURL;
 const classes = ref([]);
 const loadClasses = async () => {
-  const URLAPI = `${URL}/classes/findAllInMonthRange`;
+  const URLAPI = `${URL}/classes/findAllInMonthRange/page`;
   const response = await axios
     .get(URLAPI, {
       params: {
         monthBefore: 1,
         monthAfter: 1,
+        p: paginationData.page,
+        size: 10,
       },
     })
     .catch((error) => {
