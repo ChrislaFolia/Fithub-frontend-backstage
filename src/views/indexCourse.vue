@@ -11,8 +11,13 @@
             <div class="card mb-4">
               <div class="card-body table-responsive">
                 <div class="mb-3">
-                  <button type="button" id="insertCourse" class="btn btn btn-primary mb-1" data-bs-toggle="modal"
-                    data-bs-target="#insertModal">
+                  <button
+                    type="button"
+                    id="insertCourse"
+                    class="btn btn btn-primary mb-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#insertModal"
+                  >
                     新增課程資料
                   </button>
                 </div>
@@ -20,7 +25,7 @@
                 <table class="table table-bordered">
                   <thead class="align-middle text-center">
                     <tr class="table-primary">
-                      <th>建立課堂</th>
+                      <th>去排課</th>
                       <th>課程分類</th>
                       <th>課程名稱</th>
                       <th>課程圖片</th>
@@ -30,54 +35,93 @@
                     </tr>
                   </thead>
                   <tbody class="align-middle text-center">
-                    <tr v-for="{
-                      courseId,
-                      courseName,
-                      courseCategories,
-                      courseImgPath,
-                      courseDescription,
-                    } in courses" :key="courseId">
+                    <tr
+                      v-for="{
+                        courseId,
+                        courseName,
+                        courseCategories,
+                        courseImgPath,
+                        courseDescription,
+                      } in courses"
+                      :key="courseId"
+                    >
                       <td>
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                          :data-bs-target="`#insertClassesModal${courseId}`">
+                        <button
+                          type="button"
+                          class="btn btn-primary btn-sm"
+                          data-bs-toggle="modal"
+                          :data-bs-target="`#insertClassesModal${courseId}`"
+                        >
                           <i class="bi bi-plus"></i>
                         </button>
-                        <InsertClass class="text-left" :courseId="courseId" :courseName="courseName"
-                          @submitInsertCourse-emit="loadCourses">
+                        <InsertClass
+                          class="text-left"
+                          :courseId="courseId"
+                          :courseName="courseName"
+                          @submitInsertCourse-emit="loadCourses"
+                        >
                         </InsertClass>
                       </td>
                       <td>{{ courseCategories.categoryName }}</td>
                       <td>{{ courseName }}</td>
                       <td>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
-                          :data-bs-target="`#staticBackdropPic${courseId}`">
+                        <button
+                          type="button"
+                          class="btn btn-secondary btn-sm"
+                          data-bs-toggle="modal"
+                          :data-bs-target="`#staticBackdropPic${courseId}`"
+                        >
                           檢視圖片
                         </button>
-                        <courseImg :parentId="courseId" :parentImgName="courseName" :parentImgPath="courseImgPath"
-                          modalTitle="課程圖片"></courseImg>
+                        <courseImg
+                          :parentId="courseId"
+                          :parentImgName="courseName"
+                          :parentImgPath="courseImgPath"
+                          modalTitle="課程圖片"
+                        ></courseImg>
                       </td>
                       <td>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
-                          :data-bs-target="`#staticBackdrop${courseId}`">
+                        <button
+                          type="button"
+                          class="btn btn-secondary btn-sm"
+                          data-bs-toggle="modal"
+                          :data-bs-target="`#staticBackdrop${courseId}`"
+                        >
                           詳細內容
                         </button>
-                        <courseDescription :parentId="courseId" :parentDescription="courseDescription" modalTitle="課程描述">
+                        <courseDescription
+                          :parentId="courseId"
+                          :parentDescription="courseDescription"
+                          modalTitle="課程描述"
+                        >
                         </courseDescription>
                       </td>
                       <td>
-                        <button :id="`getUpdateCourseBtn${courseId}}`" class="btn btn-outline-secondary btn-sm"
-                          data-bs-toggle="modal" :data-bs-target="`#updateModal${courseId}`">
+                        <button
+                          :id="`getUpdateCourseBtn${courseId}}`"
+                          class="btn btn-outline-secondary btn-sm"
+                          data-bs-toggle="modal"
+                          :data-bs-target="`#updateModal${courseId}`"
+                        >
                           修改
                         </button>
-                        <UpdateCourse :categories="courseCategories" :courseId="courseId" :courseName="courseName"
-                          :courseImgPath="courseImgPath" :courseCategories="courseCategories"
-                          :courseDescription="courseDescription" :allCourseCategories="allCourseCategories"
-                          @submitUpdateCourse-emit="loadCourses">
+                        <UpdateCourse
+                          :categories="courseCategories"
+                          :courseId="courseId"
+                          :courseName="courseName"
+                          :courseImgPath="courseImgPath"
+                          :courseCategories="courseCategories"
+                          :courseDescription="courseDescription"
+                          :allCourseCategories="allCourseCategories"
+                          @submitUpdateCourse-emit="loadCourses"
+                        >
                         </UpdateCourse>
                       </td>
                       <td>
-                        <button @click="deleteCourse(`${courseId}`, `${courseName}`)"
-                          class="btn btn-outline-danger btn-sm">
+                        <button
+                          @click="deleteCourse(`${courseId}`, `${courseName}`)"
+                          class="btn btn-outline-danger btn-sm"
+                        >
                           刪除
                         </button>
                       </td>
@@ -91,7 +135,10 @@
       </div>
     </div>
 
-    <InsertCourse :allCourseCategories="allCourseCategories" @submitInsertCourse-emit="loadCourses()"></InsertCourse>
+    <InsertCourse
+      :allCourseCategories="allCourseCategories"
+      @submitInsertCourse-emit="loadCourses()"
+    ></InsertCourse>
   </body>
 </template>
 
@@ -108,7 +155,7 @@ import UpdateCourse from "../components/course/courseUpdateModal.vue";
 import InsertClass from "../components/classes/classesInsertModal.vue";
 import courseImg from "../components/util/imageModal.vue";
 import courseDescription from "../components/util/textModal.vue";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const totalPages = ref(0);
 const datas = reactive({
@@ -167,28 +214,28 @@ const deleteCourse = async (courseId, courseName) => {
     console.log(response.status);
     if (response.status == 200) {
       // alert("刪除成功");
-        Swal.fire({
-            title: '刪除成功',
-            icon: 'success',
-            confirmButtonText: '確定'
-        })
+      Swal.fire({
+        title: "刪除成功",
+        icon: "success",
+        confirmButtonText: "確定",
+      });
     } else {
       // alert("刪除失敗");
-        Swal.fire({
-            title: '刪除失敗',
-            icon: 'warning',
-            confirmButtonText: '確定'
-        })
+      Swal.fire({
+        title: "刪除失敗",
+        icon: "warning",
+        confirmButtonText: "確定",
+      });
     }
     loadCourses();
   } else if (msg == null) {
   } else {
     // alert("輸入錯誤");
-        Swal.fire({
-            title: '輸入錯誤',
-            icon: 'warning',
-            confirmButtonText: '確定'
-        })
+    Swal.fire({
+      title: "輸入錯誤",
+      icon: "warning",
+      confirmButtonText: "確定",
+    });
   }
 };
 
