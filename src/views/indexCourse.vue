@@ -129,7 +129,17 @@
                   </tbody>
                 </table>
               </div>
+              <!-- pagination start -->
+              <div class="mb-4">
+                <Pagination
+                  :page="paginationData.page"
+                  :total-pages="paginationData.totalPages"
+                  @page-emit="pageHandler"
+                ></Pagination>
+              </div>
+              <!-- pagination end -->
             </div>
+            <!-- card end -->
           </div>
         </main>
       </div>
@@ -137,7 +147,7 @@
 
     <InsertCourse
       :allCourseCategories="allCourseCategories"
-      @submitInsertCourse-emit="loadCourses()"
+      @submitInsertCourse-emit="loadCourses"
     ></InsertCourse>
   </body>
 </template>
@@ -155,16 +165,23 @@ import UpdateCourse from "../components/course/courseUpdateModal.vue";
 import InsertClass from "../components/classes/classesInsertModal.vue";
 import courseImg from "../components/util/imageModal.vue";
 import courseDescription from "../components/util/textModal.vue";
+import Pagination from "../components/util/pagination.vue";
 import Swal from "sweetalert2";
 
-const totalPages = ref(0);
-const datas = reactive({
-  start: 0,
-  rows: 0,
-  name: "",
-  sortOrder: "asc",
-  sortType: "id",
+/* 
+  pagination
+*/
+const paginationData = reactive({
+  page: 1,
+  totalPages: 1,
+  numberOfCourses: 10,
 });
+
+const pageHandler = (page) => {
+  console.log("out" + page);
+  paginationData.page = page;
+  loadCourses();
+};
 
 /*
   Load datas
@@ -174,16 +191,24 @@ const datas = reactive({
 const courses = ref([]);
 const URL = import.meta.env.VITE_API_JAVAURL;
 const loadCourses = async () => {
-  const URLAPI = `${URL}/course/findAll`;
-  const response = await axios.get(URLAPI, datas);
+  const URLAPI = `${URL}/course/page`;
+  const response = await axios.get(URLAPI, {
+    params: {
+      p: paginationData.page,
+      size: 10,
+    },
+  });
   // console.log(response.data)
 
   //取得所有課程放進courses變數
   courses.value = response.data;
-  console.log(courses);
-  //計算總共幾頁
-  totalPages.value =
-    +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows);
+
+  //取得所有課程頁數及單頁資料數放進courses變數
+  paginationData.totalPages = parseInt(response.headers["total-pages"]);
+  paginationData.numberOfCourses = parseInt(
+    response.headers["number-of-elements"]
+  );
+  // console.log(courses);
 };
 
 // Load courseCategories data
@@ -244,10 +269,9 @@ const deleteCourse = async (courseId, courseName) => {
 */
 
 onMounted(() => {
+  loadAllCourseCategories();
   loadCourses();
 });
-
-loadAllCourseCategories();
 </script>
 
 <style scoped></style>
