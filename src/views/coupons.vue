@@ -8,14 +8,21 @@
           <h1 class="mt-4 text-center">優惠券</h1>
           <div class="card mb-4">
             <div class="card-body table-responsive">
-              <button class="btn mb-3 btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal">
+              <button
+                class="btn mb-3 btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#insertModal"
+              >
                 新增優惠券
               </button>
               <table class="table table-bordered">
                 <thead class="align-middle text-center">
                   <tr class="table-primary">
                     <th>
-                      <button class="btn btn-outline-danger" @click="deleteSelected">
+                      <button
+                        class="btn btn-outline-danger"
+                        @click="deleteSelected"
+                      >
                         刪除
                       </button>
                     </th>
@@ -31,9 +38,16 @@
                 </thead>
 
                 <tbody class="align-middle text-center">
-                  <tr v-for="(coupon, couponindex) in coupons" :key="couponindex">
+                  <tr
+                    v-for="(coupon, couponindex) in coupons"
+                    :key="couponindex"
+                  >
                     <td>
-                      <input type="checkbox" v-model="selectedCoupons" :value="coupon.couponid" />
+                      <input
+                        type="checkbox"
+                        v-model="selectedCoupons"
+                        :value="coupon.couponid"
+                      />
                     </td>
                     <td>{{ coupon.couponCategories.couponcategoriesname }}</td>
                     <td>{{ coupon.couponname }}</td>
@@ -45,11 +59,15 @@
                     </td>
                     <td>{{ coupon.couponthreshold }}</td>
                     <td>{{ coupon.coupondiscount }}</td>
-                    <td>{{ coupon.couponused }}/{{ coupon.couponamount }}</td>
+                    <td>{{ coupon.couponused }}/{{ coupon.couponceil }}</td>
 
                     <td>
-                      <button class="btn btn-outline-secondary" data-bs-toggle="modal" @click="openUpdateModal(coupon)"
-                        data-bs-target="#updateModal">
+                      <button
+                        class="btn btn-outline-secondary"
+                        data-bs-toggle="modal"
+                        @click="openUpdateModal(coupon)"
+                        data-bs-target="#updateModal"
+                      >
                         修改
                       </button>
                     </td>
@@ -63,21 +81,46 @@
     </div>
 
     <!-- 修改-彈出視窗 -->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="updateModal"
+      tabindex="-1"
+      aria-labelledby="updateModal"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">更新優惠券</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              名稱<input v-model="updateSelectedCoupon.couponname" type="text" class="form-control" required="required" />
-              <span v-if="!updateSelectedCoupon.couponname" class="text-danger">必填</span>
+              名稱<input
+                v-model="updateSelectedCoupon.couponname"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span v-if="!updateSelectedCoupon.couponname" class="text-danger"
+                >必填</span
+              >
             </div>
             <div class="mb-3">
-              優惠碼<input v-model="updateSelectedCoupon.couponcode" type="text" class="form-control" required="required" />
-              <span v-if="!updateSelectedCoupon.couponcode" class="text-danger">必填</span>
+              優惠碼<input
+                v-model="updateSelectedCoupon.couponcode"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span v-if="!updateSelectedCoupon.couponcode" class="text-danger"
+                >必填</span
+              >
               <button @click="generateCoupon" class="btn btn-primary">
                 生成優惠碼
               </button>
@@ -88,32 +131,78 @@
                         <button @click="generateCoupon" class="btn btn-primary">生成優惠碼</button>
                     </div> -->
             <div class="mb-3">
-              生效日期<input v-model="updateSelectedCoupon.coupongeneratedate" type="date" class="form-control"
-                required="required" />
-              <span v-if="!updateSelectedCoupon.coupongeneratedate" class="text-danger">必填</span>
+              生效日期<input
+                v-model="updateSelectedCoupon.coupongeneratedate"
+                type="date"
+                class="form-control"
+                required="required"
+              />
+              <span
+                v-if="!updateSelectedCoupon.coupongeneratedate"
+                class="text-danger"
+                >必填</span
+              >
             </div>
             <div class="mb-3">
-              結束日期<input v-model="updateSelectedCoupon.couponenddate" type="date" class="form-control"
-                required="required" />
-              <span v-if="!updateSelectedCoupon.couponenddate" class="text-danger">必填</span>
+              結束日期<input
+                v-model="updateSelectedCoupon.couponenddate"
+                type="date"
+                class="form-control"
+                required="required"
+              />
+              <span
+                v-if="!updateSelectedCoupon.couponenddate"
+                class="text-danger"
+                >必填</span
+              >
             </div>
             <div class="mb-3">
-              使用門檻<input v-model="updateSelectedCoupon.couponthreshold" type="text" class="form-control"
-                required="required" />
-              <span v-if="!updateSelectedCoupon.couponthreshold" class="text-danger">必填</span>
+              使用門檻<input
+                v-model="updateSelectedCoupon.couponthreshold"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span
+                v-if="!updateSelectedCoupon.couponthreshold"
+                class="text-danger"
+                >必填</span
+              >
             </div>
             <div class="mb-3">
-              折扣金額<input v-model="updateSelectedCoupon.coupondiscount" type="text" class="form-control"
-                required="required" />
-              <span v-if="!updateSelectedCoupon.coupondiscount" class="text-danger">必填</span>
+              折扣金額<input
+                v-model="updateSelectedCoupon.coupondiscount"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span
+                v-if="!updateSelectedCoupon.coupondiscount"
+                class="text-danger"
+                >必填</span
+              >
             </div>
             <label class="form-label">分類</label>
             <div class="mb-3">
-              <select v-model="updateSelectedCoupon.couponcategoriesid" class="form-control" required="required">
-                <option value="1">全站通用</option>
-                <option value="3">拳擊限定</option>
+              <select
+                v-model="updateSelectedCoupon.couponcategoriesid"
+                class="form-control"
+                required="required"
+              >
+                <option value="1">全站可使用</option>
+                <option value="2">重量訓練類限定</option>
+                <option value="3">有氧訓練類限定</option>
+                <option value="4">綜合體能類限定</option>
+                <option value="5">瑜珈類限定</option>
+                <option value="6">格鬥訓練類限定</option>
+                <option value="7">舞蹈類限定</option>
+                <option value="8">伸展類限定</option>
               </select>
-              <span v-if="!updateSelectedCoupon.couponcategoriesid" class="text-danger">必填</span>
+              <span
+                v-if="!updateSelectedCoupon.couponcategoriesid"
+                class="text-danger"
+                >必填</span
+              >
             </div>
           </div>
           <div class="modal-footer">
@@ -126,44 +215,95 @@
     </div>
 
     <!-- 新增-彈出視窗 -->
-    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="insertModal"
+      tabindex="-1"
+      aria-labelledby="insertModal"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">新增優惠券</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              名稱<input v-model="coupon.couponname" type="text" class="form-control" required="required" />
+              名稱<input
+                v-model="coupon.couponname"
+                type="text"
+                class="form-control"
+                required="required"
+              />
               <span v-if="!coupon.couponname" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              優惠碼<input v-model="coupon.couponcode" type="text" class="form-control" required="required" />
+              優惠碼<input
+                v-model="coupon.couponcode"
+                type="text"
+                class="form-control"
+                required="required"
+              />
               <span v-if="!coupon.couponcode" class="text-danger">必填</span>
               <button @click="generateCoupon" class="btn btn-primary">
                 生成優惠碼
               </button>
             </div>
             <div class="mb-3">
-              生效日期<input v-model="coupon.coupongeneratedate" type="date" class="form-control" required="required" />
-              <span v-if="!coupon.coupongeneratedate" class="text-danger">必填</span>
+              生效日期<input
+                v-model="coupon.coupongeneratedate"
+                type="date"
+                class="form-control"
+                required="required"
+              />
+              <span v-if="!coupon.coupongeneratedate" class="text-danger"
+                >必填</span
+              >
             </div>
             <div class="mb-3">
-              結束日期<input v-model="coupon.couponenddate" type="date" class="form-control" required="required" />
+              結束日期<input
+                v-model="coupon.couponenddate"
+                type="date"
+                class="form-control"
+                required="required"
+              />
               <span v-if="!coupon.couponenddate" class="text-danger">必填</span>
             </div>
             <div class="mb-3">
-              使用門檻<input v-model="coupon.couponthreshold" type="text" class="form-control" required="required" />
-              <span v-if="!coupon.couponthreshold" class="text-danger">必填</span>
+              使用門檻<input
+                v-model="coupon.couponthreshold"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span v-if="!coupon.couponthreshold" class="text-danger"
+                >必填</span
+              >
             </div>
             <div class="mb-3">
-              折扣金額<input v-model="coupon.coupondiscount" type="text" class="form-control" required="required" />
-              <span v-if="!coupon.coupondiscount" class="text-danger">必填</span>
+              折扣金額<input
+                v-model="coupon.coupondiscount"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span v-if="!coupon.coupondiscount" class="text-danger"
+                >必填</span
+              >
             </div>
             <label class="form-label">分類</label>
             <div class="mb-3">
-              <select v-model="coupon.couponcategoriesid" class="form-control" required="required">
+              <select
+                v-model="coupon.couponcategoriesid"
+                class="form-control"
+                required="required"
+              >
                 <option value="1">全站可使用</option>
                 <option value="2">重量訓練類限定</option>
                 <option value="3">有氧訓練類限定</option>
@@ -173,7 +313,9 @@
                 <option value="7">舞蹈類限定</option>
                 <option value="8">伸展類限定</option>
               </select>
-              <span v-if="!coupon.couponcategoriesid" class="text-danger">必填</span>
+              <span v-if="!coupon.couponcategoriesid" class="text-danger"
+                >必填</span
+              >
             </div>
 
             <!-- 教室狀態
@@ -219,8 +361,8 @@ const coupon = reactive({
   couponthreshold: "",
 });
 
-const coupons = ref([]); // 儲存SelectAll的教室
-const selectedCoupons = ref([]); // 儲存選中的 ClassroomID
+const coupons = ref([]); // 儲存SelectAll的優惠券
+const selectedCoupons = ref([]); // 儲存選中的 CouponID
 const updateSelectedCoupon = reactive({}); // 儲存要修改的優惠券資料(預設值)
 
 //生成優惠碼按鈕

@@ -216,7 +216,7 @@ import NavbarTop from "../components/NavbarTop.vue";
 import NavbarLeft from "../components/NavbarLeft.vue";
 const URL = import.meta.env.VITE_API_JAVAURL;
 
-// const resInsertCourse = await axios.post(`${URL}/classes`, classes)
+// const resInsertCourse = await axios.post(`${URL}/classes`, classes)-
 //建立訂單物件
 const orders = reactive({
   orderid: "",
