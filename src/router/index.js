@@ -87,7 +87,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/course/:categoryId",
+      path: "/course",
       name: "course",
       component: () => import("../views/indexCourse.vue"),
     },

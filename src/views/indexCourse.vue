@@ -6,20 +6,57 @@
       <div id="layoutSidenav_content">
         <main>
           <div class="container-fluid px-4">
-            <h1 class="mt-4 mb-2" style="text-align: center">全部課程</h1>
+            <h1
+              v-if="pageCourseCategoryId == 0"
+              class="mt-4 mb-2"
+              style="text-align: center"
+            >
+              全部課程
+            </h1>
+            <h1 v-else class="mt-4 mb-2" style="text-align: center">
+              {{ courses[0]["courseCategories"]["categoryName"] }}課程
+            </h1>
 
             <div class="card mb-4">
               <div class="card-body table-responsive">
                 <div class="mb-3">
-                  <button
-                    type="button"
-                    id="insertCourse"
-                    class="btn btn btn-primary mb-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#insertModal"
-                  >
-                    新增課程資料
-                  </button>
+                  <div class="row">
+                    <!-- insert button start -->
+                    <div class="col-6 col-lg-4">
+                      <button
+                        type="button"
+                        id="insertCourse"
+                        class="btn btn btn-primary mb-1"
+                        data-bs-toggle="modal"
+                        data-bs-target="#insertModal"
+                      >
+                        新增課程資料
+                      </button>
+                    </div>
+                    <!-- insert button end -->
+                    <div class="col-6 col-lg-4">
+                      <select
+                        class="form-select"
+                        v-model="pageCourseCategoryId"
+                        id="categoryId"
+                      >
+                        <option selected value="" style="display: none">
+                          請選擇課程分類
+                        </option>
+                        <!-- value前加上：表示其爲int -->
+                        <option :value="0">全部課程</option>
+                        <option
+                          v-for="{
+                            categoryId,
+                            categoryName,
+                          } in allCourseCategories"
+                          :value="categoryId"
+                        >
+                          {{ categoryName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
                 <table class="table table-bordered">
@@ -161,7 +198,7 @@
 /*
   imports
 */
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import NavbarTop from "../components/NavbarTop.vue";
@@ -175,11 +212,24 @@ import Pagination from "../components/util/pagination.vue";
 import Swal from "sweetalert2";
 
 /*
-  route
+  watcher for categoryId
 */
-const route = useRoute();
 
-/* 
+const pageCourseCategoryId = ref(0);
+watch(
+  () => pageCourseCategoryId.value,
+  (newCategoryId) => {
+    if (newCategoryId == 0) {
+      paginationData.page = 1; //每次換Category時 顯示所有資料的第一頁
+      loadCourses();
+    } else {
+      paginationData.page = 1; //每次換Category時 顯示所有資料的第一頁
+      loadCoursesOfSingleCategory();
+    }
+  }
+);
+
+/*
   pagination
 */
 const paginationData = reactive({
@@ -238,6 +288,28 @@ const loadAllCourseCategories = async () => {
   // console.log(allCourseCategories)
 };
 
+// Load course data of single category
+const loadCoursesOfSingleCategory = async () => {
+  if (pageCourseCategoryId != 0) {
+    const URLAPI = `${URL}/course/page/${pageCourseCategoryId.value}`;
+    const response = await axios.get(URLAPI, {
+      params: {
+        p: paginationData.page,
+        size: 10,
+      },
+    });
+
+    //取得所有課程放進courses變數
+    courses.value = response.data;
+
+    //取得所有課程頁數及單頁資料數放進courses變數
+    paginationData.totalPages = parseInt(response.headers["total-pages"]);
+    paginationData.numberOfCourses = parseInt(
+      response.headers["number-of-elements"]
+    );
+  }
+};
+
 /*
   methods
 */
@@ -286,13 +358,10 @@ const deleteCourse = async (courseId, courseName) => {
 onMounted(() => {
   loadAllCourseCategories();
   // choose which page to load
-  if (route.params["categoryId"] == 0) {
+  if (pageCourseCategoryId.value == 0) {
     loadCourses();
-  } else if (
-    route.params["categoryId"] != 0 &&
-    route.params["categoryId"] != undefined
-  ) {
-    console.log("loadSingleCategoryCourse");
+  } else {
+    loadCoursesOfSingleCategory();
   }
 });
 </script>
