@@ -79,9 +79,16 @@
 </template>
 
 <script setup>
+/*
+  imports
+*/
 import { reactive } from "vue";
 import axios from "axios";
+const URL = import.meta.env.VITE_API_JAVAURL;
 
+/*
+  props
+*/
 // solution 1
 // const props = defineProps(['courseCategories'])
 
@@ -89,15 +96,21 @@ import axios from "axios";
 const props = defineProps({
   allCourseCategories: Object,
 });
+
+/*
+  Declare
+*/
 const course = reactive({
   courseName: "",
   categoryId: "",
   courseDescription: "",
   courseImgPath: "",
 });
-const formData = new FormData();
-// const courseImgFile = reactive([])
 
+/*
+  Img handler
+*/
+const formData = new FormData();
 const fileChange = (e) => {
   let file = e.target.files[0];
   console.log(file);
@@ -105,8 +118,16 @@ const fileChange = (e) => {
   console.log(formData);
 };
 
+/*
+  Emits
+*/
 const emit = defineEmits(["submitInsertCourse-emit"]);
-const URL = import.meta.env.VITE_API_JAVAURL;
+
+/*
+  Methods
+ */
+
+// Action for insert
 const submitInsertCourse = async (e) => {
   if (formData.get("photoContent") != null) {
     const resUploadFile = await axios
@@ -136,6 +157,16 @@ const submitInsertCourse = async (e) => {
   // 傳送event至parent componont
   emit("submitInsertCourse-emit");
 };
+
+/*
+  Validation
+*/
+const validatedInputState = reactive({
+  courseName: "is-valid", // 是否爲空
+  categoryId: "is-valid", // 是否爲空
+  courseDescription: "is-valid", // 圖片大小
+  courseImgPath: "is-valid", // 字數
+});
 </script>
 
 <style scoped>

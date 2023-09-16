@@ -159,14 +159,25 @@
 </template>
 
 <script setup>
+/*
+  imports
+ */
 import { ref, reactive, onMounted } from "vue";
 import router from "../../router";
 import axios from "axios";
+const URL = import.meta.env.VITE_API_JAVAURL;
 
+/*
+  props
+ */
 const props = defineProps({
   courseId: Number,
   courseName: String,
 });
+
+/*
+  Declare
+*/
 const classes = reactive({
   courseId: props.courseId,
   classDate: "",
@@ -185,8 +196,16 @@ const classroom = reactive({
   classroomCapacity: 30,
 });
 
+/*
+  Emits
+*/
 const emit = defineEmits(["submitInsertClasses-emit"]);
-const URL = import.meta.env.VITE_API_JAVAURL;
+
+/*
+  Methods
+ */
+
+// Action for insert
 const submitInsertClass = async (e) => {
   const resInsertCourse = await axios
     .post(`${URL}/classes`, classes)
@@ -205,6 +224,22 @@ const submitInsertClass = async (e) => {
   emit("submitInsertClasses-emit");
   // location.reload();
 };
+
+// Action for show classroom capacity for reference
+const setclassroomCapacity = (e) => {
+  classroom.classroomId = e.target.value;
+  for (let room of allClassrooms._rawValue) {
+    if (room.classroomId == classroom.classroomId) {
+      classroom.classroomName = room.classroomName;
+      classroom.classroomCapacity = room.classroomCapacity;
+      break;
+    }
+  }
+};
+
+/*
+  Load datas
+*/
 
 // Load classroom data
 const allClassrooms = ref([]);
@@ -229,25 +264,22 @@ const loadAllCoachs = async () => {
   // console.log(allCoachs)
 };
 
-const setclassroomCapacity = (e) => {
-  classroom.classroomId = e.target.value;
-  for (let room of allClassrooms._rawValue) {
-    if (room.classroomId == classroom.classroomId) {
-      classroom.classroomName = room.classroomName;
-      classroom.classroomCapacity = room.classroomCapacity;
-      break;
-    }
-  }
-};
+/*
+  Validation
+*/
+const validatedInputState = reactive({
+  classDate: "is-valid", // 是否爲空
+  classTime: "is-valid", // 是否爲空
+  employeeId: "is-valid", // 是否爲空
+  classroomId: "is-valid", // 是否爲空,是否已使用
+  applicantsCeil: "is-valid", // 是否爲空，是否<0，是否> classroom capacity,沒填自動補ceil值
+  applicantsFloor: "is-valid", // 是否爲空，是否<0 ,沒填自動補0
+  price: "is-valid", // 是否爲空，是否<=0
+});
 
-// 移除modal用#id串接產生的modal-backdrop問題，待問題解決後停用
-const removeBackdrop = () => {
-  const backdrop = document.body.querySelector(".modal-backdrop");
-  console.log(backdrop);
-  if (backdrop != null) {
-    backdrop.remove();
-  }
-};
+/*
+  Life Cycle Hooks
+*/
 
 onMounted(() => {
   loadAllClassrooms();
