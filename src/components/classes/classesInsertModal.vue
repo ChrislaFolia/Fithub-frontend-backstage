@@ -268,7 +268,7 @@ const loadAllCoachs = async () => {
   Validation
 */
 const validatedInputState = reactive({
-  classDate: "is-valid", // 是否爲空
+  classDate: "is-valid", // 是否爲空, 是否小於今天，是否在？個月後
   classTime: "is-valid", // 是否爲空
   employeeId: "is-valid", // 是否爲空
   classroomId: "is-valid", // 是否爲空,是否已使用
