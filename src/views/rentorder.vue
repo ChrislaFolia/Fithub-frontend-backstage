@@ -82,23 +82,26 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            時段:<select class="form-select">
-                                <option v-for="classroomNameId in classroomNameIds" :value="classroomNameId.classroomId">
-                                    {{ classroomNameId.classroomName }}</option>
+                            租借場地:<select class="form-select" v-model="updateId">
+                                <option v-for="(classroomNameId, index) in classroomNameIds"
+                                    :value="classroomNameId.classroomId">
+                                    {{ classroomNameId.classroomName }}
+                                </option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            預約日期:<input type="date" class="form-control" required="required">
+                            預約日期:<input type="date" class="form-control" required="required"
+                                v-model="chooseRentOrder.rentdate">
                         </div>
                         <div class="mb-3">
-                            時段:<select class="form-select">
+                            時段:<select class="form-select" v-model="chooseRentOrder.renttime">
                                 <option>早上</option>
                                 <option>下午</option>
                                 <option>晚上</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            租借狀態:<select class="form-select">
+                            租借狀態:<select class="form-select" v-model="chooseRentOrder.rentstatus">
                                 <option>未付款</option>
                                 <option>已付款</option>
                                 <option>取消</option>
@@ -106,7 +109,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">送出</button>
+                        <button type="submit" @click="updateRentOrder" class="btn btn-primary">送出</button>
                     </div>
                 </div>
             </div>
@@ -120,17 +123,15 @@ import { ref, onMounted, reactive } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
 import * as XLSX from 'xlsx'
+import Swal from 'sweetalert2'
 const url = import.meta.env.VITE_API_JAVAURL
 
 const rentorderPage = ref([])
 const classroomNameIds = ref([])
 const selectedRentOrderIds = ref([]) // 儲存選中的 rentorderid
 const xlsxData = ref([]) //儲存匯出xlsx需要的資料
-const updateRentOrder = reactive({
-    rentdate: '',
-    renttime: '',
-    rentstatus: ''
-})
+const chooseRentOrder = reactive({})
+const updateId = ref()
 
 // 將json資料匯出xlsx檔
 function exportXlsx() {
@@ -150,6 +151,7 @@ const page = reactive({
     date: date.value
 })
 
+// 更改顯示幾筆跳回第一頁(避免沒有該頁)
 const changeHandler = (value) => {
     page.row = row.value
     page.date = date.value
@@ -162,30 +164,24 @@ const changeHandler = (value) => {
     getrentorderpage();
 };
 
-
 // 取得全部教室名稱ID
 const getclassroomNameId = async () => {
     try {
         const response = await axios.get(`${url}/classroom/listName`);
         classroomNameIds.value = response.data;
-        // console.log(classroomNameIds.value)
+        console.log(classroomNameIds.value)
 
     } catch (error) {
-        console.error('Error getclassroomNameId data:', error);
+        console.error('Error getclassroomNameId:', error);
     }
 };
 
-// 将選中的訂單複製到 updateRentOrder
+// 將選中的訂單複製到 chooseRentOrder
 const openUpdateModal = (rentorder) => {
-    const { rentdate, renttime, rentstatus } = rentorder;
-
-    // 只保留update需要的屬性
-    updateRentOrder.rentdate = rentdate;
-    updateRentOrder.renttime = renttime;
-    updateRentOrder.rentstatus = rentstatus;
-    console.log(updateRentOrder)
+    Object.assign(chooseRentOrder, rentorder);
+    updateId.value = chooseRentOrder.classroom.classroomId
+    console.log(chooseRentOrder)
 };
-
 
 // 從伺服器獲取訂單分頁資料
 const getrentorderpage = async () => {
@@ -215,26 +211,101 @@ const getrentorderpage = async () => {
 };
 
 
+// 修改訂單
+const updateRentOrder = async () => {
+    try {
+        // 检查是否有任何必填字段为空
+        if (
+            !updateId ||
+            !chooseRentOrder.rentdate ||
+            !chooseRentOrder.renttime ||
+            !chooseRentOrder.rentstatus
+        ) {
+            Swal.fire({
+                title: '請完成必填欄位',
+                icon: 'warning',
+                confirmButtonText: '確定'
+            })
+            return;
+        }
 
+        // 只保留訂單需要的屬性
+        const rentOrderData = reactive({
+            rentorderid: chooseRentOrder.rentorderid,
+            memberid: chooseRentOrder.memberid,
+            classroomid: updateId.value,
+            rentorderdate: chooseRentOrder.rentorderdate,
+            rentdate: chooseRentOrder.rentdate,
+            renttime: chooseRentOrder.renttime,
+            rentamount: chooseRentOrder.rentamount,
+            rentstatus: chooseRentOrder.rentstatus
+        })
+
+        const response = await axios.put(`${url}/rent/update`, rentOrderData,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        Swal.fire({
+            title: '修改成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
+
+        //關閉動態框
+        const updateModal = document.getElementById("updateModal");
+        let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal);
+        getInstanceUpdateModal.toggle();
+
+        // 刷新畫面
+        getrentorderpage();
+    } catch (error) {
+        console.error("Error updateRentOrder:", error);
+    }
+};
 
 // 刪除多筆訂單
 const deleteSelected = async () => {
 
-    const checkDelete = window.confirm('確定要刪除選中的訂單嗎？');
-    if (checkDelete) {
-        try {
-            // 將選中的 rentorderid 送到後端進行刪除
-            const response = await axios.delete(`${url}/rent/delete/multiple`, {
-                data: selectedRentOrderIds.value
-            });
+    Swal.fire({
+        title: '確定要刪除選中的訂單嗎?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '確定',
+        cancelButtonText: '取消'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                // 將選中的 rentorderid 送到後端進行刪除
+                const response = await axios.delete(`${url}/rent/delete/multiple`, {
+                    data: selectedRentOrderIds.value
+                });
 
-            // 刷新資料
-            getrentorderpage();
-            selectedRentOrderIds.value = []; // 清空選中的項目
-        } catch (error) {
-            console.error('Error deleteSelected:', error);
+                // 刷新資料
+                getrentorderpage();
+                selectedRentOrderIds.value = []; // 清空選中的項目
+                Swal.fire(
+                    '已刪除',
+                    '',
+                    'success'
+                )
+            } catch (error) {
+                console.error('Error deleteSelected rentorders:', error);
+            }
+        } else {
+            Swal.fire(
+                '已取消!',
+                '',
+                'success'
+            )
+            selectedClassrooms.value = []; // 清空選中的項目
         }
-    }
+    })
 };
 
 

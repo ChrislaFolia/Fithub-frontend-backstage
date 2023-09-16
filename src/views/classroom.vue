@@ -334,7 +334,7 @@ const updateClassroom = async () => {
 const deleteSelected = async () => {
 
   Swal.fire({
-    title: '確定要刪除選中的教室嗎？?',
+    title: '確定要刪除選中的教室嗎?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
