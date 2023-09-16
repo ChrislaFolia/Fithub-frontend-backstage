@@ -26,6 +26,7 @@
                   <thead class="align-middle text-center">
                     <tr class="table-primary">
                       <th>去排課</th>
+                      <th>&nbsp;#&nbsp;</th>
                       <th>課程分類</th>
                       <th>課程名稱</th>
                       <th>課程圖片</th>
@@ -36,13 +37,16 @@
                   </thead>
                   <tbody class="align-middle text-center">
                     <tr
-                      v-for="{
-                        courseId,
-                        courseName,
-                        courseCategories,
-                        courseImgPath,
-                        courseDescription,
-                      } in courses"
+                      v-for="(
+                        {
+                          courseId,
+                          courseName,
+                          courseCategories,
+                          courseImgPath,
+                          courseDescription,
+                        },
+                        index
+                      ) in courses"
                       :key="courseId"
                     >
                       <td>
@@ -62,6 +66,7 @@
                         >
                         </InsertClass>
                       </td>
+                      <td>{{ index + 1 }}</td>
                       <td>{{ courseCategories.categoryName }}</td>
                       <td>{{ courseName }}</td>
                       <td>
@@ -157,6 +162,7 @@
   imports
 */
 import { ref, reactive, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import axios from "axios";
 import NavbarTop from "../components/NavbarTop.vue";
 import NavbarLeft from "../components/NavbarLeft.vue";
@@ -167,6 +173,11 @@ import courseImg from "../components/util/imageModal.vue";
 import courseDescription from "../components/util/textModal.vue";
 import Pagination from "../components/util/pagination.vue";
 import Swal from "sweetalert2";
+
+/*
+  route
+*/
+const route = useRoute();
 
 /* 
   pagination
@@ -274,7 +285,15 @@ const deleteCourse = async (courseId, courseName) => {
 
 onMounted(() => {
   loadAllCourseCategories();
-  loadCourses();
+  // choose which page to load
+  if (route.params["categoryId"] == 0) {
+    loadCourses();
+  } else if (
+    route.params["categoryId"] != 0 &&
+    route.params["categoryId"] != undefined
+  ) {
+    console.log("loadSingleCategoryCourse");
+  }
 });
 </script>
 

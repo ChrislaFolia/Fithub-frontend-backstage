@@ -21,6 +21,7 @@
                 <table class="table table-bordered">
                   <thead class="align-middle text-center">
                     <tr class="table-primary">
+                      <th>&nbsp;#&nbsp;</th>
                       <th>課程分類</th>
                       <th>課程名稱</th>
                       <th>負責教練</th>
@@ -36,25 +37,29 @@
                   </thead>
                   <tbody class="align-middle text-center">
                     <tr
-                      v-for="{
-                        classId,
-                        courseId,
-                        classDate,
-                        classTime,
-                        employeeId,
-                        employeename,
-                        courseName,
-                        categoryName,
-                        price,
-                        applicantsCeil,
-                        applicantsFloor,
-                        classroomId,
-                        classroomName,
-                        classroomCapacity,
-                        coachSubstitute,
-                      } in classes"
+                      v-for="(
+                        {
+                          classId,
+                          courseId,
+                          classDate,
+                          classTime,
+                          employeeId,
+                          employeename,
+                          courseName,
+                          categoryName,
+                          price,
+                          applicantsCeil,
+                          applicantsFloor,
+                          classroomId,
+                          classroomName,
+                          classroomCapacity,
+                          coachSubstitute,
+                        },
+                        index
+                      ) in classes"
                       :key="classId"
                     >
+                      <td>{{ index + 1 }}</td>
                       <td>{{ categoryName }}</td>
                       <td>{{ courseName }}</td>
                       <td>{{ employeename }}</td>

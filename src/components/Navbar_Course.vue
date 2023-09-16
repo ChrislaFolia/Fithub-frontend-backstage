@@ -20,7 +20,7 @@
     data-bs-parent="#sidenavAccordion"
   >
     <nav class="sb-sidenav-menu-nested nav">
-      <router-link class="nav-link" to="course">課程管理系統</router-link>
+      <router-link class="nav-link" to="course/0">課程管理系統</router-link>
       <router-link class="nav-link" to="classes">排課系統</router-link>
     </nav>
   </div>
