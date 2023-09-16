@@ -162,10 +162,14 @@ const loadClasses = async () => {
     .catch((error) => {
       console.log(error.toJSON());
     });
-  // console.log(response.data);
 
   classes.value = response.data;
-  console.log(classes);
+
+  //取得所有課程頁數及單頁資料數放進courses變數
+  paginationData.totalPages = parseInt(response.headers["total-pages"]);
+  paginationData.numberOfCourses = parseInt(
+    response.headers["number-of-elements"]
+  );
 };
 
 /*
