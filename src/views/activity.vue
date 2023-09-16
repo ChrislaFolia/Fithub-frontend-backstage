@@ -88,7 +88,8 @@
                             <span v-if="!updateSelectedActivities.activitydisplay" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            排序<input v-model="updateSelectedActivities.activitysort" type="text" class="form-control">
+                            排序<i class="bi bi-patch-question-fill" title="請輸入正整數，數字越大首頁顯示越前面"></i><input
+                                v-model="updateSelectedActivities.activitysort" type="text" class="form-control">
                             <span v-if="!updateSelectedActivities.activitysort" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
@@ -152,7 +153,8 @@
                             <span v-if="!Activity.activitydisplay" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            排序<input v-model="Activity.activitysort" type="text" class="form-control">
+                            排序<i class="bi bi-patch-question-fill" title="請輸入正整數，數字越大首頁顯示越前面"></i><input
+                                v-model="Activity.activitysort" type="text" class="form-control">
                             <span v-if="!Activity.activitysort" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
@@ -195,6 +197,7 @@ import { reactive, ref, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
 import Swal from 'sweetalert2'
+const url = import.meta.env.VITE_API_JAVAURL
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';  已改用CDN
 
 
@@ -285,7 +288,7 @@ const imageUpdate = (event) => {
 // 從伺服器獲取 JSON 格式活動資料
 const getActivitys = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/fithub/activity/list'); // 替換為實際的 API URL
+        const response = await axios.get(`${url}/activity/list`); // 替換為實際的 API URL
         Activitys.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
         // console.log(Activitys.value)
 
@@ -297,7 +300,7 @@ const getActivitys = async () => {
 // 給新增活動負責員工選項
 const getAllemployeenameAndemployeeid = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/fithub/activity/findAllemployeenameAndemployeeid'); // 替換為實際的 API URL
+        const response = await axios.get(`${url}/activity/findAllemployeenameAndemployeeid`); // 替換為實際的 API URL
         AllemployeenameAndemployeeid.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
         // console.log(AllemployeenameAndemployeeid.value)
 
@@ -331,7 +334,7 @@ const insertActivity = async () => {
         Activity.activitydescription = insertContent;
         // console.log(insertContent)
 
-        const response = await axios.post('http://localhost:8080/fithub/activity/insert', Activity, {
+        const response = await axios.post(`${url}/activity/insert`, Activity, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -381,16 +384,21 @@ const updateActivity = async () => {
             !updateSelectedActivities.activityon ||
             !updateSelectedActivities.activitysort ||
             !updateSelectedActivities.employeeid) {
+            Swal.fire({
+                title: '請完成必填欄位',
+                icon: 'warning',
+                confirmButtonText: '確定'
+            })
             return;
         }
 
-        //取得文字編輯器內容
+        // 取得文字編輯器內容
         const updateContent = updateEditor.getData();
         updateSelectedActivities.activitydescription = updateContent;
-
-
         console.log(updateSelectedActivities)
-        const response = await axios.put('http://localhost:8080/fithub/activity/update', updateSelectedActivities, {
+
+
+        const response = await axios.put(`${url}/activity/update`, updateSelectedActivities, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -402,7 +410,7 @@ const updateActivity = async () => {
             confirmButtonText: '確定'
         })
 
-        //關閉動態框
+        // 關閉動態框
         const updateModal = document.getElementById('updateModal')
         let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
         getInstanceUpdateModal.toggle();
@@ -415,9 +423,8 @@ const updateActivity = async () => {
 };
 
 
-// // 刪除多筆活動
+// 刪除多筆活動
 const deleteSelected = async () => {
-
 
     Swal.fire({
         title: '確定要刪除選中的活動嗎?',
@@ -430,7 +437,7 @@ const deleteSelected = async () => {
     }).then(async (result) => {
         if (result.isConfirmed) {
             try {
-                const response = await axios.delete('http://localhost:8080/fithub/activity/delete/multiple', {
+                const response = await axios.delete(`${url}/activity/delete/multiple`, {
                     data: selectedActivities.value
                 });
                 getActivitys();

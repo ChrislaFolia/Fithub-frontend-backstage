@@ -163,6 +163,9 @@ import axios from "axios";
 import { reactive, ref, onMounted } from "vue";
 import NavbarTop from "../components/NavbarTop.vue";
 import NavbarLeft from "../components/NavbarLeft.vue";
+import Swal from 'sweetalert2'
+const url = import.meta.env.VITE_API_JAVAURL
+
 //建立教室物件
 const classroom = reactive({
   classroomName: "",
@@ -219,11 +222,9 @@ const imageUpdate = (event) => {
 // 從伺服器獲取 JSON 格式教室資料
 const getclassrooms = async () => {
   try {
-    const response = await axios.get(
-      "http://localhost:8080/fithub/classroom/list"
-    ); // 替換為實際的 API URL
+    const response = await axios.get(`${url}/classroom/list`); // 替換為實際的 API URL
     classrooms.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
-    console.log(classrooms.value);
+    // console.log(classrooms.value);
   } catch (error) {
     console.error("Error getclassroom data:", error);
   }
@@ -240,18 +241,27 @@ const insertClassroom = async () => {
       !classroom.classroomPrice ||
       !classroom.classroomStatus
     ) {
+      Swal.fire({
+        title: '請完成必填欄位',
+        icon: 'warning',
+        confirmButtonText: '確定'
+      })
       return;
     }
 
-    const response = await axios.post(
-      "http://localhost:8080/fithub/classroom/insert",
-      classroom,
+    const response = await axios.post(`${url}/classroom/insert`, classroom,
       {
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
+
+    Swal.fire({
+      title: '新增成功',
+      icon: 'success',
+      confirmButtonText: '確定'
+    })
 
     //關閉動態框
     const insertModal = document.getElementById("insertModal");
@@ -271,7 +281,7 @@ const insertClassroom = async () => {
     // 刷新畫面
     getclassrooms();
   } catch (error) {
-    console.error("Error adding new classroom:", error);
+    console.error("Error insertClassroom:", error);
   }
 };
 
@@ -286,18 +296,27 @@ const updateClassroom = async () => {
       !updateSelectedClassroom.classroomPrice ||
       !updateSelectedClassroom.classroomStatus
     ) {
+      Swal.fire({
+        title: '請完成必填欄位',
+        icon: 'warning',
+        confirmButtonText: '確定'
+      })
       return;
     }
 
-    const response = await axios.put(
-      "http://localhost:8080/fithub/classroom/update",
-      updateSelectedClassroom,
+    const response = await axios.put(`${url}/classroom/update`, updateSelectedClassroom,
       {
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
+
+    Swal.fire({
+      title: '修改成功',
+      icon: 'success',
+      confirmButtonText: '確定'
+    })
 
     //關閉動態框
     const updateModal = document.getElementById("updateModal");
@@ -307,31 +326,50 @@ const updateClassroom = async () => {
     // 刷新畫面
     getclassrooms();
   } catch (error) {
-    console.error("Error adding new classroom:", error);
+    console.error("Error updateClassroom:", error);
   }
 };
 
 // 刪除多筆教室
 const deleteSelected = async () => {
-  const checkDelete = window.confirm("確定要刪除選中的教室嗎？");
-  if (checkDelete) {
-    try {
-      // 將選中的 ClassroomID 送到後端進行刪除
-      const response = await axios.delete(
-        "http://localhost:8080/fithub/classroom/delete/multiple",
-        {
-          data: selectedClassrooms.value,
-        }
-      );
 
-      // 刷新資料
-      getclassrooms();
+  Swal.fire({
+    title: '確定要刪除選中的教室嗎？?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: '確定',
+    cancelButtonText: '取消'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await axios.delete(`${url}/classroom/delete/multiple`,
+          {
+            data: selectedClassrooms.value,
+          }
+        );
+        // 刷新資料
+        getclassrooms();
+        selectedClassrooms.value = []; // 清空選中的項目
+        Swal.fire(
+          '已刪除',
+          '',
+          'success'
+        )
+      } catch (error) {
+        console.error('Error deleteSelected rentorders:', error);
+      }
+    } else {
+      Swal.fire(
+        '已取消!',
+        '',
+        'success'
+      )
       selectedClassrooms.value = []; // 清空選中的項目
-    } catch (error) {
-      console.error("Error deleting rent orders:", error);
     }
-  }
-};
+  })
+}
 
 onMounted(() => {
   getclassrooms();
