@@ -318,6 +318,11 @@ const insertActivity = async () => {
             !Activity.activityon ||
             !Activity.activitysort ||
             !Activity.employeeid) {
+            Swal.fire({
+                title: '請完成必填欄位',
+                icon: 'warning',
+                confirmButtonText: '確定'
+            })
             return;
         }
 
@@ -331,6 +336,12 @@ const insertActivity = async () => {
                 'Content-Type': 'application/json'
             }
         });
+
+        Swal.fire({
+            title: '新增成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
 
         // 關閉動態框
         const insertModal = document.getElementById('insertModal')
@@ -348,6 +359,7 @@ const insertActivity = async () => {
         Activity.employeeid = ''
         let insertfile = document.querySelector('#insertfile')
         insertfile.value = '';
+
 
         // 刷新畫面
         getActivitys();
@@ -384,6 +396,12 @@ const updateActivity = async () => {
             }
         });
 
+        Swal.fire({
+            title: '修改成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
+
         //關閉動態框
         const updateModal = document.getElementById('updateModal')
         let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
@@ -400,35 +418,40 @@ const updateActivity = async () => {
 // // 刪除多筆活動
 const deleteSelected = async () => {
 
-    const checkDelete = window.confirm('確定要刪除選中的活動嗎？');
-    if (checkDelete) {
-        try {
-            // 將選中的 ClassroomID 送到後端進行刪除
-            const response = await axios.delete('http://localhost:8080/fithub/activity/delete/multiple', {
-                data: selectedActivities.value
-            });
 
-            // alert('已刪除')
-            Swal.fire({
-            title: '已刪除',
-            icon: 'success',
-            confirmButtonText: '確定'
-        })
-            // 刷新資料
-            getActivitys();
+    Swal.fire({
+        title: '確定要刪除選中的活動嗎?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '確定',
+        cancelButtonText: '取消'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await axios.delete('http://localhost:8080/fithub/activity/delete/multiple', {
+                    data: selectedActivities.value
+                });
+                getActivitys();
+                selectedActivities.value = []; // 清空選中的項目
+                Swal.fire(
+                    '已刪除',
+                    '',
+                    'success'
+                )
+            } catch (error) {
+                console.error('Error deleteSelected:', error);
+            }
+        } else {
+            Swal.fire(
+                '已取消!',
+                '',
+                'success'
+            )
             selectedActivities.value = []; // 清空選中的項目
-        } catch (error) {
-            console.error('Error deleteSelected:', error);
         }
-    } else {
-        Swal.fire({
-            title: '已取消',
-            icon: 'warning',
-            confirmButtonText: '確定'
-        })
-        // alert('已取消');
-        selectedActivities.value = []; // 清空選中的項目
-    }
+    })
 };
 
 onMounted(() => {

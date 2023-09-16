@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <!-- 彈出視窗 -->
+        <!-- 修改-彈出視窗 -->
         <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true"
             data-bs-backdrop="static">
             <div class="modal-dialog">
@@ -168,7 +168,7 @@ const getclassroomNameId = async () => {
     try {
         const response = await axios.get(`${url}/classroom/listName`);
         classroomNameIds.value = response.data;
-        console.log(classroomNameIds.value)
+        // console.log(classroomNameIds.value)
 
     } catch (error) {
         console.error('Error getclassroomNameId data:', error);
@@ -194,7 +194,7 @@ const getrentorderpage = async () => {
         // console.log(page)
         const response = await axios.post(`${url}/rent/findallpage`, page); // 替換為實際的 API URL
         rentorderPage.value = response.data;
-        console.log(rentorderPage.value)
+        // console.log(rentorderPage.value)
 
         // 挑選需要的欄位輸出成檔案
         xlsxData.value = rentorderPage.value.content.map(rentOrder => ({
@@ -217,10 +217,10 @@ const getrentorderpage = async () => {
 
 
 
-// 刪除多筆教室
+// 刪除多筆訂單
 const deleteSelected = async () => {
 
-    const checkDelete = window.confirm('確定要刪除選中的教室嗎？');
+    const checkDelete = window.confirm('確定要刪除選中的訂單嗎？');
     if (checkDelete) {
         try {
             // 將選中的 rentorderid 送到後端進行刪除
