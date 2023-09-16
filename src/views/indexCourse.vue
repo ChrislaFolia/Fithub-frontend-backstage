@@ -19,44 +19,44 @@
 
             <div class="card mb-4">
               <div class="card-body table-responsive">
-                <div class="mb-3">
-                  <div class="row">
-                    <!-- insert button start -->
-                    <div class="col-6 col-lg-4">
-                      <button
-                        type="button"
-                        id="insertCourse"
-                        class="btn btn btn-primary mb-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#insertModal"
-                      >
-                        新增課程資料
-                      </button>
-                    </div>
-                    <!-- insert button end -->
-                    <div class="col-6 col-lg-4">
-                      <select
-                        class="form-select"
-                        v-model="pageCourseCategoryId"
-                        id="categoryId"
-                      >
-                        <option selected value="" style="display: none">
-                          請選擇課程分類
-                        </option>
-                        <!-- value前加上：表示其爲int -->
-                        <option :value="0">全部課程</option>
-                        <option
-                          v-for="{
-                            categoryId,
-                            categoryName,
-                          } in allCourseCategories"
-                          :value="categoryId"
-                        >
-                          {{ categoryName }}
-                        </option>
-                      </select>
-                    </div>
+                <div class="row mb-3">
+                  <!-- insert button start -->
+                  <div class="col-6 col-lg-4">
+                    <button
+                      type="button"
+                      id="insertCourse"
+                      class="btn btn btn-primary mb-1"
+                      data-bs-toggle="modal"
+                      data-bs-target="#insertModal"
+                    >
+                      新增課程資料
+                    </button>
                   </div>
+                  <!-- insert button end -->
+                  <!-- category select start -->
+                  <div class="col-6 col-lg-3">
+                    <select
+                      class="form-select"
+                      v-model="pageCourseCategoryId"
+                      id="categoryId"
+                    >
+                      <option selected value="" style="display: none">
+                        請選擇課程分類
+                      </option>
+                      <!-- value前加上：表示其爲int -->
+                      <option :value="0">全部課程</option>
+                      <option
+                        v-for="{
+                          categoryId,
+                          categoryName,
+                        } in allCourseCategories"
+                        :value="categoryId"
+                      >
+                        {{ categoryName }}
+                      </option>
+                    </select>
+                  </div>
+                  <!-- category select end -->
                 </div>
 
                 <table class="table table-bordered">
@@ -198,7 +198,7 @@
 /*
   imports
 */
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import NavbarTop from "../components/NavbarTop.vue";
@@ -241,7 +241,12 @@ const paginationData = reactive({
 const pageHandler = (page) => {
   console.log("out" + page);
   paginationData.page = page;
-  loadCourses();
+  // choose which page to load
+  if (pageCourseCategoryId.value == 0) {
+    loadCourses();
+  } else {
+    loadCoursesOfSingleCategory();
+  }
 };
 
 /*
@@ -280,12 +285,14 @@ const loadCourses = async () => {
 const allCourseCategories = ref([]);
 const loadAllCourseCategories = async () => {
   const URLAPI = `${URL}/coursecategories/findAll`;
-  const response = await axios.get(URLAPI);
+  const response = await axios.get(URLAPI).catch((error) => {
+    console.log(error.toJSON());
+  });
   // console.log(response.data)
 
   //取得所有分類放進allCourseCategories變數
   allCourseCategories.value = response.data;
-  // console.log(allCourseCategories)
+  // console.log(allCourseCategories);
 };
 
 // Load course data of single category
@@ -354,9 +361,11 @@ const deleteCourse = async (courseId, courseName) => {
 /*
   LifeCycle Hooks
 */
+onBeforeMount(() => {
+  loadAllCourseCategories();
+});
 
 onMounted(() => {
-  loadAllCourseCategories();
   // choose which page to load
   if (pageCourseCategoryId.value == 0) {
     loadCourses();

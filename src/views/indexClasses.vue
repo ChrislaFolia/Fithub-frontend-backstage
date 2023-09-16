@@ -6,17 +6,54 @@
       <div id="layoutSidenav_content">
         <main>
           <div class="container-fluid px-4">
-            <h1 class="mt-4 mb-2" style="text-align: center">全部課程</h1>
+            <h1
+              v-if="pageCourseCategoryId == 0"
+              class="mt-4 mb-2"
+              style="text-align: center"
+            >
+              全部課程
+            </h1>
+            <h1 v-else class="mt-4 mb-2" style="text-align: center">
+              {{ classes[0]["categoryName"] }}課程
+            </h1>
 
             <div class="card mb-4">
               <div class="card-body table-responsive">
-                <div class="mb-3">
-                  <router-link
-                    to="course"
-                    type="button"
-                    class="btn btn btn-primary mb-1"
-                    >新增課堂資料</router-link
-                  >
+                <div class="row mb-3">
+                  <!-- insert button start -->
+                  <div class="col-6 col-lg-4">
+                    <router-link
+                      to="course"
+                      type="button"
+                      class="btn btn btn-primary mb-1"
+                      >新增課堂資料</router-link
+                    >
+                  </div>
+                  <!-- insert button end -->
+                  <!-- category select start -->
+                  <div class="col-6 col-lg-3">
+                    <select
+                      class="form-select"
+                      v-model="pageCourseCategoryId"
+                      id="categoryId"
+                    >
+                      <option selected value="" style="display: none">
+                        請選擇課程分類
+                      </option>
+                      <!-- value前加上：表示其爲int -->
+                      <option :value="0">全部課程</option>
+                      <option
+                        v-for="{
+                          categoryId,
+                          categoryName,
+                        } in allCourseCategories"
+                        :value="categoryId"
+                      >
+                        {{ categoryName }}
+                      </option>
+                    </select>
+                  </div>
+                  <!-- category select end -->
                 </div>
                 <table class="table table-bordered">
                   <thead class="align-middle text-center">
@@ -127,7 +164,7 @@
 /*
   imports
 */
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, onBeforeMount, watch } from "vue";
 import axios from "axios";
 import UpdateClass from "../components/classes/classesUpdateModal.vue";
 import NavbarTop from "../components/NavbarTop.vue";
@@ -135,6 +172,24 @@ import NavbarLeft from "../components/NavbarLeft.vue";
 import Pagination from "../components/util/pagination.vue";
 import Swal from "sweetalert2";
 const URL = import.meta.env.VITE_API_JAVAURL;
+
+/*
+  watcher for categoryId
+*/
+
+const pageCourseCategoryId = ref(0);
+watch(
+  () => pageCourseCategoryId.value,
+  (newCategoryId) => {
+    if (newCategoryId == 0) {
+      paginationData.page = 1; //每次換Category時 顯示所有資料的第一頁
+      loadClasses();
+    } else {
+      paginationData.page = 1; //每次換Category時 顯示所有資料的第一頁
+      loadSingleCategoryClasses();
+    }
+  }
+);
 
 /* 
   pagination
@@ -148,7 +203,12 @@ const paginationData = reactive({
 const pageHandler = (page) => {
   console.log("out" + page);
   paginationData.page = page;
-  loadClasses();
+  // choose which page to load
+  if (pageCourseCategoryId.value == 0) {
+    loadClasses();
+  } else {
+    loadSingleCategoryClasses();
+  }
 };
 
 // Load Classes data
@@ -175,6 +235,46 @@ const loadClasses = async () => {
   paginationData.numberOfCourses = parseInt(
     response.headers["number-of-elements"]
   );
+};
+
+// Load Single category Classes data
+const loadSingleCategoryClasses = async () => {
+  const URLAPI = `${URL}/classes/findAllInMonthRangeAndCategoryId/page`;
+  const response = await axios
+    .get(URLAPI, {
+      params: {
+        categoryId: pageCourseCategoryId.value,
+        monthBefore: 1,
+        monthAfter: 1,
+        p: paginationData.page,
+        size: 10,
+      },
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+    });
+
+  classes.value = response.data;
+
+  //取得所有課程頁數及單頁資料數放進courses變數
+  paginationData.totalPages = parseInt(response.headers["total-pages"]);
+  paginationData.numberOfCourses = parseInt(
+    response.headers["number-of-elements"]
+  );
+};
+
+// Load courseCategories data
+const allCourseCategories = ref([]);
+const loadAllCourseCategories = async () => {
+  const URLAPI = `${URL}/coursecategories/findAll`;
+  const response = await axios.get(URLAPI).catch((error) => {
+    console.log(error.toJSON());
+  });
+  // console.log(response.data)
+
+  //取得所有分類放進allCourseCategories變數
+  allCourseCategories.value = response.data;
+  // console.log(allCourseCategories)
 };
 
 /*
@@ -221,9 +321,17 @@ const deleteClass = async (classId, courseName) => {
 /*
   LifeCycle Hooks
  */
+onBeforeMount(() => {
+  loadAllCourseCategories();
+});
 
 onMounted(() => {
-  loadClasses();
+  // choose which page to load
+  if (pageCourseCategoryId.value == 0) {
+    loadClasses();
+  } else {
+    loadSingleCategoryClasses();
+  }
 });
 </script>
 
