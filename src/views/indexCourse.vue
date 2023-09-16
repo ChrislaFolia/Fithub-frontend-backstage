@@ -99,7 +99,7 @@
                           class="text-left"
                           :courseId="courseId"
                           :courseName="courseName"
-                          @submitInsertCourse-emit="loadCourses"
+                          @submitInsertCourse-emit="pageHandler(1)"
                         >
                         </InsertClass>
                       </td>
@@ -189,7 +189,7 @@
 
     <InsertCourse
       :allCourseCategories="allCourseCategories"
-      @submitInsertCourse-emit="loadCourses"
+      @submitInsertCourse-emit="pageHandler(1)"
     ></InsertCourse>
   </body>
 </template>
@@ -346,7 +346,7 @@ const deleteCourse = async (courseId, courseName) => {
         confirmButtonText: "確定",
       });
     }
-    loadCourses();
+    pageHandler(1);
   } else if (msg == null) {
   } else {
     // alert("輸入錯誤");

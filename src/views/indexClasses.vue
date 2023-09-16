@@ -128,7 +128,7 @@
                           :classroomName="classroomName"
                           :classroomCapacity="classroomCapacity"
                           :coachSubstitute="coachSubstitute"
-                          @submitUpdateClasses-emit="loadClasses"
+                          @submitUpdateClasses-emit="pageHandler(1)"
                         ></UpdateClass>
                       </td>
                       <td>
@@ -306,7 +306,7 @@ const deleteClass = async (classId, courseName) => {
         confirmButtonText: "確定",
       });
     }
-    loadClasses();
+    pageHandler(1);
   } else if (msg == null) {
   } else {
     // alert("輸入錯誤");
