@@ -15,7 +15,9 @@
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label for="classDate" class="col-form-label">課程時間 :</label>
+            <label for="classDate" class="col-form-label"
+              ><span class="need-input">*</span>課程時間 :</label
+            >
             <input
               type="date"
               class="form-control"
@@ -25,7 +27,9 @@
           </div>
 
           <div class="mb-3">
-            <label for="classTime" class="col-form-label">課程時段 :</label>
+            <label for="classTime" class="col-form-label"
+              ><span class="need-input">*</span>課程時段 :</label
+            >
             <select
               class="form-select"
               v-model="classes.classTime"
@@ -38,7 +42,9 @@
           </div>
 
           <div class="mb-3">
-            <label for="coach" class="col-form-label">教練 :</label>
+            <label for="coach" class="col-form-label"
+              ><span class="need-input">*</span>教練 :</label
+            >
             <select class="form-select" v-model="classes.employeeId" id="coach">
               <option
                 v-for="{ employeeid, employeename } in allCoachs"
@@ -64,7 +70,9 @@
           </div>
 
           <div class="mb-3">
-            <label for="classroomSelect" class="col-form-label">教室 :</label>
+            <label for="classroomSelect" class="col-form-label"
+              ><span class="need-input">*</span>教室 :</label
+            >
             <select
               class="form-select"
               v-model="classes.classroomId"
@@ -82,9 +90,9 @@
 
           <div class="mb-3">
             <label for="applicantsCeil" class="col-form-label"
-              >課程人數上限 : ({{ classroom.classroomName }}使用人數上限為{{
-                classroom.classroomCapacity
-              }}人)</label
+              ><span class="need-input">*</span>課程人數上限 : ({{
+                classroom.classroomName
+              }}使用人數上限為{{ classroom.classroomCapacity }}人)</label
             >
             <input
               type="text"
@@ -96,7 +104,7 @@
 
           <div class="mb-3">
             <label for="applicantsFloor" class="col-form-label"
-              >開課人數下限 :</label
+              ><span class="need-input">*</span>開課人數下限 :</label
             >
             <input
               type="text"
@@ -107,7 +115,9 @@
           </div>
 
           <div class="mb-3">
-            <label for="price" class="col-form-label">課程價格 :</label>
+            <label for="price" class="col-form-label"
+              ><span class="need-input">*</span>課程價格 :</label
+            >
             <input
               type="text"
               class="form-control"
@@ -122,7 +132,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Close
+            取消
           </button>
           <button
             type="submit"
@@ -240,4 +250,8 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.need-input {
+  color: red;
+}
+</style>
