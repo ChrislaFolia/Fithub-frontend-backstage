@@ -87,7 +87,6 @@ const getData = async () => {
         // 會員年齡層
         const birthday = await axios.get(`${url}/members/memberbirthday`);
         memberbirthday.value = birthday.data
-        console.log(memberbirthday.value);
         doughnutMemberData.datasets[0].data = [memberbirthday.value.age1To24, memberbirthday.value.age25To49, memberbirthday.value.age50To65, memberbirthday.value.age66To100]
 
         // 每月新增會員
