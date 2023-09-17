@@ -161,9 +161,9 @@ const submitInsertCourse = async () => {
       .catch((error) => {
         console.log(error.toJSON());
       });
-    console.log(resUploadFile);
+    // console.log(resUploadFile);
     course.courseImgPath = resUploadFile.data;
-    console.log(course.courseImgPath);
+    // console.log(course.courseImgPath);
   }
 
   // save courseData to DB
@@ -192,10 +192,7 @@ const validatedInputState = reactive({
   courseImgPath: "", // 圖片大小
 });
 
-// validated watcher for categoryId
-// watch(course.categoryId, (newCategory) => {});
-
-// validated watcher for courseName
+// validation watcher
 watch(course, (newCourse) => {
   if (newCourse.categoryId !== "") {
     validatedInputState.categoryId = "";

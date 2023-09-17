@@ -50,8 +50,10 @@
               <input
                 type="text"
                 class="form-control"
+                :class="validatedInputState.courseName"
                 v-model.trim="course.courseName"
               />
+              <div class="invalid-feedback">請填寫課程名稱</div>
             </div>
 
             <div class="mb-3">
@@ -75,9 +77,11 @@
               >
               <textarea
                 class="form-control"
+                :class="validatedInputState.courseDescription"
                 rows="6"
                 v-model.trim="course.courseDescription"
               ></textarea>
+              <div class="invalid-feedback">字數限制為120字</div>
             </div>
           </form>
         </div>
@@ -104,9 +108,16 @@
 </template>
 
 <script setup>
+/*
+  imports
+*/
 const URL = import.meta.env.VITE_API_JAVAURL;
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import axios from "axios";
+
+/*
+  props
+*/
 const props = defineProps({
   courseId: Number,
   courseCategories: Object,
@@ -116,6 +127,10 @@ const props = defineProps({
   allCourseCategories: Object,
 });
 
+/*
+  Declare
+*/
+
 const course = reactive({
   courseId: props.courseId,
   courseName: props.courseName,
@@ -124,6 +139,9 @@ const course = reactive({
   courseDescription: props.courseDescription,
 });
 
+/*
+  Img handler
+*/
 const formData = new FormData();
 formData.append("cId", props.courseId);
 formData.append("courseImgPath", props.courseImgPath);
@@ -135,8 +153,28 @@ const fileChange = (e) => {
   console.log(formData.get("photoContent"));
 };
 
+/*
+  Emits
+*/
 const emit = defineEmits(["submitUpdateCourse-emit"]);
+
+/*
+  Methods
+ */
+// Action for update
 const submitUpdateCourse = async (e) => {
+  // validation
+  if (course.courseName == "") {
+    validatedInputState.courseName = "is-invalid";
+    return;
+  }
+  if (course.courseDescription.trim().length > 120) {
+    // 字數限制120字
+    validatedInputState.courseDescription = "is-invalid";
+    return;
+  }
+
+  // save img and get image path
   if (formData.get("photoContent") != null) {
     console.log(formData.photoContent);
     const resUploadFile = await axios
@@ -148,12 +186,13 @@ const submitUpdateCourse = async (e) => {
       .catch((error) => {
         console.log(error.toJSON());
       });
-    console.log(resUploadFile);
+    // console.log(resUploadFile);
     course.courseImgPath = resUploadFile.data;
   }
-  console.log(course.courseImgPath);
-  console.log("I am" + props.courseId);
+  // console.log(course.courseImgPath);
+  // console.log("I am" + props.courseId);
 
+  // put courseData to DB
   const resUpdateCourse = await axios
     .put(`${URL}/course`, course)
     .catch((error) => {
@@ -167,9 +206,28 @@ const submitUpdateCourse = async (e) => {
 
   // 傳送event至parent componont
   emit("submitUpdateCourse-emit");
-
-  // location.reload();
 };
+
+/*
+  Validation
+*/
+const validatedInputState = reactive({
+  courseName: "", // 是否爲空
+  categoryId: "", // 是否爲空
+  courseDescription: "", // 字數120字
+  courseImgPath: "", // 圖片大小
+});
+
+// validation watcher
+watch(course, (newCourse) => {
+  if (newCourse.courseName.trim() !== "") {
+    validatedInputState.courseName = "";
+  }
+  if (newCourse.courseDescription.trim().length <= 120) {
+    // 字數限制120字
+    validatedInputState.courseDescription = "";
+  }
+});
 </script>
 
 <style scoped>
