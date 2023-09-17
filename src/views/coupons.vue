@@ -182,6 +182,33 @@
                 >必填</span
               >
             </div>
+            <div class="mb-3">
+              已使用量<input
+                v-model="updateSelectedCoupon.couponused"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span
+                v-if="!updateSelectedCoupon.couponused"
+                class="text-danger"
+                >必填</span
+              >
+            </div>
+            <div class="mb-3">
+              總發行量<input
+                v-model="updateSelectedCoupon.couponceil"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span
+                v-if="!updateSelectedCoupon.couponceil"
+                class="text-danger"
+                >必填</span
+              >
+            </div>
+                        <!-- <td>{{ coupon.couponused }}/{{ coupon.couponceil }}</td> -->
             <label class="form-label">分類</label>
             <div class="mb-3">
               <select
@@ -297,6 +324,18 @@
                 >必填</span
               >
             </div>
+            <div class="mb-3">
+              發行張數<input
+                v-model="coupon.couponceil"
+                type="text"
+                class="form-control"
+                required="required"
+              />
+              <span v-if="!coupon.couponceil" class="text-danger"
+                >必填</span
+              >
+            </div>
+
             <label class="form-label">分類</label>
             <div class="mb-3">
               <select

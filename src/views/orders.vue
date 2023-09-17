@@ -8,9 +8,20 @@
           <h1 class="mt-4 text-center">訂單</h1>
           <div class="card">
             <div class="card-body table-responsive">
-              <button class="btn mb-3 btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal">
+              <div class="col-3 mb-3">
+                                <select class="form-select" @change="changeHandler(-1)" v-model.number="row">
+                                    <option value=5 selected>每頁 5 筆資料</option>
+                                    <option value=10>每頁 10 筆資料</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <i class="bi bi-patch-question-fill" title="請輸入西元年,年-月,年-月-日(月日請補0)"></i>
+                                <input type="search" class="form-control mb-3" @keyup="changeHandler(-1)" v-model="date"
+                                    placeholder="請輸入訂單日期查詢">
+                            </div>
+              <!-- <button class="btn mb-3 btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal">
                 新增訂單
-              </button>
+              </button> -->
               <table class="table table-bordered">
                 <thead class="align-middle text-center">
                   <tr class="table-primary">
@@ -21,29 +32,29 @@
                     <!-- <th>總金額</th> -->
                     <th>付款方式</th>
                     <th>付款狀態</th>
-                    <th>訂單狀態</th>
-                    <th>修改</th>
+                    <!-- <th>訂單狀態</th> -->
+                    <!-- <th>修改</th> -->
                     <th>詳細資料</th>
                   </tr>
                 </thead>
 
                 <tbody class="align-middle text-center">
-                  <tr v-for="(orders, ordersindex) in orderss" :key="ordersindex">
+                  <tr v-for="(orders, ordersindex) in orderPage.content" :key="ordersindex">
                     <td>{{ orders.orderId }}</td>
                     <td>{{ orders.orderDate }}</td>
                     <td>{{ orders.member.memberid }}</td>
                     <td>{{ orders.member.membername }}</td>
                     <!-- <td>{{ orders.orderTotalAmount }}</td> -->
                     <td>{{ orders.orderPaymentMethod }}</td>
-                    <td>{{ translateOrderState(orders.orderstate) }}</td>
+                    <!-- <td>{{ translateOrderState(orders.orderstate) }}</td> -->
                     <td>{{ orders.orderCondition }}</td>
 
-                    <td>
+                    <!-- <td>
                       <button class="btn btn-outline-secondary" data-bs-toggle="modal" @click="openUpdateModal(orders)"
                         data-bs-target="#updateModal">
                         修改
                       </button>
-                    </td>
+                    </td> -->
                     <td>
                       <button class="btn btn-outline-danger" data-bs-toggle="modal"
                         @click="openModalWithOrderItem(orders.orderId)" data-bs-target="#updateModal2">
@@ -53,6 +64,17 @@
                   </tr>
                 </tbody>
               </table>
+              <nav>
+                                <ul class="pagination pagination-sm">
+                                    <li class="page-item" v-for="(value, index) in orderPage.totalPages" :key="index">
+                                        <a class="page-link"
+                                            :class="{ 'selected-page': value - 1 === orderPage.number }"
+                                            @click="changeHandler(value)">
+                                            {{ value }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
             </div>
           </div>
         </div>
@@ -76,7 +98,7 @@
                   <th>上課教室</th>
                   <th>課程價格</th>
                   <th>優惠金額</th>
-                  <th>訂單總金額</th>
+                  <th>總金額</th>
                   <!-- 新增的列 -->
                 </tr>
               </thead>
@@ -105,7 +127,7 @@
     </div>
 
     <!-- 修改-彈出視窗 -->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <!-- <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -120,12 +142,12 @@
             <div class="mb-3">
               會員編號<input v-model="updateSelectedOrders.memberId" type="text" class="form-control" required="required" />
               <span v-if="!updateSelectedOrders.memberId" class="text-danger">必填</span>
-            </div>
+            </div> -->
             <!-- <div class="mb-3">
                         總金額<input v-model="updateSelectedOrders.orderTotalAmount" type="text" class="form-control" required="required">
                         <span v-if="!updateSelectedOrders.orderTotalAmount" class="text-danger">必填</span>
                     </div> -->
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               付款方式<input v-model="updateSelectedOrders.orderPaymentMethod" type="text" class="form-control"
                 required="required" />
               <span v-if="!updateSelectedOrders.orderPaymentMethod" class="text-danger">必填</span>
@@ -138,14 +160,6 @@
               </select>
               <span v-if="!updateSelectedOrders.orderstate" class="text-danger">必填</span>
             </div>
-            <label class="form-label">訂單狀態</label>
-            <div class="mb-3">
-              <select v-model="updateSelectedOrders.orderCondition" class="form-control" required="required">
-                <option value="Pending">Pending</option>
-                <option value="Processing">Processing</option>
-              </select>
-              <span v-if="!updateSelectedOrders.orderCondition" class="text-danger">必填</span>
-            </div>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary" @click="updateOrders">
@@ -154,10 +168,10 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- 新增-彈出視窗 -->
-    <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
+    <!-- <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -172,12 +186,12 @@
             <div class="mb-3">
               會員編號<input v-model="orders.memberId" type="text" class="form-control" required="required" />
               <span v-if="!orders.memberId" class="text-danger">必填</span>
-            </div>
+            </div> -->
             <!-- <div class="mb-3">
                         總金額<input v-model="orders.orderTotalAmount" type="text" class="form-control" required="required">
                         <span v-if="!orders.orderTotalAmount" class="text-danger">必填</span>
                     </div> -->
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               付款方式<input v-model="orders.orderPaymentMethod" type="text" class="form-control" required="required" />
               <span v-if="!orders.orderPaymentMethod" class="text-danger">必填</span>
             </div>
@@ -205,7 +219,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </body>
 </template>
 
@@ -215,6 +229,55 @@ import { reactive, ref, onMounted } from "vue";
 import NavbarTop from "../components/NavbarTop.vue";
 import NavbarLeft from "../components/NavbarLeft.vue";
 const URL = import.meta.env.VITE_API_JAVAURL;
+
+const orderPage = ref([])
+// 分頁 預設5筆資料 第0頁
+let row = ref(5);
+let date = ref('')
+const page = reactive({
+    number: 0,
+    row: row.value,
+    date: date.value
+})
+
+const changeHandler = (value) => {
+    page.row = row.value
+    page.date = date.value
+    //
+    if (value >= 0) {
+        page.number = value - 1;
+    } else {
+        page.number = 0
+    }
+    getorderpage();
+};
+
+// 從伺服器獲取訂單分頁資料
+const getorderpage = async () => {
+    try {
+
+        console.log(page)
+        const response = await axios.post('http://localhost:8080/fithub/orders/findallpage', page); // 替換為實際的 API URL
+        orderPage.value = response.data;
+        console.log(orderPage.value)
+
+        // // 挑選需要的欄位輸出成檔案
+        // xlsxData.value = rentorderPage.value.content.map(rentOrder => ({
+        //     rentOrderId: rentOrder.rentorderid,
+        //     rentOrderDate: rentOrder.rentorderdate,
+        //     memberName: rentOrder.member.membername,
+        //     classroomName: rentOrder.classroom.classroomName,
+        //     rentDate: rentOrder.rentdate,
+        //     rentTime: rentOrder.renttime,
+        //     rentStatus: rentOrder.rentstatus,
+        // }));
+
+        // console.log(xlsxData.value)
+
+    } catch (error) {
+        console.error('Error getrentorder data:', error);
+    }
+};
 
 // const resInsertCourse = await axios.post(`${URL}/classes`, classes)-
 //建立訂單物件
@@ -227,15 +290,15 @@ const orders = reactive({
   orderpaymentmethod: "",
   orderstate: "",
 });
-const translateOrderState = (state) => {
-  const stateTranslations = {
-    0: "未付款",
-    1: "已付款",
-    // Add more translations as needed
-  };
+// const translateOrderState = (state) => {
+//   const stateTranslations = {
+//     0: "未付款",
+//     1: "已付款",
+//     // Add more translations as needed
+//   };
 
-  return stateTranslations[state] || "未知狀態";
-};
+//   return stateTranslations[state] || "未知狀態";
+// };
 
 const orderitem = reactive({
   itemid: "",
@@ -270,16 +333,16 @@ const getorderitems = async () => {
   }
 };
 
-// 從伺服器獲取 JSON 格式優惠券資料
-const getorderss = async () => {
-  try {
-    const response = await axios.get(`${URL}/orders`); // 替換為實際的 API URL
-    orderss.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
-    console.log(orderss.value);
-  } catch (error) {
-    console.error("Error getorderss data:", error);
-  }
-};
+// // 從伺服器獲取 JSON 格式優惠券資料
+// const getorderss = async () => {
+//   try {
+//     const response = await axios.get(`${URL}/orders`); // 替換為實際的 API URL
+//     orderss.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
+//     console.log(orderss.value);
+//   } catch (error) {
+//     console.error("Error getorderss data:", error);
+//   }
+// };
 
 const getCouponCategoryName = (coupon) => {
   if (coupon.couponCategories) {
@@ -317,7 +380,7 @@ const insertOrders = async () => {
     // insertfile.value = '';
 
     // 刷新畫面
-    getorderss();
+    getorderpage();
   } catch (error) {
     console.error("Error adding new orders:", error);
   }
@@ -351,7 +414,7 @@ const updateOrders = async () => {
   getInstanceUpdateModal.toggle();
 
   // 刷新畫面
-  getorderss();
+  getorderpage();
   // } catch (error) {
   //     console.error('Error adding new classroom:', error);
   // }
@@ -408,7 +471,7 @@ const openModalWithOrderItem = (orderId) => {
 };
 
 onMounted(() => {
-  getorderss();
+  getorderpage();
 });
 </script>
 
