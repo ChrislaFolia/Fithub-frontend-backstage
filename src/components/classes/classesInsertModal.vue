@@ -18,6 +18,7 @@
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
+            @click="resetForm"
           ></button>
         </div>
         <div class="modal-body">
@@ -159,7 +160,7 @@
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal"
-            @click="resetForm;"
+            @click="resetForm"
           >
             取消
           </button>
@@ -293,12 +294,11 @@ const resetForm = () => {
   classes.classDate = "";
   classes.classTime = "";
   classes.employeeId = "";
-  coachSubclasses.stitute = 0;
-  classes.applicantsCeil = 15;
-  classes.applicantsFloor = 5;
-  classes.price = 150;
+  classes.coachSubstitute = 0;
+  classes.applicantsCeil = "15";
+  classes.applicantsFloor = "5";
+  classes.price = "150";
   classes.classroomId = "";
-  console.log(111);
 };
 
 /*
