@@ -72,7 +72,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            日期<input v-model="updateSelectedActivities.activitydate" type="date" class="form-control">
+                            新增日期<input v-model="updateSelectedActivities.activitydate" type="date" class="form-control">
                             <span v-if="!updateSelectedActivities.activitydate" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
@@ -88,7 +88,8 @@
                             <span v-if="!updateSelectedActivities.activitydisplay" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            排序<input v-model="updateSelectedActivities.activitysort" type="text" class="form-control">
+                            排序<i class="bi bi-patch-question-fill" title="請輸入正整數，數字越大首頁顯示越前面"></i><input
+                                v-model="updateSelectedActivities.activitysort" type="text" class="form-control">
                             <span v-if="!updateSelectedActivities.activitysort" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
@@ -136,7 +137,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            日期<input v-model="Activity.activitydate" type="date" class="form-control">
+                            新增日期<input v-model="Activity.activitydate" type="date" class="form-control">
                             <span v-if="!Activity.activitydate" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
@@ -152,7 +153,8 @@
                             <span v-if="!Activity.activitydisplay" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
-                            排序<input v-model="Activity.activitysort" type="text" class="form-control">
+                            排序<i class="bi bi-patch-question-fill" title="請輸入正整數，數字越大首頁顯示越前面"></i><input
+                                v-model="Activity.activitysort" type="text" class="form-control">
                             <span v-if="!Activity.activitysort" class="text-danger">必填</span>
                         </div>
                         <div class="mb-3">
@@ -195,6 +197,7 @@ import { reactive, ref, onMounted } from 'vue'
 import NavbarTop from '../components/NavbarTop.vue'
 import NavbarLeft from '../components/NavbarLeft.vue'
 import Swal from 'sweetalert2'
+const url = import.meta.env.VITE_API_JAVAURL
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';  已改用CDN
 
 
@@ -285,7 +288,7 @@ const imageUpdate = (event) => {
 // 從伺服器獲取 JSON 格式活動資料
 const getActivitys = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/fithub/activity/list'); // 替換為實際的 API URL
+        const response = await axios.get(`${url}/activity/list`); // 替換為實際的 API URL
         Activitys.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
         // console.log(Activitys.value)
 
@@ -297,7 +300,7 @@ const getActivitys = async () => {
 // 給新增活動負責員工選項
 const getAllemployeenameAndemployeeid = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/fithub/activity/findAllemployeenameAndemployeeid'); // 替換為實際的 API URL
+        const response = await axios.get(`${url}/activity/findAllemployeenameAndemployeeid`); // 替換為實際的 API URL
         AllemployeenameAndemployeeid.value = response.data; //data為response物件的屬性，通常是返回的JSON格式資料
         // console.log(AllemployeenameAndemployeeid.value)
 
@@ -318,6 +321,11 @@ const insertActivity = async () => {
             !Activity.activityon ||
             !Activity.activitysort ||
             !Activity.employeeid) {
+            Swal.fire({
+                title: '請完成必填欄位',
+                icon: 'warning',
+                confirmButtonText: '確定'
+            })
             return;
         }
 
@@ -326,11 +334,17 @@ const insertActivity = async () => {
         Activity.activitydescription = insertContent;
         // console.log(insertContent)
 
-        const response = await axios.post('http://localhost:8080/fithub/activity/insert', Activity, {
+        const response = await axios.post(`${url}/activity/insert`, Activity, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
+
+        Swal.fire({
+            title: '新增成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
 
         // 關閉動態框
         const insertModal = document.getElementById('insertModal')
@@ -348,6 +362,7 @@ const insertActivity = async () => {
         Activity.employeeid = ''
         let insertfile = document.querySelector('#insertfile')
         insertfile.value = '';
+
 
         // 刷新畫面
         getActivitys();
@@ -369,22 +384,33 @@ const updateActivity = async () => {
             !updateSelectedActivities.activityon ||
             !updateSelectedActivities.activitysort ||
             !updateSelectedActivities.employeeid) {
+            Swal.fire({
+                title: '請完成必填欄位',
+                icon: 'warning',
+                confirmButtonText: '確定'
+            })
             return;
         }
 
-        //取得文字編輯器內容
+        // 取得文字編輯器內容
         const updateContent = updateEditor.getData();
         updateSelectedActivities.activitydescription = updateContent;
-
-
         console.log(updateSelectedActivities)
-        const response = await axios.put('http://localhost:8080/fithub/activity/update', updateSelectedActivities, {
+
+
+        const response = await axios.put(`${url}/activity/update`, updateSelectedActivities, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
-        //關閉動態框
+        Swal.fire({
+            title: '修改成功',
+            icon: 'success',
+            confirmButtonText: '確定'
+        })
+
+        // 關閉動態框
         const updateModal = document.getElementById('updateModal')
         let getInstanceUpdateModal = bootstrap.Modal.getInstance(updateModal)
         getInstanceUpdateModal.toggle();
@@ -397,38 +423,42 @@ const updateActivity = async () => {
 };
 
 
-// // 刪除多筆活動
+// 刪除多筆活動
 const deleteSelected = async () => {
 
-    const checkDelete = window.confirm('確定要刪除選中的活動嗎？');
-    if (checkDelete) {
-        try {
-            // 將選中的 ClassroomID 送到後端進行刪除
-            const response = await axios.delete('http://localhost:8080/fithub/activity/delete/multiple', {
-                data: selectedActivities.value
-            });
-
-            // alert('已刪除')
-            Swal.fire({
-            title: '已刪除',
-            icon: 'success',
-            confirmButtonText: '確定'
-        })
-            // 刷新資料
-            getActivitys();
+    Swal.fire({
+        title: '確定要刪除選中的活動嗎?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '確定',
+        cancelButtonText: '取消'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await axios.delete(`${url}/activity/delete/multiple`, {
+                    data: selectedActivities.value
+                });
+                getActivitys();
+                selectedActivities.value = []; // 清空選中的項目
+                Swal.fire(
+                    '已刪除',
+                    '',
+                    'success'
+                )
+            } catch (error) {
+                console.error('Error deleteSelected:', error);
+            }
+        } else {
+            Swal.fire(
+                '已取消!',
+                '',
+                'success'
+            )
             selectedActivities.value = []; // 清空選中的項目
-        } catch (error) {
-            console.error('Error deleteSelected:', error);
         }
-    } else {
-        Swal.fire({
-            title: '已取消',
-            icon: 'warning',
-            confirmButtonText: '確定'
-        })
-        // alert('已取消');
-        selectedActivities.value = []; // 清空選中的項目
-    }
+    })
 };
 
 onMounted(() => {
