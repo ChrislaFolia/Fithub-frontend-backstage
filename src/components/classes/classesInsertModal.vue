@@ -329,15 +329,16 @@ const submitInsertClass = async (e) => {
   }
 
   // classroom
-  classroomValidator(classes.classroomId, classes.classDate, classes.classTime);
+  let classroomValidatingFactor = classroomValidator(
+    classes.classroomId,
+    classes.classDate,
+    classes.classTime
+  );
   if (classes.classroomId == "") {
     validatedInputState.classroomId = "is-invalid";
     validationType.classroomId = "stringEmpty";
     return;
-  } else if (
-    classroomValidationData.rentOrder.length != 0 ||
-    classroomValidationData.classes.length != 0
-  ) {
+  } else if (classroomValidatingFactor) {
     validatedInputState.classroomId = "is-invalid";
     validationType.classroomId = "classroomAlreadyBooked";
     return;
@@ -523,10 +524,10 @@ const classroomValidationData = reactive({
   rentOrder: [],
 });
 
-const classroomValidator = (classroomId, selectedDate, selectedTime) => {
+const classroomValidator = async (classroomId, selectedDate, selectedTime) => {
   // console.log(classroomId, selectedDate, selectedTime);
   const URLAPIRENTORDER = `${URL}/classroom/getClassroomInUseRentOrder`;
-  const resRentOrder = axios
+  const resRentOrder = await axios
     .get(URLAPIRENTORDER, {
       params: {
         classroomId: classroomId,
@@ -544,7 +545,7 @@ const classroomValidator = (classroomId, selectedDate, selectedTime) => {
   }
 
   const URLAPICLASSES = `${URL}/classroom/getClassroomInUseClasses`;
-  const resClasses = axios
+  const resClasses = await axios
     .get(URLAPICLASSES, {
       params: {
         classroomId: classroomId,
@@ -560,6 +561,12 @@ const classroomValidator = (classroomId, selectedDate, selectedTime) => {
   console.log(resClasses.data);
   if (resClasses.data != undefined) {
     classroomValidationData.classes = resClasses.data;
+  }
+  if (classroomValidationData.classes.length != 0) {
+    return true;
+  }
+  if (classroomValidationData.rentOrder.length != 0) {
+    return true;
   }
 };
 
