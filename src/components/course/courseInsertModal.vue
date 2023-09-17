@@ -18,6 +18,7 @@
             >
             <select
               class="form-select"
+              :class="validatedInputState.categoryId"
               v-model="course.categoryId"
               id="categoryId"
             >
@@ -29,6 +30,7 @@
                 {{ categoryName }}
               </option>
             </select>
+            <div class="invalid-feedback">請選擇課程分類</div>
           </div>
 
           <div class="mb-3">
@@ -38,8 +40,10 @@
             <input
               type="text"
               class="form-control"
+              :class="validatedInputState.courseName"
               v-model.trim="course.courseName"
             />
+            <div class="invalid-feedback">請填寫課程名稱</div>
           </div>
 
           <div class="mb-3">
@@ -51,9 +55,11 @@
             <label for="message-text" class="col-form-label">課程描述 :</label>
             <textarea
               class="form-control"
+              :class="validatedInputState.courseDescription"
               rows="6"
               v-model.trim="course.courseDescription"
             ></textarea>
+            <div class="invalid-feedback">字數限制為120字</div>
           </div>
         </div>
         <div class="modal-footer">
@@ -82,7 +88,7 @@
 /*
   imports
 */
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import axios from "axios";
 const URL = import.meta.env.VITE_API_JAVAURL;
 
@@ -101,8 +107,8 @@ const props = defineProps({
   Declare
 */
 const course = reactive({
-  courseName: "",
   categoryId: "",
+  courseName: "",
   courseDescription: "",
   courseImgPath: "",
 });
@@ -128,7 +134,23 @@ const emit = defineEmits(["submitInsertCourse-emit"]);
  */
 
 // Action for insert
-const submitInsertCourse = async (e) => {
+const submitInsertCourse = async () => {
+  // validation
+  if (course.categoryId == "") {
+    validatedInputState.categoryId = "is-invalid";
+    return;
+  }
+  if (course.courseName == "") {
+    validatedInputState.courseName = "is-invalid";
+    return;
+  }
+  if (course.courseDescription.trim().length > 120) {
+    // 字數限制120字
+    validatedInputState.courseDescription = "is-invalid";
+    return;
+  }
+
+  // save img and get image path
   if (formData.get("photoContent") != null) {
     const resUploadFile = await axios
       .post(`${URL}/course/uploadImg`, formData, {
@@ -143,6 +165,8 @@ const submitInsertCourse = async (e) => {
     course.courseImgPath = resUploadFile.data;
     console.log(course.courseImgPath);
   }
+
+  // save courseData to DB
   const resInsertCourse = await axios
     .post(`${URL}/course`, course)
     .catch((error) => {
@@ -162,10 +186,27 @@ const submitInsertCourse = async (e) => {
   Validation
 */
 const validatedInputState = reactive({
-  courseName: "is-valid", // 是否爲空
-  categoryId: "is-valid", // 是否爲空
-  courseDescription: "is-valid", // 圖片大小
-  courseImgPath: "is-valid", // 字數
+  courseName: "", // 是否爲空
+  categoryId: "", // 是否爲空
+  courseDescription: "", // 字數120字
+  courseImgPath: "", // 圖片大小
+});
+
+// validated watcher for categoryId
+// watch(course.categoryId, (newCategory) => {});
+
+// validated watcher for courseName
+watch(course, (newCourse) => {
+  if (newCourse.categoryId !== "") {
+    validatedInputState.categoryId = "";
+  }
+  if (newCourse.courseName.trim() !== "") {
+    validatedInputState.courseName = "";
+  }
+  if (newCourse.courseDescription.trim().length <= 120) {
+    // 字數限制120字
+    validatedInputState.courseDescription = "";
+  }
 });
 </script>
 
