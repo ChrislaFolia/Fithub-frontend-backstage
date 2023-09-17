@@ -7,7 +7,7 @@
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item  dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                        aria-expanded="false"><i class="fas fa-user fa-fw"></i>{{ userName }}</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <!-- <li><a class="dropdown-item"    @onclick="logout()">Logout</a></li> -->
                         <li><input type="button" class="dropdown-item" @click="logout()" value="登出"></li>
@@ -21,6 +21,9 @@
 <script setup>
 import router from "@/router"
 
+// 從 localStorage 中取得 username 
+const userName = window.localStorage.getItem("username");
+
 function logout() {
     window.localStorage.setItem("isLogin", "")
     window.localStorage.setItem("token", "")
@@ -32,8 +35,8 @@ function logout() {
 
 
 const toggleSidebar = () => {
-  document.body.classList.toggle('sb-nav-fixed');
-  document.body.classList.toggle('sb-sidenav-toggled');
+    document.body.classList.toggle('sb-nav-fixed');
+    document.body.classList.toggle('sb-sidenav-toggled');
 };
 
 </script>
