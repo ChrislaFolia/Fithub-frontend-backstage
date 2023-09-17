@@ -307,26 +307,42 @@ const emit = defineEmits(["submitInsertClasses-emit"]);
 
 // Action for insert
 const submitInsertClass = async (e) => {
-  // validation
+  /*
+    validation start
+  */
+  // classDate
   if (classes.classDate == "") {
     validatedInputState.classDate = "is-invalid";
     validationType.classDate = "stringEmpty";
     return;
   }
+  // classTime
   if (classes.classTime == "") {
     validatedInputState.classTime = "is-invalid";
     return;
   }
+  // coach
   if (classes.employeeId == "") {
     validatedInputState.employeeId = "is-invalid";
     validationType.employeeId = "stringEmpty";
     return;
   }
+
+  // classroom
+  classroomValidator(classes.classroomId, classes.classDate, classes.classTime);
   if (classes.classroomId == "") {
     validatedInputState.classroomId = "is-invalid";
     validationType.classroomId = "stringEmpty";
     return;
+  } else if (
+    classroomValidationData.rentOrder.length != 0 ||
+    classroomValidationData.classes.length != 0
+  ) {
+    validatedInputState.classroomId = "is-invalid";
+    validationType.classroomId = "classroomAlreadyBooked";
+    return;
   }
+  // applicantsCeil
   if (classes.applicantsCeil.trim() == "") {
     validatedInputState.applicantsCeil = "is-invalid";
     validationType.applicantsCeil = "stringEmpty";
@@ -336,6 +352,7 @@ const submitInsertClass = async (e) => {
     validationType.applicantsCeil = "lessThanOne";
     return;
   }
+  // applicantsFloor
   if (classes.applicantsFloor.trim() == "") {
     validatedInputState.applicantsFloor = "is-invalid";
     validationType.applicantsFloor = "stringEmpty";
@@ -351,6 +368,8 @@ const submitInsertClass = async (e) => {
     validatedInputState.applicantsFloor = "is-invalid";
     validationType.applicantsFloor = "moreThanCeil";
   }
+
+  // price
   if (classes.price.trim() == "") {
     validatedInputState.price = "is-invalid";
     validationType.price = "stringEmpty";
@@ -360,6 +379,10 @@ const submitInsertClass = async (e) => {
     validationType.price = "negativeNumber";
     return;
   }
+
+  /*
+    validation end
+  */
 
   // insert classes to DB
   const resInsertClasses = await axios
@@ -377,7 +400,6 @@ const submitInsertClass = async (e) => {
   router.push("/classes");
   emit("submitInsertClasses-emit");
   resetForm();
-  // location.reload();
 };
 
 // Action for show classroom capacity for reference
@@ -494,6 +516,52 @@ const validationType = reactive({
   applicantsFloor: "",
   price: "",
 });
+
+// Load classroom validation data
+const classroomValidationData = reactive({
+  classes: [],
+  rentOrder: [],
+});
+
+const classroomValidator = (classroomId, selectedDate, selectedTime) => {
+  // console.log(classroomId, selectedDate, selectedTime);
+  const URLAPIRENTORDER = `${URL}/classroom/getClassroomInUseRentOrder`;
+  const resRentOrder = axios
+    .get(URLAPIRENTORDER, {
+      params: {
+        classroomId: classroomId,
+        rentdate: selectedDate,
+        renttime: selectedTime,
+      },
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+    });
+  console.log(resRentOrder);
+  console.log(resRentOrder.data);
+  if (resRentOrder.data != undefined) {
+    classroomValidationData.rentOrder = resRentOrder.data;
+  }
+
+  const URLAPICLASSES = `${URL}/classroom/getClassroomInUseClasses`;
+  const resClasses = axios
+    .get(URLAPICLASSES, {
+      params: {
+        classroomId: classroomId,
+        classDate: selectedDate,
+        classTime: selectedTime,
+      },
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+    });
+  console.log(resClasses);
+  console.log(resClasses.config);
+  console.log(resClasses.data);
+  if (resClasses.data != undefined) {
+    classroomValidationData.classes = resClasses.data;
+  }
+};
 
 /*
   Life Cycle Hooks
