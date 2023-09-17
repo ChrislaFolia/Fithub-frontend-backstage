@@ -331,6 +331,10 @@ const submitInsertClass = async (e) => {
     validatedInputState.applicantsCeil = "is-invalid";
     validationType.applicantsCeil = "stringEmpty";
     return;
+  } else if (parseInt(classes.applicantsCeil.trim()) < 1) {
+    validatedInputState.applicantsCeil = "is-invalid";
+    validationType.applicantsCeil = "lessThanOne";
+    return;
   }
   if (classes.applicantsFloor.trim() == "") {
     validatedInputState.applicantsFloor = "is-invalid";
@@ -456,7 +460,10 @@ watch(classes, (newClasses) => {
     validatedInputState.classroomId = "";
     validationType.classroomId = "";
   }
-  if (newClasses.applicantsCeil.trim() !== "") {
+  if (
+    newClasses.applicantsCeil.trim() !== "" &&
+    parseInt(newClasses.applicantsCeil.trim()) >= 1
+  ) {
     validatedInputState.applicantsCeil = "";
     validationType.applicantsCeil = "";
   }
