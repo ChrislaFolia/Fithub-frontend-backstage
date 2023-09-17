@@ -64,10 +64,10 @@
                       <th>負責教練</th>
                       <th>課程時間</th>
                       <th>課程教室</th>
-                      <th>課程價格<br />(新台幣)</th>
+                      <th>課程價格</th>
                       <!-- <th>目前報名人數</th> -->
-                      <th>課程人數上限</th>
-                      <th>開課人數下限</th>
+                      <th>名額上限</th>
+                      <th>最低開課人數</th>
                       <th>修改</th>
                       <th>刪除</th>
                     </tr>
@@ -102,7 +102,7 @@
                       <td>{{ employeename }}</td>
                       <td>{{ classDate }}&nbsp;{{ classTime }}</td>
                       <td>{{ classroomName }}</td>
-                      <td>{{ price }}</td>
+                      <td>NT$&nbsp;{{ price }}</td>
                       <!-- <td>{{ -1 }}</td> -->
                       <td>{{ applicantsCeil }}</td>
                       <td>{{ applicantsFloor }}</td>

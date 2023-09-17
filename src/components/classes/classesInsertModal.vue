@@ -28,9 +28,11 @@
             <input
               type="date"
               class="form-control"
+              :class="validatedInputState.classDate"
               v-model="classes.classDate"
               id="classDate"
             />
+            <div class="invalid-feedback">請選擇日期</div>
           </div>
 
           <div class="mb-3">
@@ -39,6 +41,7 @@
             >
             <select
               class="form-select"
+              :class="validatedInputState.classTime"
               v-model="classes.classTime"
               id="classTime"
             >
@@ -47,13 +50,19 @@
               <option value="下午">下午</option>
               <option value="晚上">晚上</option>
             </select>
+            <div class="invalid-feedback">請選擇時段</div>
           </div>
 
           <div class="mb-3">
             <label for="coach" class="col-form-label"
               ><span class="need-input">*</span>教練 :</label
             >
-            <select class="form-select" v-model="classes.employeeId" id="coach">
+            <select
+              class="form-select"
+              :class="validatedInputState.employeeId"
+              v-model="classes.employeeId"
+              id="coach"
+            >
               <option selected value="" style="display: none">請選擇</option>
               <option
                 v-for="{ employeeid, employeename } in allCoachs"
@@ -62,6 +71,7 @@
                 {{ employeename }}
               </option>
             </select>
+            <div class="invalid-feedback">請選擇教練</div>
           </div>
 
           <div class="mb-3">
@@ -84,6 +94,7 @@
             >
             <select
               class="form-select"
+              :class="validatedInputState.classroomId"
               v-model="classes.classroomId"
               id="classroomSelect"
               @change="setclassroomCapacity"
@@ -96,32 +107,37 @@
                 {{ classroomName }}
               </option>
             </select>
+            <div class="invalid-feedback">請選擇教室</div>
           </div>
 
           <div class="mb-3">
             <label for="applicantsCeil" class="col-form-label"
-              ><span class="need-input">*</span>課程人數上限 : ({{
+              ><span class="need-input">*</span>課程名額上限 : ({{
                 classroom.classroomName
               }}使用人數上限為{{ classroom.classroomCapacity }}人)</label
             >
             <input
               type="text"
               class="form-control"
+              :class="validatedInputState.applicantsCeil"
               v-model.trim="classes.applicantsCeil"
               id="applicantsCeil"
             />
+            <div class="invalid-feedback">請填寫名額上限</div>
           </div>
 
           <div class="mb-3">
             <label for="applicantsFloor" class="col-form-label"
-              ><span class="need-input">*</span>開課人數下限 :</label
+              ><span class="need-input">*</span>最低開課人數 :</label
             >
             <input
               type="text"
               class="form-control"
+              :class="validatedInputState.applicantsFloor"
               v-model.trim="classes.applicantsFloor"
               id="applicantsFloor"
             />
+            <div class="invalid-feedback">請填寫最低開課人數</div>
           </div>
 
           <div class="mb-3">
@@ -131,9 +147,11 @@
             <input
               type="text"
               class="form-control"
+              :class="validatedInputState.price"
               v-model.trim="classes.price"
               id="price"
             />
+            <div class="invalid-feedback">請填寫課程價格</div>
           </div>
         </div>
         <div class="modal-footer">
@@ -141,6 +159,7 @@
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal"
+            @click="resetForm;"
           >
             取消
           </button>
@@ -162,7 +181,7 @@
 /*
   imports
  */
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import router from "../../router";
 import axios from "axios";
 const URL = import.meta.env.VITE_API_JAVAURL;
@@ -184,9 +203,9 @@ const classes = reactive({
   classTime: "",
   employeeId: "",
   coachSubstitute: 0,
-  applicantsCeil: 0,
-  applicantsFloor: 0,
-  price: 150,
+  applicantsCeil: "15",
+  applicantsFloor: "5",
+  price: "150",
   classroomId: "",
 });
 
@@ -207,7 +226,39 @@ const emit = defineEmits(["submitInsertClasses-emit"]);
 
 // Action for insert
 const submitInsertClass = async (e) => {
-  const resInsertCourse = await axios
+  // validation
+
+  if (classes.classDate == "") {
+    validatedInputState.classDate = "is-invalid";
+    return;
+  }
+  if (classes.classTime == "") {
+    validatedInputState.classTime = "is-invalid";
+    return;
+  }
+  if (classes.employeeId == "") {
+    validatedInputState.employeeId = "is-invalid";
+    return;
+  }
+  if (classes.classroomId == "") {
+    validatedInputState.classroomId = "is-invalid";
+    return;
+  }
+  if (classes.applicantsCeil.trim() == "") {
+    validatedInputState.applicantsCeil = "is-invalid";
+    return;
+  }
+  if (classes.applicantsFloor.trim() == "") {
+    validatedInputState.applicantsFloor = "is-invalid";
+    return;
+  }
+  if (classes.price.trim() == "") {
+    validatedInputState.price = "is-invalid";
+    return;
+  }
+
+  // insert classes to DB
+  const resInsertClasses = await axios
     .post(`${URL}/classes`, classes)
     .catch((error) => {
       console.log(error.toJSON());
@@ -220,8 +271,8 @@ const submitInsertClass = async (e) => {
   let getInstanceInsertModal = bootstrap.Modal.getInstance(insertModal);
   getInstanceInsertModal.toggle();
   router.push("/classes");
-
   emit("submitInsertClasses-emit");
+  resetForm();
   // location.reload();
 };
 
@@ -235,6 +286,19 @@ const setclassroomCapacity = (e) => {
       break;
     }
   }
+};
+
+// Reset form
+const resetForm = () => {
+  classes.classDate = "";
+  classes.classTime = "";
+  classes.employeeId = "";
+  coachSubclasses.stitute = 0;
+  classes.applicantsCeil = 15;
+  classes.applicantsFloor = 5;
+  classes.price = 150;
+  classes.classroomId = "";
+  console.log(111);
 };
 
 /*
@@ -268,13 +332,38 @@ const loadAllCoachs = async () => {
   Validation
 */
 const validatedInputState = reactive({
-  classDate: "is-valid", // 是否爲空, 是否小於今天，是否在？個月後
-  classTime: "is-valid", // 是否爲空
-  employeeId: "is-valid", // 是否爲空
-  classroomId: "is-valid", // 是否爲空,是否已使用
-  applicantsCeil: "is-valid", // 是否爲空，是否<0，是否> classroom capacity,沒填自動補ceil值
-  applicantsFloor: "is-valid", // 是否爲空，是否<0 ,沒填自動補0
-  price: "is-valid", // 是否爲空，是否<=0
+  classDate: "", // 是否爲空, 是否小於今天，是否在？個月後
+  classTime: "", // 是否爲空
+  employeeId: "", // 是否爲空
+  classroomId: "", // 是否爲空,是否已使用
+  applicantsCeil: "", // 是否爲空，是否<0，是否> classroom capacity,沒填自動補ceil值
+  applicantsFloor: "", // 是否爲空，是否<0 ,沒填自動補0
+  price: "", // 是否爲空，是否<=0
+});
+
+// validation watcher
+watch(classes, (newClasses) => {
+  if (newClasses.classDate !== "") {
+    validatedInputState.classDate = "";
+  }
+  if (newClasses.classTime !== "") {
+    validatedInputState.classTime = "";
+  }
+  if (newClasses.employeeId !== "") {
+    validatedInputState.employeeId = "";
+  }
+  if (newClasses.classroomId !== "") {
+    validatedInputState.classroomId = "";
+  }
+  if (newClasses.applicantsCeil.trim() !== "") {
+    validatedInputState.applicantsCeil = "";
+  }
+  if (newClasses.applicantsFloor.trim() !== "") {
+    validatedInputState.applicantsFloor = "";
+  }
+  if (newClasses.price.trim() !== "") {
+    validatedInputState.price = "";
+  }
 });
 
 /*
