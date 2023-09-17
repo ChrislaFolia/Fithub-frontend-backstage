@@ -33,7 +33,18 @@
               v-model="classes.classDate"
               id="classDate"
             />
-            <div class="invalid-feedback">請選擇日期</div>
+            <div
+              v-if="(validationType.classDate = 'stringEmpty')"
+              class="invalid-feedback"
+            >
+              請選擇日期
+            </div>
+            <div
+              v-else-if="(validationType.classDate = 'dateBefore')"
+              class="invalid-feedback"
+            >
+              無法新增過去之課程
+            </div>
           </div>
 
           <div class="mb-3">
@@ -72,7 +83,18 @@
                 {{ employeename }}
               </option>
             </select>
-            <div class="invalid-feedback">請選擇教練</div>
+            <div
+              v-if="(validationType.employeeId = 'stringEmpty')"
+              class="invalid-feedback"
+            >
+              請選擇教練
+            </div>
+            <div
+              v-else-if="(validationType.employeeId = 'classConflict')"
+              class="invalid-feedback"
+            >
+              教練於該時段衝堂，請選擇其他日期或時段
+            </div>
           </div>
 
           <div class="mb-3">
@@ -108,7 +130,20 @@
                 {{ classroomName }}
               </option>
             </select>
-            <div class="invalid-feedback">請選擇教室</div>
+            <div
+              v-if="(validationType.classroomId = 'stringEmpty')"
+              class="invalid-feedback"
+            >
+              請選擇教室
+            </div>
+            <div
+              v-else-if="
+                (validationType.classroomId = 'classroomAlreadyBooked')
+              "
+              class="invalid-feedback"
+            >
+              該時段教室已被預訂，請選擇其他日期或時段
+            </div>
           </div>
 
           <div class="mb-3">
@@ -124,7 +159,26 @@
               v-model.trim="classes.applicantsCeil"
               id="applicantsCeil"
             />
-            <div class="invalid-feedback">請填寫名額上限</div>
+            <div
+              v-if="(validationType.applicantsCeil = 'stringEmpty')"
+              class="invalid-feedback"
+            >
+              請填寫名額上限
+            </div>
+            <div
+              v-else-if="
+                (validationType.applicantsCeil = 'overClassroomCapacity')
+              "
+              class="invalid-feedback"
+            >
+              已超過教室可容納人數
+            </div>
+            <div
+              v-else-if="(validationType.applicantsCeil = 'lessThanOne')"
+              class="invalid-feedback"
+            >
+              名額上限不可低於 1 人
+            </div>
           </div>
 
           <div class="mb-3">
@@ -138,7 +192,18 @@
               v-model.trim="classes.applicantsFloor"
               id="applicantsFloor"
             />
-            <div class="invalid-feedback">請填寫最低開課人數</div>
+            <div
+              v-if="(validationType.applicantsFloor = 'stringEmpty')"
+              class="invalid-feedback"
+            >
+              請填寫最低開課人數
+            </div>
+            <div
+              v-else-if="(validationType.applicantsFloor = 'negativeNumber')"
+              class="invalid-feedback"
+            >
+              最低開課人數不可為負數
+            </div>
           </div>
 
           <div class="mb-3">
@@ -152,7 +217,18 @@
               v-model.trim="classes.price"
               id="price"
             />
-            <div class="invalid-feedback">請填寫課程價格</div>
+            <div
+              v-if="(validationType.price = 'stringEmpty')"
+              class="invalid-feedback"
+            >
+              請填寫課程價格
+            </div>
+            <div
+              v-else-if="(validationType.price = 'negativeNumber')"
+              class="invalid-feedback"
+            >
+              課程價格不可為負數
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -231,6 +307,7 @@ const submitInsertClass = async (e) => {
 
   if (classes.classDate == "") {
     validatedInputState.classDate = "is-invalid";
+    validationType.classDate = "stringEmpty";
     return;
   }
   if (classes.classTime == "") {
@@ -239,22 +316,27 @@ const submitInsertClass = async (e) => {
   }
   if (classes.employeeId == "") {
     validatedInputState.employeeId = "is-invalid";
+    validationType.employeeId = "stringEmpty";
     return;
   }
   if (classes.classroomId == "") {
     validatedInputState.classroomId = "is-invalid";
+    validationType.classroomId = "stringEmpty";
     return;
   }
   if (classes.applicantsCeil.trim() == "") {
     validatedInputState.applicantsCeil = "is-invalid";
+    validationType.applicantsCeil = "stringEmpty";
     return;
   }
   if (classes.applicantsFloor.trim() == "") {
     validatedInputState.applicantsFloor = "is-invalid";
+    validationType.applicantsFloor = "stringEmpty";
     return;
   }
   if (classes.price.trim() == "") {
     validatedInputState.price = "is-invalid";
+    validationType.price = "stringEmpty";
     return;
   }
 
@@ -345,6 +427,7 @@ const validatedInputState = reactive({
 watch(classes, (newClasses) => {
   if (newClasses.classDate !== "") {
     validatedInputState.classDate = "";
+    validationType.classDate = "";
   }
   if (newClasses.classTime !== "") {
     validatedInputState.classTime = "";
@@ -354,16 +437,30 @@ watch(classes, (newClasses) => {
   }
   if (newClasses.classroomId !== "") {
     validatedInputState.classroomId = "";
+    validationType.classroomId = "";
   }
   if (newClasses.applicantsCeil.trim() !== "") {
     validatedInputState.applicantsCeil = "";
+    validationType.applicantsCeil = "";
   }
   if (newClasses.applicantsFloor.trim() !== "") {
     validatedInputState.applicantsFloor = "";
+    validationType.applicantsFloor = "";
   }
   if (newClasses.price.trim() !== "") {
     validatedInputState.price = "";
+    validationType.price = "";
   }
+});
+
+// Validation Type
+const validationType = reactive({
+  classDate: "",
+  employeeId: "",
+  classroomId: "stringEmpty",
+  applicantsCeil: "stringEmpty",
+  applicantsFloor: "stringEmpty",
+  price: "stringEmpty",
 });
 
 /*
