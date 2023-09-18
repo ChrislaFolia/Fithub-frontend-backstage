@@ -322,9 +322,18 @@ const submitInsertClass = async (classroomCapacity, e) => {
     return;
   }
   // coach
+  await coachValidator(
+    classes.employeeId,
+    classes.classDate,
+    classes.classTime
+  );
   if (classes.employeeId == "") {
     validatedInputState.employeeId = "is-invalid";
     validationType.employeeId = "stringEmpty";
+    return;
+  } else if (coachValidationData.coachValidatingFactor) {
+    validatedInputState.employeeId = "is-invalid";
+    validationType.employeeId = "classConflict";
     return;
   }
 
@@ -344,6 +353,7 @@ const submitInsertClass = async (classroomCapacity, e) => {
     validationType.classroomId = "classroomAlreadyBooked";
     return;
   }
+
   // applicantsCeil
   if (classes.applicantsCeil.trim() == "") {
     validatedInputState.applicantsCeil = "is-invalid";
@@ -466,7 +476,7 @@ const loadAllCoachs = async () => {
 const validatedInputState = reactive({
   classDate: "", // 是否爲空, 是否小於今天，是否在？個月後
   classTime: "", // 是否爲空
-  employeeId: "", // 是否爲空
+  employeeId: "", // 是否爲空,教練是否衝堂
   classroomId: "", // 是否爲空,是否已使用
   applicantsCeil: "", // 是否爲空，是否<1，是否> classroom capacity,沒填自動補ceil值
   applicantsFloor: "", // 是否爲空，是否<0 ,沒填自動補0，不可>=ceil
@@ -524,7 +534,36 @@ const validationType = reactive({
   price: "",
 });
 
-// Load classroom validation data
+// coachValidator
+const coachValidationData = reactive({
+  classes: [],
+  coachValidatingFactor: false,
+});
+const coachValidator = async (employeeid, selectedDate, selectedTime) => {
+  const URLAPICOACH = `${URL}/employees/findClassesInDateRangeAndEmployeeid`;
+  const resCoach = await axios
+    .get(URLAPICOACH, {
+      params: {
+        employeeid: employeeid,
+        classDate: selectedDate,
+        classTime: selectedTime,
+      },
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+    });
+  if (resCoach.data != undefined) {
+    coachValidationData.classes = resCoach.data;
+  }
+
+  if (coachValidationData.classes.length != 0) {
+    coachValidationData.coachValidatingFactor = true;
+    return;
+  }
+  coachValidationData.coachValidatingFactor = false;
+};
+
+// classroomValidator
 const classroomValidationData = reactive({
   classes: [],
   rentOrder: [],
