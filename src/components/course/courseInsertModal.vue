@@ -9,6 +9,7 @@
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
+            @click="resetForm"
           ></button>
         </div>
         <div class="modal-body">
@@ -67,6 +68,7 @@
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal"
+            @click="resetForm"
           >
             取消
           </button>
@@ -180,6 +182,13 @@ const submitInsertCourse = async () => {
 
   // 傳送event至parent componont
   emit("submitInsertCourse-emit");
+};
+
+// Reset form
+const resetForm = () => {
+  course.categoryId = "";
+  course.courseName = "";
+  course.courseDescription = "";
 };
 
 /*
