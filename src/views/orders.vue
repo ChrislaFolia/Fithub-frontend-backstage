@@ -9,16 +9,28 @@
           <div class="card">
             <div class="card-body table-responsive">
               <div class="col-3 mb-3">
-                                <select class="form-select" @change="changeHandler(-1)" v-model.number="row">
-                                    <option value=5 selected>每頁 5 筆資料</option>
-                                    <option value=10>每頁 10 筆資料</option>
-                                </select>
-                            </div>
-                            <div class="col-3">
-                                <i class="bi bi-patch-question-fill" title="請輸入西元年,年-月,年-月-日(月日請補0)"></i>
-                                <input type="search" class="form-control mb-3" @keyup="changeHandler(-1)" v-model="date"
-                                    placeholder="請輸入訂單日期查詢">
-                            </div>
+                <select
+                  class="form-select"
+                  @change="changeHandler(-1)"
+                  v-model.number="row"
+                >
+                  <option value="5" selected>每頁 5 筆資料</option>
+                  <option value="10">每頁 10 筆資料</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <i
+                  class="bi bi-patch-question-fill"
+                  title="請輸入西元年,年-月,年-月-日(月日請補0)"
+                ></i>
+                <input
+                  type="search"
+                  class="form-control mb-3"
+                  @keyup="changeHandler(-1)"
+                  v-model="date"
+                  placeholder="請輸入訂單日期查詢"
+                />
+              </div>
               <!-- <button class="btn mb-3 btn-primary" data-bs-toggle="modal" data-bs-target="#insertModal">
                 新增訂單
               </button> -->
@@ -39,7 +51,10 @@
                 </thead>
 
                 <tbody class="align-middle text-center">
-                  <tr v-for="(orders, ordersindex) in orderPage.content" :key="ordersindex">
+                  <tr
+                    v-for="(orders, ordersindex) in orderPage.content"
+                    :key="ordersindex"
+                  >
                     <td>{{ orders.orderId }}</td>
                     <td>{{ orders.orderDate }}</td>
                     <td>{{ orders.member.memberid }}</td>
@@ -56,8 +71,12 @@
                       </button>
                     </td> -->
                     <td>
-                      <button class="btn btn-outline-danger" data-bs-toggle="modal"
-                        @click="openModalWithOrderItem(orders.orderId)" data-bs-target="#updateModal2">
+                      <button
+                        class="btn btn-outline-danger"
+                        data-bs-toggle="modal"
+                        @click="openModalWithOrderItem(orders.orderId)"
+                        data-bs-target="#updateModal2"
+                      >
                         查看
                       </button>
                     </td>
@@ -65,28 +84,47 @@
                 </tbody>
               </table>
               <nav>
-                                <ul class="pagination pagination-sm">
-                                    <li class="page-item" v-for="(value, index) in orderPage.totalPages" :key="index">
-                                        <a class="page-link"
-                                            :class="{ 'selected-page': value - 1 === orderPage.number }"
-                                            @click="changeHandler(value)">
-                                            {{ value }}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                <ul class="pagination pagination-sm">
+                  <li
+                    class="page-item"
+                    v-for="(value, index) in orderPage.totalPages"
+                    :key="index"
+                  >
+                    <a
+                      class="page-link"
+                      :class="{
+                        'selected-page': value - 1 === orderPage.number,
+                      }"
+                      @click="changeHandler(value)"
+                    >
+                      {{ value }}
+                    </a>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>
       </div>
     </div>
     <!-- 詳細資料彈出視窗 -->
-    <div class="modal fade" id="updateModal2" tabindex="-1" aria-labelledby="updateModal2" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="updateModal2"
+      tabindex="-1"
+      aria-labelledby="updateModal2"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">詳細資料</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <table class="table">
@@ -103,7 +141,10 @@
                 </tr>
               </thead>
               <tbody class="align-middle text-center">
-                <tr v-for="(orderitem, orderitemsindex) in selectedOrderItems" :key="orderitemsindex">
+                <tr
+                  v-for="(orderitem, orderitemsindex) in selectedOrderItems"
+                  :key="orderitemsindex"
+                >
                   <td>{{ orderitem.itemId }}</td>
                   <td>{{ orderitem.classes.course.courseName }}</td>
                   <td>
@@ -143,11 +184,11 @@
               會員編號<input v-model="updateSelectedOrders.memberId" type="text" class="form-control" required="required" />
               <span v-if="!updateSelectedOrders.memberId" class="text-danger">必填</span>
             </div> -->
-            <!-- <div class="mb-3">
+    <!-- <div class="mb-3">
                         總金額<input v-model="updateSelectedOrders.orderTotalAmount" type="text" class="form-control" required="required">
                         <span v-if="!updateSelectedOrders.orderTotalAmount" class="text-danger">必填</span>
                     </div> -->
-            <!-- <div class="mb-3">
+    <!-- <div class="mb-3">
               付款方式<input v-model="updateSelectedOrders.orderPaymentMethod" type="text" class="form-control"
                 required="required" />
               <span v-if="!updateSelectedOrders.orderPaymentMethod" class="text-danger">必填</span>
@@ -187,11 +228,11 @@
               會員編號<input v-model="orders.memberId" type="text" class="form-control" required="required" />
               <span v-if="!orders.memberId" class="text-danger">必填</span>
             </div> -->
-            <!-- <div class="mb-3">
+    <!-- <div class="mb-3">
                         總金額<input v-model="orders.orderTotalAmount" type="text" class="form-control" required="required">
                         <span v-if="!orders.orderTotalAmount" class="text-danger">必填</span>
                     </div> -->
-            <!-- <div class="mb-3">
+    <!-- <div class="mb-3">
               付款方式<input v-model="orders.orderPaymentMethod" type="text" class="form-control" required="required" />
               <span v-if="!orders.orderPaymentMethod" class="text-danger">必填</span>
             </div>
@@ -230,53 +271,54 @@ import NavbarTop from "../components/NavbarTop.vue";
 import NavbarLeft from "../components/NavbarLeft.vue";
 const URL = import.meta.env.VITE_API_JAVAURL;
 
-const orderPage = ref([])
+const orderPage = ref([]);
 // 分頁 預設5筆資料 第0頁
 let row = ref(5);
-let date = ref('')
+let date = ref("");
 const page = reactive({
-    number: 0,
-    row: row.value,
-    date: date.value
-})
+  number: 0,
+  row: row.value,
+  date: date.value,
+});
 
 const changeHandler = (value) => {
-    page.row = row.value
-    page.date = date.value
-    //
-    if (value >= 0) {
-        page.number = value - 1;
-    } else {
-        page.number = 0
-    }
-    getorderpage();
+  page.row = row.value;
+  page.date = date.value;
+  //
+  if (value >= 0) {
+    page.number = value - 1;
+  } else {
+    page.number = 0;
+  }
+  getorderpage();
 };
 
 // 從伺服器獲取訂單分頁資料
 const getorderpage = async () => {
-    try {
+  try {
+    console.log(page);
+    const response = await axios.post(
+      "http://localhost:8080/fithub/orders/findallpage",
+      page
+    ); // 替換為實際的 API URL
+    orderPage.value = response.data;
+    console.log(orderPage.value);
 
-        console.log(page)
-        const response = await axios.post('http://localhost:8080/fithub/orders/findallpage', page); // 替換為實際的 API URL
-        orderPage.value = response.data;
-        console.log(orderPage.value)
+    // // 挑選需要的欄位輸出成檔案
+    // xlsxData.value = rentorderPage.value.content.map(rentOrder => ({
+    //     rentOrderId: rentOrder.rentorderid,
+    //     rentOrderDate: rentOrder.rentorderdate,
+    //     memberName: rentOrder.member.membername,
+    //     classroomName: rentOrder.classroom.classroomName,
+    //     rentDate: rentOrder.rentdate,
+    //     rentTime: rentOrder.renttime,
+    //     rentStatus: rentOrder.rentstatus,
+    // }));
 
-        // // 挑選需要的欄位輸出成檔案
-        // xlsxData.value = rentorderPage.value.content.map(rentOrder => ({
-        //     rentOrderId: rentOrder.rentorderid,
-        //     rentOrderDate: rentOrder.rentorderdate,
-        //     memberName: rentOrder.member.membername,
-        //     classroomName: rentOrder.classroom.classroomName,
-        //     rentDate: rentOrder.rentdate,
-        //     rentTime: rentOrder.renttime,
-        //     rentStatus: rentOrder.rentstatus,
-        // }));
-
-        // console.log(xlsxData.value)
-
-    } catch (error) {
-        console.error('Error getrentorder data:', error);
-    }
+    // console.log(xlsxData.value)
+  } catch (error) {
+    console.error("Error getrentorder data:", error);
+  }
 };
 
 // const resInsertCourse = await axios.post(`${URL}/classes`, classes)-
@@ -478,5 +520,12 @@ onMounted(() => {
 <style scoped>
 .text-danger {
   font-size: 8px;
+}
+.pagination li {
+  cursor: pointer;
+}
+
+.selected-page {
+  background-color: lightblue;
 }
 </style>
