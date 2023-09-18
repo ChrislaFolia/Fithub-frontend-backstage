@@ -329,7 +329,7 @@ const submitInsertClass = async (e) => {
   }
 
   // classroom
-  let classroomValidatingFactor = classroomValidator(
+  await classroomValidator(
     classes.classroomId,
     classes.classDate,
     classes.classTime
@@ -338,12 +338,12 @@ const submitInsertClass = async (e) => {
     validatedInputState.classroomId = "is-invalid";
     validationType.classroomId = "stringEmpty";
     return;
+  } else if (classroomValidatingFactor.value) {
+    console.log("classroom", classroomValidatingFactor.value);
+    validatedInputState.classroomId = "is-invalid";
+    validationType.classroomId = "classroomAlreadyBooked";
+    return;
   }
-  // else if (classroomValidatingFactor) {
-  //   validatedInputState.classroomId = "is-invalid";
-  //   validationType.classroomId = "classroomAlreadyBooked";
-  //   return;
-  // }
   // applicantsCeil
   if (classes.applicantsCeil.trim() == "") {
     validatedInputState.applicantsCeil = "is-invalid";
@@ -426,6 +426,7 @@ const resetForm = () => {
   classes.applicantsFloor = "5";
   classes.price = "150";
   classes.classroomId = "";
+  classroomValidatingFactor.value = false;
 };
 
 /*
@@ -525,6 +526,7 @@ const classroomValidationData = reactive({
   rentOrder: [],
 });
 
+const classroomValidatingFactor = ref(false);
 const classroomValidator = async (classroomId, selectedDate, selectedTime) => {
   // console.log(classroomId, selectedDate, selectedTime);
   const URLAPIRENTORDER = `${URL}/classroom/getClassroomInUseRentOrder`;
@@ -557,21 +559,23 @@ const classroomValidator = async (classroomId, selectedDate, selectedTime) => {
     .catch((error) => {
       console.log(error.toJSON());
     });
-  // console.log(resClasses);
-  // console.log(resClasses.config);
-  // console.log(resClasses.data);
-  // if (resClasses.data != undefined) {
-  //   classroomValidationData.classes = resClasses.data;
-  // }
-  // if (classroomValidationData.classes.length != 0) {
-  //   console.log(classroomValidationData.classes.length);
-  //   return true;
-  // }
-  // if (classroomValidationData.rentOrder.length != 0) {
-  //   console.log(classroomValidationData.rentOrder.length);
-  //   return true;
-  // }
-  return false;
+  console.log(resClasses);
+  console.log(resClasses.config);
+  console.log(resClasses.data);
+  if (resClasses.data != undefined) {
+    classroomValidationData.classes = resClasses.data;
+  }
+  if (classroomValidationData.classes.length != 0) {
+    console.log(classroomValidationData.classes.length);
+    classroomValidatingFactor.value = true;
+    return;
+  }
+  if (classroomValidationData.rentOrder.length != 0) {
+    console.log(classroomValidationData.rentOrder.length);
+    classroomValidatingFactor.value = true;
+    return;
+  }
+  classroomValidatingFactor.value = false;
 };
 
 /*
