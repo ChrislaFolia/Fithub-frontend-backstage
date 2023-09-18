@@ -248,7 +248,7 @@
             type="submit"
             id="sendInsertClass"
             class="btn btn-primary"
-            @click="submitInsertClass"
+            @click="submitInsertClass(classroom.classroomCapacity)"
           >
             送出
           </button>
@@ -306,7 +306,7 @@ const emit = defineEmits(["submitInsertClasses-emit"]);
  */
 
 // Action for insert
-const submitInsertClass = async (e) => {
+const submitInsertClass = async (classroomCapacity, e) => {
   /*
     validation start
   */
@@ -352,6 +352,10 @@ const submitInsertClass = async (e) => {
   } else if (parseInt(classes.applicantsCeil.trim()) < 1) {
     validatedInputState.applicantsCeil = "is-invalid";
     validationType.applicantsCeil = "lessThanOne";
+    return;
+  } else if (parseInt(classes.applicantsCeil.trim()) > classroomCapacity) {
+    validatedInputState.applicantsCeil = "is-invalid";
+    validationType.applicantsCeil = "overClassroomCapacity";
     return;
   }
   // applicantsFloor
