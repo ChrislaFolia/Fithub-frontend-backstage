@@ -491,8 +491,8 @@ watch(classes, (newClasses) => {
     validationType.classroomId = "";
   }
   if (
-    newClasses.applicantsCeil.trim() !== "" &&
-    parseInt(newClasses.applicantsCeil.trim()) >= 1
+    newClasses.applicantsCeil !== "" &&
+    parseInt(newClasses.applicantsCeil) >= 1
   ) {
     validatedInputState.applicantsCeil = "";
     validationType.applicantsCeil = "";
