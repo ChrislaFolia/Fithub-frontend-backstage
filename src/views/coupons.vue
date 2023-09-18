@@ -189,9 +189,7 @@
                 class="form-control"
                 required="required"
               />
-              <span
-                v-if="!updateSelectedCoupon.couponused"
-                class="text-danger"
+              <span v-if="!updateSelectedCoupon.couponused" class="text-danger"
                 >必填</span
               >
             </div>
@@ -202,13 +200,11 @@
                 class="form-control"
                 required="required"
               />
-              <span
-                v-if="!updateSelectedCoupon.couponceil"
-                class="text-danger"
+              <span v-if="!updateSelectedCoupon.couponceil" class="text-danger"
                 >必填</span
               >
             </div>
-                        <!-- <td>{{ coupon.couponused }}/{{ coupon.couponceil }}</td> -->
+            <!-- <td>{{ coupon.couponused }}/{{ coupon.couponceil }}</td> -->
             <label class="form-label">分類</label>
             <div class="mb-3">
               <select
@@ -331,9 +327,7 @@
                 class="form-control"
                 required="required"
               />
-              <span v-if="!coupon.couponceil" class="text-danger"
-                >必填</span
-              >
+              <span v-if="!coupon.couponceil" class="text-danger">必填</span>
             </div>
 
             <label class="form-label">分類</label>
@@ -467,6 +461,7 @@ const insertCoupon = async () => {
 
     // 刷新畫面
     getcoupons();
+    alert("成功新增優惠券");
   } catch (error) {
     console.error("Error adding new coupon:", error);
   }
@@ -501,6 +496,7 @@ const updateCoupon = async () => {
 
   // 刷新畫面
   getcoupons();
+  alert("成功更新優惠券");
   // } catch (error) {
   //     console.error('Error adding new classroom:', error);
   // }
