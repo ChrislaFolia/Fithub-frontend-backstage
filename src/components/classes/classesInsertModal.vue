@@ -383,6 +383,7 @@ const submitInsertClass = async (classroomCapacity, e) => {
   ) {
     validatedInputState.applicantsFloor = "is-invalid";
     validationType.applicantsFloor = "moreThanCeil";
+    return;
   }
 
   // price
