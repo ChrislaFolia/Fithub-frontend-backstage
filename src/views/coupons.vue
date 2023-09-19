@@ -502,12 +502,12 @@ const updateCoupon = async () => {
   // }
 };
 
-// 刪除多筆教室
+// 刪除多筆
 const deleteSelected = async () => {
   const checkDelete = window.confirm("確定要刪除選中的優惠券嗎？");
   if (checkDelete) {
     try {
-      // 將選中的 ClassroomID 送到後端進行刪除
+      // 將選中的 couponId 送到後端進行刪除
       const response = await axios.delete(`${URL}/coupons/delete/multiple`, {
         data: selectedCoupons.value,
       });
@@ -516,7 +516,7 @@ const deleteSelected = async () => {
       getcoupons();
       selectedCoupons.value = []; // 清空選中的項目
     } catch (error) {
-      console.error("Error deleting rent orders:", error);
+      console.error("Error deleting coupon:", error);
     }
   }
 };
