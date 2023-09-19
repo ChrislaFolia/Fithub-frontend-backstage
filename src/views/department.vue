@@ -156,7 +156,7 @@ const loadDatas = async () => {
 
     allDepts.value = response.data.list
 
-    console.log(response.data)
+    // console.log(response.data)
 
     totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(response.data.count / datas.rows)
 
