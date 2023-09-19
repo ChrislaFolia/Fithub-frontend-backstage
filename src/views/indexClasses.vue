@@ -65,7 +65,6 @@
                       <th>課程時間</th>
                       <th>課程教室</th>
                       <th>課程價格</th>
-                      <!-- <th>目前報名人數</th> -->
                       <th>名額上限</th>
                       <th>最低開課人數</th>
                       <th>修改</th>
@@ -102,9 +101,10 @@
                       <td>{{ employeename }}</td>
                       <td>{{ classDate }}&nbsp;{{ classTime }}</td>
                       <td>{{ classroomName }}</td>
-                      <td>NT$&nbsp;{{ price }}</td>
-                      <!-- <td>{{ -1 }}</td> -->
-                      <td>{{ applicantsCeil }}</td>
+                      <td>NT$&nbsp;{{ price.toLocaleString() }}</td>
+                      <td>
+                        {{ applicantsCeil }}
+                      </td>
                       <td>{{ applicantsFloor }}</td>
                       <td>
                         <i
@@ -164,7 +164,14 @@
 /*
   imports
 */
-import { ref, reactive, onMounted, onBeforeMount, watch } from "vue";
+import {
+  ref,
+  reactive,
+  onMounted,
+  onBeforeMount,
+  watch,
+  onBeforeUpdate,
+} from "vue";
 import axios from "axios";
 import UpdateClass from "../components/classes/classesUpdateModal.vue";
 import NavbarTop from "../components/NavbarTop.vue";
@@ -211,6 +218,9 @@ const pageHandler = (page) => {
   }
 };
 
+/*
+  Load Datas
+*/
 // Load Classes data
 const classes = ref([]);
 const loadClasses = async () => {
@@ -235,6 +245,7 @@ const loadClasses = async () => {
   paginationData.numberOfCourses = parseInt(
     response.headers["number-of-elements"]
   );
+  await getAllAlreadyBuy();
 };
 
 // Load Single category Classes data
@@ -261,6 +272,7 @@ const loadSingleCategoryClasses = async () => {
   paginationData.numberOfCourses = parseInt(
     response.headers["number-of-elements"]
   );
+  await getAllAlreadyBuy();
 };
 
 // Load courseCategories data
@@ -275,6 +287,31 @@ const loadAllCourseCategories = async () => {
   //取得所有分類放進allCourseCategories變數
   allCourseCategories.value = response.data;
   // console.log(allCourseCategories)
+};
+
+// Load alreadyBuyAmount
+const URLAPIALREADYBUY = `${URL}/order-items/getOrderItemAmountByClassId`;
+const getAlreadyBuy = (classId) =>
+  axios
+    .get(URLAPIALREADYBUY, {
+      params: {
+        classId: classId,
+      },
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+    });
+
+// Temporary used method 後端controller 出現對應方法後棄用
+const alreadyBuy = ref([]);
+const getAllAlreadyBuy = async () => {
+  for (const singleClass of classes.value) {
+    const res = await getAlreadyBuy(singleClass["classId"]);
+    if (Object.keys(res.data).length !== 0) {
+      //判斷是否為空{}
+      alreadyBuy.value.push(res.data);
+    }
+  }
 };
 
 /*
@@ -333,6 +370,9 @@ onMounted(() => {
     loadSingleCategoryClasses();
   }
 });
+// onBeforeUpdate(() => {
+//   alreadyBuyShow.value = false;
+// });
 </script>
 
 <style scoped></style>
