@@ -201,7 +201,7 @@ const paginationData = reactive({
 });
 
 const pageHandler = (page) => {
-  console.log("out" + page);
+  // console.log("out" + page);
   paginationData.page = page;
   // choose which page to load
   if (pageCourseCategoryId.value == 0) {

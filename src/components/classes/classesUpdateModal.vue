@@ -35,7 +35,7 @@
               v-else-if="validationType.classDate == 'dateBefore'"
               class="invalid-feedback"
             >
-              無法新增過去之課程
+              無法修改過去之課程
             </div>
           </div>
 
@@ -306,6 +306,8 @@ const emit = defineEmits(["submitUpdateClasses-emit"]);
 
 // Action for update
 const submitUpdateClass = async (classroomCapacity) => {
+  let today = new Date();
+  let givenClassDate = new Date(classes.classDate);
   /*
     validation start
   */
@@ -313,6 +315,10 @@ const submitUpdateClass = async (classroomCapacity) => {
   if (classes.classDate == "") {
     validatedInputState.classDate = "is-invalid";
     validationType.classDate = "stringEmpty";
+    return;
+  } else if (givenClassDate <= today) {
+    validatedInputState.classDate = "is-invalid";
+    validationType.classDate = "dateBefore";
     return;
   }
   // classTime

@@ -307,6 +307,8 @@ const emit = defineEmits(["submitInsertClasses-emit"]);
 
 // Action for insert
 const submitInsertClass = async (classroomCapacity, e) => {
+  let today = new Date();
+  let givenClassDate = new Date(classes.classDate);
   /*
     validation start
   */
@@ -314,6 +316,10 @@ const submitInsertClass = async (classroomCapacity, e) => {
   if (classes.classDate == "") {
     validatedInputState.classDate = "is-invalid";
     validationType.classDate = "stringEmpty";
+    return;
+  } else if (givenClassDate <= today) {
+    validatedInputState.classDate = "is-invalid";
+    validationType.classDate = "dateBefore";
     return;
   }
   // classTime
