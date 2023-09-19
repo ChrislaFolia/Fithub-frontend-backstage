@@ -194,8 +194,8 @@ const loadDatas = async () => {
     allSpecs.value = responseSpecialtys.data
     allCoachs.value = responseCoachs.data
 
-    console.log(responseCoachSpecialtys)
-    console.log(allCoachSpecs.value)
+    // console.log(responseCoachSpecialtys)
+    // console.log(allCoachSpecs.value)
 
     totalPages.value = +datas.rows === 0 ? 1 : Math.ceil(responseCoachSpecialtys.data.count / datas.rows)
 }

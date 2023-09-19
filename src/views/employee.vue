@@ -161,6 +161,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div>
+                            <input type="button" value="測試資料" class="btn btn-secondary ms-1" @click="inputTestData" />
+                        </div>
                         <div class="mb-3">
                             姓名:<input type="text" class="form-control" v-model="insertEmployee.employeename">
                             <span v-if="!insertEmployee.employeename" class="text-danger">必填</span>
@@ -434,11 +437,11 @@ const insertData = async () => {
             insertEmployee.employeebirthday = ''
             insertEmployee.employeeintroduction = ''
             // alert("新增成功")
-        Swal.fire({
-            title: '新增成功',
-            icon: 'success',
-            confirmButtonText: '確定'
-        })
+            Swal.fire({
+                title: '新增成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
     } catch (error) {
         // alert("新增失敗")
@@ -489,11 +492,11 @@ const updateData = async () => {
             loadDatas(); // 重新載入資料
 
             // alert("修改成功")
-        Swal.fire({
-            title: '修改成功',
-            icon: 'success',
-            confirmButtonText: '確定'
-        })
+            Swal.fire({
+                title: '修改成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
@@ -526,11 +529,11 @@ const deleteData = async () => {
 
             loadDatas(); // 重新載入資料
             // alert("刪除成功")
-        Swal.fire({
-            title: '刪除成功',
-            icon: 'success',
-            confirmButtonText: '確定'
-        })
+            Swal.fire({
+                title: '刪除成功',
+                icon: 'success',
+                confirmButtonText: '確定'
+            })
         }
 
 
@@ -547,6 +550,21 @@ const deleteData = async () => {
     }
 
 }
+
+const inputTestData = () => {
+    insertEmployee.employeename = "陳慶君"
+    insertEmployee.employeeemail = "test3555488@gmail.com"
+    insertEmployee.employeephone = "0912345678"
+    insertEmployee.employeegender = "女"
+    insertEmployee.employeecity = "高雄市"
+    insertEmployee.employeezone = "旗山區"
+    insertEmployee.employeeaddress = "鳳楠路11巷11號"
+    insertEmployee.hiredate = "2023-09-25"
+    insertEmployee.salary = "45000"
+    insertEmployee.employeebirthday = "2000-02-04"
+    insertEmployee.employeeintroduction = "擅長舉重"
+}
+
 
 </script >
 

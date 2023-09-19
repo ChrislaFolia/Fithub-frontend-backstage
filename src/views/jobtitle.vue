@@ -153,7 +153,7 @@ const loadDatas = async () => {
     // const responsJobTitles = await axios.get(`${url}/jobtitles`)
     const responsJobTitles = await axios.post(`${url}/jobtitles/findPage`,datas)
 
-    console.log(responsJobTitles)
+    // console.log(responsJobTitles)
 
     allJobTItles.value = responsJobTitles.data.list
 
