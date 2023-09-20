@@ -117,13 +117,40 @@ const course = reactive({
 
 /*
   Img handler
-*/
+  */
+
 const formData = new FormData();
+const selectedFile = ref(null);
 const fileChange = (e) => {
+  // Form solution
   let file = e.target.files[0];
-  console.log(file);
+  // console.log(file);
   formData.append("photoContent", file);
-  console.log(formData);
+  // console.log(formData);
+
+  // base64 solution
+  selectedFile.value = e.target.files;
+};
+
+// base64 encoder
+const base64Encoder = () => {
+  if (!selectedFile.value || selectedFile.value.length === 0) {
+    return;
+  }
+
+  for (let i = 0; i < selectedFile.value.length; i++) {
+    const file = selectedFile.value[i];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = (event) => {
+      const base64Data = event.target.result;
+
+      // 將 base64Data 直接塞入 activitypic 陣列中的物件
+      // course.courseImgPath = base64Data;
+    };
+  }
 };
 
 /*
