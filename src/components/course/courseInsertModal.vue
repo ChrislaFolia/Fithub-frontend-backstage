@@ -130,6 +130,7 @@ const fileChange = (e) => {
 
   // base64 solution
   selectedFile.value = e.target.files;
+  // base64Encoder();
 };
 
 // base64 encoder
