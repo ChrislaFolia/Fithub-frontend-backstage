@@ -68,7 +68,12 @@
                 />
                 <div class="text-muted text-center">{{ courseName }}原圖片</div>
               </picture>
-              <input class="form-control" type="file" @change="fileChange" />
+              <input
+                class="form-control"
+                type="file"
+                accept="image/*"
+                @change="fileChange"
+              />
             </div>
 
             <div class="mb-3">

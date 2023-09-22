@@ -49,7 +49,22 @@
 
           <div class="mb-3">
             <label for="message-text" class="col-form-label">課程圖片 :</label>
-            <input class="form-control" type="file" @change="fileChange" />
+            <div class="my-2">
+              <picture v-if="selectedFile.state">
+                <img
+                  :src="selectedFile.fileBase64"
+                  class="img-fluid"
+                  alt="not Found"
+                />
+                <div class="text-muted text-center">圖片預覽</div>
+              </picture>
+            </div>
+            <input
+              class="form-control my-2"
+              type="file"
+              accept="image/*"
+              @change="fileChange"
+            />
           </div>
 
           <div class="mb-3">
@@ -120,17 +135,27 @@ const course = reactive({
   */
 
 const formData = new FormData();
-const selectedFile = ref(null);
+const selectedFile = ref({
+  file: null,
+  fileBase64: null,
+  state: false,
+});
+// const imgPreview = ref({
+//   imgPreviewFile: null,
+//   imgPreviewState: false,
+// });
 const fileChange = (e) => {
   // Form solution
-  let file = e.target.files[0];
+  selectedFile.value.state = false;
+  console.log(e.target.files);
+  selectedFile.value.file = e.target.files[0];
+  console.log(selectedFile.value.file);
   // console.log(file);
-  formData.append("photoContent", file);
+  formData.append("photoContent", selectedFile.value.file);
   // console.log(formData);
 
   // base64 solution
-  selectedFile.value = e.target.files;
-  // base64Encoder();
+  base64Encoder();
 };
 
 // base64 encoder
@@ -138,20 +163,18 @@ const base64Encoder = () => {
   if (!selectedFile.value || selectedFile.value.length === 0) {
     return;
   }
+  console.log(111);
+  const file = selectedFile.value.file;
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
 
-  for (let i = 0; i < selectedFile.value.length; i++) {
-    const file = selectedFile.value[i];
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-
-    reader.onload = (event) => {
-      const base64Data = event.target.result;
-
-      // 將 base64Data 直接塞入 activitypic 陣列中的物件
-      // course.courseImgPath = base64Data;
-    };
-  }
+  reader.onload = (event) => {
+    console.log(event.target.result);
+    selectedFile.value.fileBase64 = event.target.result;
+    selectedFile.value.state = true;
+    // 將 base64Data 直接塞入 course 陣列中的物件
+    // course.courseImgPath = base64Data;
+  };
 };
 
 /*
@@ -247,5 +270,10 @@ watch(course, (newCourse) => {
 <style scoped>
 .need-input {
   color: red;
+}
+
+.img-modal {
+  width: 100%;
+  height: 100%;
 }
 </style>
