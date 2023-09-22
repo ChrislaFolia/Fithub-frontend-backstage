@@ -49,15 +49,14 @@
 
           <div class="mb-3">
             <label for="message-text" class="col-form-label">課程圖片 :</label>
-            <div class="my-2">
-              <picture v-if="selectedFile.state">
-                <img
-                  :src="selectedFile.fileBase64"
-                  class="img-fluid"
-                  alt="not Found"
-                />
-                <div class="text-muted text-center">圖片預覽</div>
-              </picture>
+            <div class="my-2 text-center">
+              <img
+                v-if="selectedFile.state"
+                :src="selectedFile.fileBase64"
+                class="img-fluid"
+                alt="not Found"
+              />
+              <div class="text-muted">圖片預覽</div>
             </div>
             <input
               class="form-control my-2"

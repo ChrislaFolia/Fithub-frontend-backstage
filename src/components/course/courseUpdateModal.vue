@@ -60,14 +60,14 @@
               <label for="message-text" class="col-form-label"
                 >課程圖片 :</label
               >
-              <picture>
+              <div class="text-center">
                 <img
                   :src="`${URL}/course/getImg?cid=${courseId}`"
                   class="img-fluid"
                   alt="not Found"
                 />
-                <div class="text-muted text-center">{{ courseName }}原圖片</div>
-              </picture>
+                <div class="text-muted">{{ courseName }}原圖片</div>
+              </div>
               <input
                 class="form-control"
                 type="file"
