@@ -62,11 +62,18 @@
               >
               <div class="text-center">
                 <img
+                  v-if="!selectedFile.state"
                   :src="`${URL}/course/getImg?cid=${courseId}`"
                   class="img-fluid"
                   alt="not Found"
                 />
-                <div class="text-muted">{{ courseName }}原圖片</div>
+                <img
+                  v-else-if="selectedFile.state"
+                  :src="selectedFile.fileBase64"
+                  class="img-fluid"
+                  alt="not Found"
+                />
+                <div class="text-muted">圖片預覽</div>
               </div>
               <input
                 class="form-control"
@@ -117,7 +124,7 @@
   imports
 */
 const URL = import.meta.env.VITE_API_JAVAURL;
-import { reactive, watch } from "vue";
+import { ref, reactive, watch } from "vue";
 import axios from "axios";
 
 /*
@@ -148,14 +155,41 @@ const course = reactive({
   Img handler
 */
 const formData = new FormData();
+const selectedFile = ref({
+  file: null,
+  fileBase64: null,
+  state: false,
+});
 formData.append("cId", props.courseId);
 formData.append("courseImgPath", props.courseImgPath);
 formData.append("_method", "put");
 const fileChange = (e) => {
-  let file = e.target.files[0];
-  console.log(file);
-  formData.append("photoContent", file);
-  console.log(formData.get("photoContent"));
+  selectedFile.value.state = false;
+  selectedFile.value.file = e.target.files[0];
+  // console.log(selectedFile.value.file);
+  formData.append("photoContent", selectedFile.value.file);
+  // console.log(formData.get("photoContent"));
+
+  // base64 solution
+  base64Encoder();
+};
+
+// base64 encoder
+const base64Encoder = () => {
+  if (!selectedFile.value || selectedFile.value.length === 0) {
+    return;
+  }
+  const file = selectedFile.value.file;
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
+  reader.onload = (event) => {
+    console.log(event.target.result);
+    selectedFile.value.fileBase64 = event.target.result;
+    selectedFile.value.state = true;
+    // 將 base64Data 直接塞入 course 陣列中的物件
+    // course.courseImgPath = base64Data;
+  };
 };
 
 /*

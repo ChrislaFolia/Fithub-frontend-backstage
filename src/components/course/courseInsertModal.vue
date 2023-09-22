@@ -139,16 +139,12 @@ const selectedFile = ref({
   fileBase64: null,
   state: false,
 });
-// const imgPreview = ref({
-//   imgPreviewFile: null,
-//   imgPreviewState: false,
-// });
 const fileChange = (e) => {
   // Form solution
   selectedFile.value.state = false;
-  console.log(e.target.files);
+  // console.log(e.target.files);
   selectedFile.value.file = e.target.files[0];
-  console.log(selectedFile.value.file);
+  // console.log(selectedFile.value.file);
   // console.log(file);
   formData.append("photoContent", selectedFile.value.file);
   // console.log(formData);
@@ -162,7 +158,6 @@ const base64Encoder = () => {
   if (!selectedFile.value || selectedFile.value.length === 0) {
     return;
   }
-  console.log(111);
   const file = selectedFile.value.file;
   const reader = new FileReader();
   reader.readAsDataURL(file);
