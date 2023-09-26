@@ -318,7 +318,7 @@ const deleteData = async () => {
     } catch (error) {
         // alert("刪除失敗")
         Swal.fire({
-            title: '新增失敗',
+            title: '刪除失敗',
             icon: 'warning',
             confirmButtonText: '確定'
         })
