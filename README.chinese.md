@@ -1,6 +1,6 @@
 <div align="center">
 
-  <h1 align="center">Fithub</h1>
+  <h1 align="center">Fithub Project (後臺之前端專案)</h1>
 
 </div>
 
@@ -9,7 +9,7 @@
 ## Table of Contents
 
 - [關於 Fithub](#關於-Fithub)
-- [建立前臺前端專案](#建立前臺前端專案)
+- [建立後臺前端專案](#建立後臺前端專案)
 - [功能](#功能)
 - [致謝](#致謝)
 - [與我聯絡](#與我聯絡)
@@ -42,7 +42,7 @@ Fithub 是一間致力於促進健康生活方式的專業健身中心。我們�
   - Bootstrap v5.2.3
     <br/><br/>
 
-* 這個存儲庫 (repo) 是 Fithub 專案的前端的前臺部分，其他部分的存儲庫連結如下:
+* 這個存儲庫 (repo) 是 Fithub 專案的前端的後臺部分，其他部分的存儲庫連結如下:
 
   - [Fithub-backend](https://github.com/ChrislaFolia/Fithub-backend)
   - [Fithub-frontend-frontstage](https://github.com/ChrislaFolia/Fithub-frontend-frontstage)
@@ -64,7 +64,7 @@ DB[("<big>Database</big>\n<small>MSSQL")]:::simple;
 
 <!-- GETTING STARTED -->
 
-## 建立前臺前端專案
+## 建立後臺前端專案
 
 ### 建議 IDE
 

@@ -1,5 +1,5 @@
 <div align="center">
-  <h1 align="center">Fithub</h1>
+  <h1 align="center">Fithub (The Frontend Part of Backstage)</h1>
 </div>
 
 <!-- TABLE OF CONTENTS -->
