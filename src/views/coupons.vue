@@ -183,17 +183,6 @@
               >
             </div>
             <div class="mb-3">
-              已使用量<input
-                v-model="updateSelectedCoupon.couponused"
-                type="text"
-                class="form-control"
-                required="required"
-              />
-              <span v-if="!updateSelectedCoupon.couponused" class="text-danger"
-                >必填</span
-              >
-            </div>
-            <div class="mb-3">
               總發行量<input
                 v-model="updateSelectedCoupon.couponceil"
                 type="text"
