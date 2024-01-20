@@ -264,9 +264,19 @@ const loadSingleCategoryClasses = async () => {
     .catch((error) => {
       console.log(error.toJSON());
     });
-
   classes.value = response.data;
 
+  // If we got no classes in assigned category, load all classes
+  if (!classes.value.length) {
+    Swal.fire({
+      title: "該課程分類尚無課程",
+      icon: "warning",
+      confirmButtonText: "確定",
+    });
+    pageCourseCategoryId.value = 0;
+    loadClasses();
+    return;
+  }
   //取得所有課程頁數及單頁資料數放進courses變數
   paginationData.totalPages = parseInt(response.headers["total-pages"]);
   paginationData.numberOfCourses = parseInt(
